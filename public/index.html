@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balina Sinyal Paneli</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0a0a1a; color: #00ff88; min-height: 100vh; }
+        .header { background: linear-gradient(135deg, #1a1a3e, #0d0d2b); padding: 20px; text-align: center; border-bottom: 2px solid #00ff8833; }
+        .header h1 { font-size: 2em; }
+        .status { display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 0.8em; margin-top: 10px; }
+        .status.on { background: #00ff8833; color: #00ff88; }
+        .status.off { background: #ff000033; color: #ff4444; }
+        .controls { padding: 15px 30px; display: flex; gap: 10px; flex-wrap: wrap; }
+        button { padding: 10px 20px; border: 1px solid #00ff8855; background: #00ff8822; color: #00ff88; border-radius: 8px; cursor: pointer; }
+        button:hover { background: #00ff8844; }
+        .signals { padding: 20px 30px; }
+        .card { background: linear-gradient(135deg, #1a1a3e, #0f0f2a); border: 1px solid #00ff8833; border-radius: 12px; padding: 20px; margin-bottom: 15px; animation: slideIn 0.3s ease; }
+        .card.buy { border-left: 4px solid #00ff88; }
+        .card.sell { border-left: 4px solid #ff4444; }
+        .card.info { border-left: 4px solid #ffaa00; }
+        .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .symbol { font-size: 1.4em; font-weight: bold; }
+        .action { padding: 4px 12px; border-radius: 6px; font-weight: bold; font-size: 0.85em; }
+        .action.buy { background: #00ff8833; color: #00ff88; }
+        .action.sell { background: #ff000033; color: #ff4444; }
+        .price { font-size: 1.8em; font-weight: bold; margin: 5px 0; }
+        .time { color: #888; font-size: 0.85em; }
+        .msg { margin-top: 8px; color: #aaa; }
+        .empty { text-align: center; padding: 60px; color: #555; font-size: 1.2em; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Balina Sinyal Paneli</h1>
+        <div class="status off" id="status">Baglaniyor...</div>
+    </div>
+    <div class="controls">
+        <button onclick="testSignal()">Test Sinyali</button>
+        <button onclick="clearSignals()">Temizle</button>
+    </div>
+    <div class="signals" id="signals">
+        <div class="empty">TradingView sinyalleri bekleniyor...</div>
+    </div>
+    <script>
+        const signalsDiv = document.getElementById('signals');
+        const statusDiv = document.getElementById('status');
+        let signals = [];
+
+        function connectSSE() {
+            const evtSource = new EventSource('/events');
+            evtSource.onopen = () => {
+                statusDiv.textContent = 'Bagli - Canli';
+                statusDiv.className = 'status on';
+            };
+            evtSource.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                if (data.type === 'init') { signals = data.signals; render(); }
+                else if (data.type === 'new_signal') { signals.unshift(data.signal); render(); }
+            };
+            evtSource.onerror = () => {
+                statusDiv.textContent = 'Baglanti Kesildi';
+                statusDiv.className = 'status off';
+            };
+        }
+
+        function render() {
+            if (signals.length === 0) {
+                signalsDiv.innerHTML = '<div class="empty">Sinyal bekleniyor...</div>';
+                return;
+            }
+            signalsDiv.innerHTML = signals.map(s => {
+                const ac = (s.action || '').toLowerCase();
+                const cls = ac.includes('buy') || ac.includes('long') ? 'buy' : ac.includes('sell') || ac.includes('short') ? 'sell' : 'info';
+                return '<div class="card ' + cls + '">' +
+                    '<div class="card-top"><span class="symbol">' + s.symbol + '</span><span class="action ' + cls + '">' + s.action + '</span></div>' +
+                    '<div class="price">$' + s.price + '</div>' +
+                    '<div class="time">' + s.time + '</div>' +
+                    (s.message ? '<div class="msg">' + s.message + '</div>' : '') +
+                    '</div>';
+            }).join('');
+        }
+
+        async function testSignal() { await fetch('/api/test'); }
+        async function clearSignals() { await fetch('/api/signals', { method: 'DELETE' }); signals = []; render(); }
+
+        connectSSE();
+    </script>
+</body>
+</html>
