@@ -3,88 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Balina Sinyal Paneli</title>
+    <title>Balina Webhook Sunucu</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background: #0a0a1a; color: #00ff88; min-height: 100vh; }
-        .header { background: linear-gradient(135deg, #1a1a3e, #0d0d2b); padding: 20px; text-align: center; border-bottom: 2px solid #00ff8833; }
-        .header h1 { font-size: 2em; }
-        .status { display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 0.8em; margin-top: 10px; }
-        .status.on { background: #00ff8833; color: #00ff88; }
-        .status.off { background: #ff000033; color: #ff4444; }
-        .controls { padding: 15px 30px; display: flex; gap: 10px; flex-wrap: wrap; }
-        button { padding: 10px 20px; border: 1px solid #00ff8855; background: #00ff8822; color: #00ff88; border-radius: 8px; cursor: pointer; }
-        button:hover { background: #00ff8844; }
-        .signals { padding: 20px 30px; }
-        .card { background: linear-gradient(135deg, #1a1a3e, #0f0f2a); border: 1px solid #00ff8833; border-radius: 12px; padding: 20px; margin-bottom: 15px; animation: slideIn 0.3s ease; }
-        .card.buy { border-left: 4px solid #00ff88; }
-        .card.sell { border-left: 4px solid #ff4444; }
-        .card.info { border-left: 4px solid #ffaa00; }
-        .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .symbol { font-size: 1.4em; font-weight: bold; }
-        .action { padding: 4px 12px; border-radius: 6px; font-weight: bold; font-size: 0.85em; }
-        .action.buy { background: #00ff8833; color: #00ff88; }
-        .action.sell { background: #ff000033; color: #ff4444; }
-        .price { font-size: 1.8em; font-weight: bold; margin: 5px 0; }
-        .time { color: #888; font-size: 0.85em; }
-        .msg { margin-top: 8px; color: #aaa; }
-        .empty { text-align: center; padding: 60px; color: #555; font-size: 1.2em; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        body { font-family: 'Segoe UI', sans-serif; background: #0d1b2a; color: #e0e0e0; min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { text-align: center; font-size: 2em; margin-bottom: 10px; color: #00ff88; }
+        .sub { text-align: center; color: #888; font-size: 14px; margin-bottom: 30px; }
+        .status-box { text-align: center; padding: 12px; border-radius: 10px; margin-bottom: 20px; font-weight: 600; }
+        .status-box.on { background: rgba(0,255,136,0.15); color: #00ff88; border: 1px solid rgba(0,255,136,0.3); }
+        .status-box.off { background: rgba(255,0,0,0.15); color: #ff4444; border: 1px solid rgba(255,0,0,0.3); }
+        .card { background: #1b2d45; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+        .card-title { font-size: 16px; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+        .webhook-url { background: #0d1b2a; border: 1px solid #333; border-radius: 8px; padding: 12px; font-family: monospace; font-size: 13px; display: flex; align-items: center; justify-content: space-between; gap: 10px; word-break: break-all; margin-bottom: 10px; }
+        .copy-btn { background: #2563eb; color: #fff; border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px; white-space: nowrap; }
+        .copy-btn:hover { background: #1d4ed8; }
+        .code { background: #0d1b2a; border-radius: 8px; padding: 14px; font-family: monospace; font-size: 12px; color: #a5f3fc; white-space: pre; line-height: 1.6; overflow-x: auto; margin-top: 10px; }
+        .signal-card { background: #1b2d45; border-radius: 12px; padding: 18px; margin-bottom: 12px; border-left: 4px solid #888; animation: slideIn 0.3s ease; }
+        .signal-card.buy { border-left-color: #00ff88; }
+        .signal-card.sell { border-left-color: #ff4444; }
+        .signal-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .signal-symbol { font-size: 18px; font-weight: 800; }
+        .signal-action { padding: 3px 12px; border-radius: 6px; font-weight: 700; font-size: 12px; }
+        .signal-action.buy { background: rgba(0,255,136,0.15); color: #00ff88; }
+        .signal-action.sell { background: rgba(255,0,0,0.15); color: #ff4444; }
+        .signal-time { color: #888; font-size: 12px; }
+        .signal-price { font-size: 22px; font-weight: 800; margin: 4px 0; }
+        .empty { text-align: center; padding: 50px; color: #555; font-size: 14px; }
+        .test-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+        .test-btns button { padding: 10px 18px; border: 1px solid #333; background: #1b2d45; color: #e0e0e0; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; }
+        .test-btns button:hover { background: #2563eb; border-color: #2563eb; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-15px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Balina Sinyal Paneli</h1>
-        <div class="status off" id="status">Baglaniyor...</div>
+    <div class="container">
+        <h1>Balina Webhook Sunucu</h1>
+        <div class="sub">TradingView Webhook Entegrasyonu</div>
+
+        <div id="connStatus" class="status-box off">Bekleniyor...</div>
+
+        <div class="card">
+            <div class="card-title">Test Sinyali Gonder</div>
+            <div class="test-btns">
+                <button onclick="testSignal('BTCUSDT','buy')">BTC LONG</button>
+                <button onclick="testSignal('BTCUSDT','sell')">BTC SHORT</button>
+                <button onclick="testSignal('XAUUSD','buy')">XAU LONG</button>
+                <button onclick="testSignal('XAUUSD','sell')">XAU SHORT</button>
+                <button onclick="clearSignals()" style="background:#333;">Temizle</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Gelen Sinyaller</div>
+            <div id="signalList">
+                <div class="empty">TradingView sinyalleri bekleniyor...</div>
+            </div>
+        </div>
     </div>
-    <div class="controls">
-        <button onclick="testSignal()">Test Sinyali</button>
-        <button onclick="clearSignals()">Temizle</button>
-    </div>
-    <div class="signals" id="signals">
-        <div class="empty">TradingView sinyalleri bekleniyor...</div>
-    </div>
+
     <script>
-        const signalsDiv = document.getElementById('signals');
-        const statusDiv = document.getElementById('status');
+        const SERVER_URL = window.location.origin;
+        const signalList = document.getElementById('signalList');
+        const connStatus = document.getElementById('connStatus');
         let signals = [];
 
         function connectSSE() {
-            const evtSource = new EventSource('/events');
+            const evtSource = new EventSource(SERVER_URL + '/events');
+
             evtSource.onopen = () => {
-                statusDiv.textContent = 'Bagli - Canli';
-                statusDiv.className = 'status on';
+                connStatus.textContent = 'Baglanti Aktif - Canli';
+                connStatus.className = 'status-box on';
             };
+
             evtSource.onmessage = (event) => {
                 const data = JSON.parse(event.data);
-                if (data.type === 'init') { signals = data.signals; render(); }
-                else if (data.type === 'new_signal') { signals.unshift(data.signal); render(); }
+                if (data.type === 'init') {
+                    signals = data.signals;
+                    render();
+                } else if (data.type === 'new_signal') {
+                    signals.unshift(data.signal);
+                    render();
+                }
             };
+
             evtSource.onerror = () => {
-                statusDiv.textContent = 'Baglanti Kesildi';
-                statusDiv.className = 'status off';
+                connStatus.textContent = 'Baglanti Kesildi - Yeniden deneniyor...';
+                connStatus.className = 'status-box off';
             };
         }
 
         function render() {
             if (signals.length === 0) {
-                signalsDiv.innerHTML = '<div class="empty">Sinyal bekleniyor...</div>';
+                signalList.innerHTML = '<div class="empty">Sinyal bekleniyor...</div>';
                 return;
             }
-            signalsDiv.innerHTML = signals.map(s => {
-                const ac = (s.action || '').toLowerCase();
-                const cls = ac.includes('buy') || ac.includes('long') ? 'buy' : ac.includes('sell') || ac.includes('short') ? 'sell' : 'info';
-                return '<div class="card ' + cls + '">' +
-                    '<div class="card-top"><span class="symbol">' + s.symbol + '</span><span class="action ' + cls + '">' + s.action + '</span></div>' +
-                    '<div class="price">$' + s.price + '</div>' +
-                    '<div class="time">' + s.time + '</div>' +
-                    (s.message ? '<div class="msg">' + s.message + '</div>' : '') +
-                    '</div>';
+            signalList.innerHTML = signals.map(s => {
+                const cls = s.action === 'buy' ? 'buy' : 'sell';
+                const label = s.action === 'buy' ? 'LONG' : 'SHORT';
+                const time = new Date(s.time).toLocaleString('tr-TR');
+                return '<div class="signal-card ' + cls + '">' +
+                    '<div class="signal-top">' +
+                        '<span class="signal-symbol">' + s.symbol + '</span>' +
+                        '<span class="signal-action ' + cls + '">' + label + '</span>' +
+                    '</div>' +
+                    (s.price ? '<div class="signal-price">$' + s.price + '</div>' : '') +
+                    '<div class="signal-time">' + time + '</div>' +
+                    (s.message ? '<div style="margin-top:6px;color:#aaa;">' + s.message + '</div>' : '') +
+                '</div>';
             }).join('');
         }
 
-        async function testSignal() { await fetch('/api/test'); }
-        async function clearSignals() { await fetch('/api/signals', { method: 'DELETE' }); signals = []; render(); }
+        async function testSignal(symbol, action) {
+            await fetch(SERVER_URL + '/api/test/' + symbol + '/' + action);
+        }
+
+        async function clearSignals() {
+            await fetch(SERVER_URL + '/api/signals', { method: 'DELETE' });
+            signals = [];
+            render();
+        }
 
         connectSSE();
     </script>
