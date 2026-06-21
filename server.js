@@ -1,10 +1,12 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
 let signals = [];
 let clients = [];
@@ -43,7 +45,6 @@ app.get('/events', (req, res) => {
         'Access-Control-Allow-Origin': '*'
     });
     clients.push(res);
-    console.log('Yeni istemci baglandi. Toplam: ' + clients.length);
     res.write('data: ' + JSON.stringify({ type: 'init', signals: signals }) + '\n\n');
     req.on('close', () => {
         clients = clients.filter(c => c !== res);
@@ -81,12 +82,7 @@ app.get('/api/test/:symbol/:action', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.json({
-        name: 'Balina Webhook Sunucu',
-        status: 'aktif',
-        signals: signals.length,
-        clients: clients.length
-    });
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {
