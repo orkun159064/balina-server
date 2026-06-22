@@ -658,12 +658,64 @@ function copyWH(id){
 }
 
 // ===== RENDER SUNUCU BAGLANTISI =====
+var lastSignals=[];
+
+function addLastSignal(signal){
+    lastSignals.unshift(signal);
+    if(lastSignals.length>5)lastSignals=lastSignals.slice(0,5);
+    renderLastSignals();
+}
+
+function renderLastSignals(){
+    var list=document.getElementById('notifList');
+    if(!lastSignals.length)return;
+    list.innerHTML=lastSignals.map(function(s){
+        var cls=(s.action==='buy'||s.action==='long')?'al':'as';
+        var label=(s.action==='buy'||s.action==='long')?'LONG':'SHORT';
+        var t=new Date(s.time).toLocaleString('tr-TR');
+        return '<div class="notif-item '+cls+'"><div><div class="notif-title">'+s.symbol+' '+label+'</div><div class="notif-time">'+t+'</div></div></div>';
+    }).join('');
+    document.getElementById('notifCount').textContent=lastSignals.length;
+}
+
 function connectToServer(){
     var evtSource=new EventSource("/events");
     evtSource.onopen=function(){console.log("Sunucuya baglanildi");};
     evtSource.onmessage=function(event){
         var data=JSON.parse(event.data);
-        if(data.type==="new_signal"){processSignal(data.signal.symbol,data.signal.action);}
+        if(data.type==="init"&&data.signals&&data.signals.length){
+            data.signals.slice(0,5).forEach(function(s){
+                addLastSignal(s);
+                var isXAU=s.symbol.toUpperCase().includes('XAU');
+                var pair=isXAU?'XAUUSD':'BTCUSDT';
+                var tId=isXAU?'timeXAU':'timeBTC';
+                var d=new Date(s.time);
+                document.getElementById(tId).textContent='Son guncelleme: '+d.toLocaleTimeString('tr-TR');
+                if(s.action==='buy'||s.action==='long'){
+                    var el=document.getElementById(isXAU?'statusXAU':'statusBTC');
+                    var sig=document.getElementById(isXAU?'signalXAU':'signalBTC');
+                    var desc=document.getElementById(isXAU?'descXAU':'descBTC');
+                    var badge=document.getElementById(isXAU?'badgeXAU':'badgeBTC');
+                    el.className='panel-status long';sig.textContent='Balinalar LONG Giriyor';
+                    desc.textContent='\ud83d\udc0b '+pair+' alim sinyali tespit edildi!';
+                    badge.textContent='LONG';badge.className='panel-badge badge-live';
+                    badge.style.background='var(--green-bg)';badge.style.color='var(--green)';
+                }else{
+                    var el=document.getElementById(isXAU?'statusXAU':'statusBTC');
+                    var sig=document.getElementById(isXAU?'signalXAU':'signalBTC');
+                    var desc=document.getElementById(isXAU?'descXAU':'descBTC');
+                    var badge=document.getElementById(isXAU?'badgeXAU':'badgeBTC');
+                    el.className='panel-status short';sig.textContent='Balinalar SHORT Acıyor';
+                    desc.textContent='\ud83d\udc0b '+pair+' satis sinyali tespit edildi!';
+                    badge.textContent='SHORT';badge.className='panel-badge badge-live';
+                    badge.style.background='var(--red-bg)';badge.style.color='var(--red)';
+                }
+            });
+        }
+        if(data.type==="new_signal"){
+            addLastSignal(data.signal);
+            processSignal(data.signal.symbol,data.signal.action);
+        }
     };
     evtSource.onerror=function(){
         console.log("Baglanti kesildi, 5 sn sonra tekrar deneniyor...");
