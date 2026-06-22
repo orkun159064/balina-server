@@ -582,12 +582,36 @@ function showPopup(cls,title,body,time){
 }
 function closePopup(){document.getElementById('alertPopup').classList.remove('show');clearTimeout(popT);}
 
-function playAlert(isBuy){
+
+  function playAlert(isBuy){
     if(!S.soundOn)return;
-    try{const ctx=new(window.AudioContext||window.webkitAudioContext)();const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);
-    if(isBuy){o.frequency.setValueAtTime(523,ctx.currentTime);o.frequency.setValueAtTime(659,ctx.currentTime+.1);o.frequency.setValueAtTime(784,ctx.currentTime+.2);}
-    else{o.frequency.setValueAtTime(784,ctx.currentTime);o.frequency.setValueAtTime(659,ctx.currentTime+.1);o.frequency.setValueAtTime(523,ctx.currentTime+.2);}
-    o.type='sine';g.gain.setValueAtTime(.3,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.01,ctx.currentTime+.5);o.start(ctx.currentTime);o.stop(ctx.currentTime+.5);}catch(e){}
+    try{
+        const ctx=new(window.AudioContext||window.webkitAudioContext)();
+        
+        function beep(freq,dur){
+            var o=ctx.createOscillator();
+            var g=ctx.createGain();
+            o.connect(g);
+            g.connect(ctx.destination);
+            o.type='square';
+            o.frequency.value=freq;
+            g.gain.setValueAtTime(0.95,ctx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);
+            o.start(ctx.currentTime);
+            o.stop(ctx.currentTime+dur);
+        }
+        
+        var t=ctx.currentTime;
+        
+        if(isBuy){
+            beep(800,0.15);beep(1000,0.15);beep(1200,0.15);beep(1400,0.15);
+            beep(1600,0.15);beep(1800,0.15);beep(2000,0.2);beep(2200,0.3);
+        }else{
+            beep(2200,0.15);beep(2000,0.15);beep(1800,0.15);beep(1600,0.15);
+            beep(1400,0.15);beep(1200,0.15);beep(1000,0.2);beep(800,0.3);
+        }
+    }catch(e){}
+}
 }
 function browserNotif(title,body){if(!S.notifOn||!('Notification' in window)||Notification.permission!=='granted')return;try{new Notification(title,{body,icon:'🐋',vibrate:[200,100,200]});}catch(e){}}
 
