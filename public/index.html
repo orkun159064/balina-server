@@ -403,3 +403,279 @@
         <button class="btn btn-outline" style="margin-top:8px;" onclick="doLogout()">🚪 Cikis Yap</button>
     </div>
 </div>
+<script>
+const ADMIN_EMAIL = "orkun159064@outlook.com";
+
+const S = {
+    user: null, subscribed: false, trialStart: null, trialDur: 24*60*60*1000,
+    soundOn: true, notifOn: true, signalCount: 0, whaleBase: 0, active: false, isAdmin: false
+};
+
+function getDailyWhales() {
+    const today = new Date();
+    const seed = today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate();
+    let h = 0;
+    for(let i=0;i<String(seed).length;i++){h=((h<<5)-h)+String(seed).charCodeAt(i);h|=0;}
+    return 9000+Math.abs(h)%801;
+}
+
+function updateWhales() {
+    if(S.whaleBase===0) S.whaleBase=getDailyWhales();
+    document.getElementById('statWhales').textContent=S.whaleBase.toLocaleString('tr-TR');
+    document.getElementById('whalesXAU').textContent='\ud83d\udc0b '+S.whaleBase.toLocaleString('tr-TR')+' balina izleniyor';
+    document.getElementById('whalesBTC').textContent='\ud83d\udc0b '+S.whaleBase.toLocaleString('tr-TR')+' balina izleniyor';
+}
+
+function switchTab(t){
+    document.querySelectorAll('.auth-tab').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.auth-form').forEach(f=>f.classList.remove('active'));
+    if(t==='login'){document.querySelectorAll('.auth-tab')[0].classList.add('active');document.getElementById('loginForm').classList.add('active');}
+    else{document.querySelectorAll('.auth-tab')[1].classList.add('active');document.getElementById('registerForm').classList.add('active');}
+}
+
+function doLogin(e){
+    e.preventDefault();
+    const email=document.getElementById('lEmail').value;
+    const pass=document.getElementById('lPass').value;
+    const users=JSON.parse(localStorage.getItem('ba_users')||'[]');
+    const u=users.find(x=>x.email===email&&x.pass===pass);
+    if(u){S.user=u;S.subscribed=u.sub||false;S.trialStart=u.trialStart||Date.now();S.isAdmin=(u.email===ADMIN_EMAIL);save();goDash();}
+    else if(!users.length){const n={name:email.split('@')[0],email,pass,sub:false,trialStart:Date.now()};users.push(n);localStorage.setItem('ba_users',JSON.stringify(users));S.user=n;S.trialStart=n.trialStart;S.isAdmin=(email===ADMIN_EMAIL);save();goDash();}
+    else alert('E-posta veya sifre hatali!');
+}
+
+function doRegister(e){
+    e.preventDefault();
+    const name=document.getElementById('rName').value,email=document.getElementById('rEmail').value,pass=document.getElementById('rPass').value;
+    const users=JSON.parse(localStorage.getItem('ba_users')||'[]');
+    if(users.find(x=>x.email===email)){alert('Bu e-posta zaten kayitli!');return;}
+    const n={name,email,pass,sub:false,trialStart:Date.now()};
+    users.push(n);localStorage.setItem('ba_users',JSON.stringify(users));
+    S.user=n;S.trialStart=n.trialStart;S.isAdmin=(email===ADMIN_EMAIL);save();goDash();
+}
+
+function doLogout(){localStorage.removeItem('ba_session');location.reload();}
+function save(){localStorage.setItem('ba_session',JSON.stringify({user:S.user,sub:S.subscribed,trialStart:S.trialStart}));}
+
+function goDash(){
+    S.active=true;
+    document.getElementById('authScreen').style.display='none';
+    document.getElementById('dashboard').classList.add('active');
+    updateUserUI(); updateWhales(); startTimer(); checkBlocked();
+    if(S.isAdmin){document.getElementById('adminSection').style.display='block';}
+    else{document.getElementById('adminSection').style.display='none';}
+    if('Notification' in window&&Notification.permission==='default')Notification.requestPermission();
+}
+
+function updateUserUI(){
+    if(!S.user)return;
+    document.getElementById('navName').textContent=S.user.name;
+    document.getElementById('navEmail').textContent=S.user.email;
+    document.getElementById('navAvatar').textContent=S.user.name[0].toUpperCase();
+    document.getElementById('mName').textContent=S.user.name;
+    document.getElementById('mEmail').textContent=S.user.email;
+    document.getElementById('mAvatar').textContent=S.user.name[0].toUpperCase();
+    document.getElementById('mAdminBadge').style.display=S.isAdmin?'block':'none';
+    if(S.subscribed){
+        document.getElementById('subBadge').textContent='Aktif';document.getElementById('subBadge').className='sub-badge active';
+        document.getElementById('mSub').textContent='Aktif Abonelik';document.getElementById('mSub').style.color='var(--green)';
+        document.getElementById('subLabel').textContent='Abonelik sureniz';
+        document.getElementById('subBtn').style.display='none';document.getElementById('upgradeBtn').style.display='none';
+    }else{
+        document.getElementById('subBadge').textContent='Deneme';document.getElementById('subBadge').className='sub-badge trial';
+        document.getElementById('mSub').textContent='Ucretsiz Deneme';document.getElementById('mSub').style.color='var(--yellow)';
+        document.getElementById('subLabel').textContent='Ucretsiz deneme suresi';
+        document.getElementById('subBtn').style.display='block';document.getElementById('upgradeBtn').style.display='block';
+    }
+}
+
+function startTimer(){
+    setInterval(()=>{
+        if(S.subscribed){
+            const end=S.user.subEnd||(Date.now()+30*24*60*60*1000);
+            const rem=Math.max(0,end-Date.now());
+            const d=Math.floor(rem/(24*60*60*1000)),h=Math.floor((rem%(24*60*60*1000))/(60*60*1000));
+            document.getElementById('timerDisp').textContent=d+'g '+h+'sa';
+            document.getElementById('subValue').textContent=d+' Gun '+h+' Saat';
+            document.getElementById('subBar').style.width=(rem/(30*24*60*60*1000))*100+'%';
+            document.getElementById('navTimer').className='nav-timer';
+        }else{
+            const rem=Math.max(0,S.trialDur-(Date.now()-S.trialStart));
+            if(rem<=0){
+                document.getElementById('timerDisp').textContent='Sure doldu';
+                document.getElementById('subValue').textContent='Sure Doldu';
+                document.getElementById('subBar').style.width='0%';
+                document.getElementById('navTimer').className='nav-timer expired';
+                if(!document.getElementById('blockedScreen').classList.contains('active')){document.getElementById('blockedScreen').classList.add('active');}
+                return;
+            }
+            const h=Math.floor(rem/3600000),m=Math.floor((rem%3600000)/60000),s=Math.floor((rem%60000)/1000);
+            document.getElementById('timerDisp').textContent=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+            document.getElementById('subValue').textContent=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+            document.getElementById('subBar').style.width=(rem/S.trialDur)*100+'%';
+            document.getElementById('navTimer').className=h<1?'nav-timer urgent':'nav-timer';
+        }
+    },1000);
+}
+
+function checkBlocked(){
+    if(S.subscribed)return;
+    if(Date.now()-S.trialStart>=S.trialDur){document.getElementById('blockedScreen').classList.add('active');}
+}
+
+// ===== GLOBAL AUDIO CONTEXT (TARAYICI GUVENLIGI COZUMU) =====
+var audioCtx = null;
+
+function initAudio(){
+    if(!audioCtx){
+        try{audioCtx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}
+    }
+    if(audioCtx&&audioCtx.state==='suspended'){audioCtx.resume();}
+}
+
+document.addEventListener('click',function(){initAudio();},{once:false});
+document.addEventListener('keydown',function(){initAudio();},{once:false});
+
+// ===== GUCLU ALARM SESI =====
+function playAlert(isBuy){
+    if(!S.soundOn)return;
+    initAudio();
+    if(!audioCtx)return;
+    try{
+        var ctx=audioCtx;
+        function beep(freq,dur){
+            var o=ctx.createOscillator();
+            var g=ctx.createGain();
+            o.connect(g);
+            g.connect(ctx.destination);
+            o.type="square";
+            o.frequency.value=freq;
+            g.gain.setValueAtTime(0.95,ctx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);
+            o.start(ctx.currentTime);
+            o.stop(ctx.currentTime+dur);
+        }
+        if(isBuy){
+            beep(800,0.15);beep(1000,0.15);beep(1200,0.15);beep(1400,0.15);
+            beep(1600,0.15);beep(1800,0.15);beep(2000,0.2);beep(2200,0.3);
+        }else{
+            beep(2200,0.15);beep(2000,0.15);beep(1800,0.15);beep(1600,0.15);
+            beep(1400,0.15);beep(1200,0.15);beep(1000,0.2);beep(800,0.3);
+        }
+    }catch(e){}
+}
+
+// ===== ISIK EFEKTLERI (EKRANI KAPLAMAZ) =====
+var originalTitle=document.title;
+var titleBlink=null;
+
+function flashScreen(type){
+    var nav=document.querySelector('.nav');
+    var bar=document.getElementById('flashBar');
+    document.body.classList.remove('flash-border-green','flash-border-red');
+    void document.body.offsetWidth;
+    document.body.classList.add(type==='al'?'flash-border-green':'flash-border-red');
+    if(nav){nav.classList.remove('flash-green','flash-red');void nav.offsetWidth;nav.classList.add(type==='al'?'flash-green':'flash-red');}
+    if(bar){bar.className='flash-bar';void bar.offsetWidth;bar.className='flash-bar '+(type==='al'?'al':'as');}
+    if(titleBlink)clearInterval(titleBlink);
+    var msg=type==='al'?'\ud83d\udfe2\ud83d\udfe2\ud83d\udfe2 LONG SINYALI!':'\ud83d\udd34\ud83d\udd34\ud83d\udd34 SHORT SINYALI!';
+    var isOn=true;
+    titleBlink=setInterval(function(){document.title=isOn?msg:originalTitle;isOn=!isOn;},800);
+    setTimeout(function(){
+        clearInterval(titleBlink);titleBlink=null;document.title=originalTitle;
+        document.body.classList.remove('flash-border-green','flash-border-red');
+        if(nav)nav.classList.remove('flash-green','flash-red');
+        if(bar)bar.className='flash-bar';
+    },15000);
+}
+
+// ===== SINYAL ISLEME =====
+function processSignal(symbol,type){
+    if(!S.active)return;
+    if(!S.subscribed&&(Date.now()-S.trialStart)>=S.trialDur)return;
+    var now=new Date();
+    var isXAU=symbol.toUpperCase().includes('XAU')||symbol.toUpperCase().includes('ALTIN');
+    var pair=isXAU?'XAUUSD':'BTCUSDT';
+    var sId=isXAU?'statusXAU':'statusBTC',sigId=isXAU?'signalXAU':'signalBTC';
+    var dId=isXAU?'descXAU':'descBTC',bId=isXAU?'badgeXAU':'badgeBTC',tId=isXAU?'timeXAU':'timeBTC';
+    var el=document.getElementById(sId),sig=document.getElementById(sigId),desc=document.getElementById(dId),badge=document.getElementById(bId);
+    if(type==='buy'||type==='long'){
+        el.className='panel-status long';sig.textContent='Balinalar LONG Giriyor';
+        desc.textContent='\ud83d\udc0b '+pair+' alim sinyali tespit edildi!';
+        badge.textContent='LONG';badge.className='panel-badge badge-live';badge.style.background='var(--green-bg)';badge.style.color='var(--green)';
+        showPopup('al','\ud83d\udc0b '+pair+' LONG','Balinalar '+pair+' long pozisyon acti!',now);
+        addNotif('al','\ud83d\udc0b '+pair+' LONG Giris','Balina alim sinyali tespit edildi',now);
+        playAlert(true);flashScreen('al');browserNotif('\ud83d\udc0b '+pair+' LONG!','Balinalar '+pair+' long pozisyon acti!');
+    }else{
+        el.className='panel-status short';sig.textContent='Balinalar SHORT Acıyor';
+        desc.textContent='\ud83d\udc0b '+pair+' satis sinyali tespit edildi!';
+        badge.textContent='SHORT';badge.className='panel-badge badge-live';badge.style.background='var(--red-bg)';badge.style.color='var(--red)';
+        showPopup('as','\ud83d\udc0b '+pair+' SHORT','Balinalar '+pair+' short pozisyon acti!',now);
+        addNotif('as','\ud83d\udc0b '+pair+' SHORT Giris','Balina satis sinyali tespit edildi',now);
+        playAlert(false);flashScreen('as');browserNotif('\ud83d\udc0b '+pair+' SHORT!','Balinalar '+pair+' short pozisyon acti!');
+    }
+    document.getElementById(tId).textContent='Son guncelleme: '+now.toLocaleTimeString('tr-TR');
+    S.signalCount++;document.getElementById('statSignals').textContent=S.signalCount;
+}
+
+var notifs=[];
+function addNotif(type,title,msg,time){notifs.unshift({type,title,msg,time});if(notifs.length>10)notifs=notifs.slice(0,10);renderNotifs();}
+function renderNotifs(){
+    var el=document.getElementById('notifList');
+    if(!notifs.length){el.innerHTML='<div class="no-notif">Henuz bildirim yok</div>';}
+    else{el.innerHTML=notifs.slice(0,8).map(function(n){return '<div class="notif-item '+n.type+'"><div><div class="notif-title">'+n.title+'</div><div class="notif-time">'+n.time.toLocaleString('tr-TR')+'</div></div></div>';}).join('');}
+    document.getElementById('notifCount').textContent=notifs.length;
+}
+
+var popT;
+function showPopup(cls,title,body,time){
+    var p=document.getElementById('alertPopup');p.className='alert-popup '+cls;
+    document.getElementById('apTitle').textContent=title;document.getElementById('apBody').textContent=body;document.getElementById('apTime').textContent=time.toLocaleString('tr-TR');
+    p.classList.add('show');clearTimeout(popT);popT=setTimeout(function(){p.classList.remove('show');},8000);
+}
+function closePopup(){document.getElementById('alertPopup').classList.remove('show');clearTimeout(popT);}
+
+function browserNotif(title,body){if(!S.notifOn||!('Notification' in window)||Notification.permission!=='granted')return;try{new Notification(title,{body:body,vibrate:[200,100,200]});}catch(e){}}
+
+function toggleSound(){S.soundOn=document.getElementById('soundToggle').checked;}
+function toggleNotif(){S.notifOn=document.getElementById('notifToggle').checked;if(S.notifOn&&'Notification' in window)Notification.requestPermission();}
+
+function openModal(id){document.getElementById(id).classList.add('active');}
+function closeModal(e,id){if(!e||e.target===document.getElementById(id))document.getElementById(id).classList.remove('active');}
+function selectPM(el){document.querySelectorAll('.pm-item').forEach(function(m){m.classList.remove('selected');});el.classList.add('selected');}
+
+function doPayment(){
+    S.subscribed=true;S.user.sub=true;S.user.subEnd=Date.now()+30*24*60*60*1000;
+    var users=JSON.parse(localStorage.getItem('ba_users')||'[]');
+    var idx=users.findIndex(function(u){return u.email===S.user.email;});
+    if(idx!==-1){users[idx].sub=true;users[idx].subEnd=S.user.subEnd;localStorage.setItem('ba_users',JSON.stringify(users));}
+    save();document.getElementById('blockedScreen').classList.remove('active');updateUserUI();closeModal(null,'payModal');
+}
+
+function copyWH(id){
+    var url=document.getElementById(id).textContent;
+    navigator.clipboard.writeText(url).then(function(){var btn=document.getElementById(id).nextElementSibling;btn.textContent='Kopyalandi!';btn.classList.add('copied');setTimeout(function(){btn.textContent='Kopyala';btn.classList.remove('copied');},2000);});
+}
+
+// ===== RENDER SUNUCU BAGLANTISI =====
+function connectToServer(){
+    var evtSource=new EventSource("/events");
+    evtSource.onopen=function(){console.log("Sunucuya baglanildi");};
+    evtSource.onmessage=function(event){
+        var data=JSON.parse(event.data);
+        if(data.type==="new_signal"){processSignal(data.signal.symbol,data.signal.action);}
+    };
+    evtSource.onerror=function(){
+        console.log("Baglanti kesildi, 5 sn sonra tekrar deneniyor...");
+        evtSource.close();setTimeout(connectToServer,5000);
+    };
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+    var saved=localStorage.getItem('ba_session');
+    if(saved){try{var d=JSON.parse(saved);S.user=d.user;S.subscribed=d.sub;S.trialStart=d.trialStart;S.isAdmin=(d.user.email===ADMIN_EMAIL);goDash();}catch(e){localStorage.removeItem('ba_session');}}
+    updateWhales();connectToServer();
+});
+</script>
+</body>
+</html>
