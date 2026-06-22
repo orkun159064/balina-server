@@ -22,6 +22,13 @@
         @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
         @keyframes swim{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+        @keyframes flashNav{0%,100%{background:var(--navy)}50%{background:#ff0000}}
+        .nav.flash{animation:flashNav .5s ease 6}
+        @keyframes flashGreen{0%{opacity:0}50%{opacity:.12}100%{opacity:0}}
+        @keyframes flashRed{0%{opacity:0}50%{opacity:.12}100%{opacity:0}}
+        .flash-overlay{display:none;position:fixed;inset:0;z-index:99;pointer-events:none}
+        .flash-overlay.al{display:block;background:var(--green);animation:flashGreen .5s ease 5}
+        .flash-overlay.as{display:block;background:var(--red);animation:flashRed .5s ease 5}
 
         .auth{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--navy),var(--navy-light),#1e3a5f);padding:20px}
         .auth-box{width:100%;max-width:440px}
@@ -100,7 +107,6 @@
         .card-title{font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px}
         .card-badge{padding:3px 10px;border-radius:16px;font-size:10px;font-weight:600}
         .cb-blue{background:rgba(37,99,235,.1);color:var(--blue)}.cb-green{background:var(--green-bg);color:var(--green)}
-
         .webhook-box{background:var(--bg);border:2px solid #e5e7eb;border-radius:var(--rs);padding:12px 14px;display:flex;align-items:center;gap:8px;font-family:monospace;font-size:12px;word-break:break-all;margin-bottom:14px}
         .copy-btn{background:var(--blue);color:#fff;border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;transition:var(--t);font-family:inherit}
         .copy-btn:hover{background:var(--blue-hover)}.copy-btn.copied{background:var(--green)}
@@ -109,9 +115,7 @@
         .steps li:last-child{border-bottom:0}
         .steps li::before{content:counter(step);display:flex;align-items:center;justify-content:center;width:22px;height:22px;background:var(--blue);color:#fff;border-radius:50%;font-size:10px;font-weight:700;flex-shrink:0}
         .code{background:var(--navy);border-radius:var(--rs);padding:12px;margin-top:10px;font-family:monospace;font-size:11px;color:#a5f3fc;white-space:pre;line-height:1.5;overflow-x:auto}
-
         .admin-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:16px;font-size:10px;font-weight:700;background:rgba(245,158,11,.15);color:var(--yellow);text-transform:uppercase;margin-bottom:12px}
-
         .sg{margin-bottom:16px}.sg-title{font-size:11px;font-weight:700;color:var(--grey-dark);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px}
         .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f0f0}.toggle-row:last-child{border-bottom:0}
         .toggle-label{font-size:13px;color:var(--grey-dark)}.toggle-desc{font-size:11px;color:var(--grey-med);margin-top:1px}
@@ -120,7 +124,6 @@
         .toggle-slider{position:absolute;cursor:pointer;inset:0;background:#d1d5db;border-radius:24px;transition:var(--t)}
         .toggle-slider::before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:var(--t)}
         .toggle-switch input:checked+.toggle-slider{background:var(--blue)}.toggle-switch input:checked+.toggle-slider::before{transform:translateX(20px)}
-
         .sub-card{background:linear-gradient(135deg,var(--navy),var(--navy-light));border-radius:var(--r);padding:20px;color:#fff}
         .sub-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
         .sub-badge{padding:3px 10px;border-radius:16px;font-size:10px;font-weight:700;text-transform:uppercase}
@@ -128,7 +131,6 @@
         .sub-timer{text-align:center}.sub-timer-label{font-size:11px;opacity:.5;margin-bottom:4px}.sub-timer-value{font-size:28px;font-weight:900;font-variant-numeric:tabular-nums}
         .sub-progress{width:100%;height:4px;background:rgba(255,255,255,.1);border-radius:2px;margin-top:10px;overflow:hidden}
         .sub-progress-bar{height:100%;background:var(--blue);border-radius:2px;transition:width 1s linear}
-
         .notif-list{max-height:280px;overflow-y:auto}
         .notif-item{display:flex;align-items:flex-start;gap:10px;padding:12px;border-radius:var(--rs);margin-bottom:6px}
         .notif-item.al{background:var(--green-bg);border-left:3px solid var(--green)}
@@ -136,7 +138,6 @@
         .notif-title{font-size:12px;font-weight:700}.notif-item.al .notif-title{color:var(--green)}.notif-item.as .notif-title{color:var(--red)}
         .notif-time{font-size:10px;color:var(--grey-med)}
         .no-notif{text-align:center;padding:30px;color:var(--grey-light);font-size:13px}
-
         .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
         .modal-overlay.active{display:flex;animation:fadeIn .2s}
         .modal{background:#fff;border-radius:var(--rl);padding:28px;width:100%;max-width:420px;box-shadow:var(--shadow-xl);animation:fadeIn .3s}
@@ -148,12 +149,10 @@
         .pm-item{display:flex;align-items:center;gap:10px;padding:12px;border:2px solid #e5e7eb;border-radius:var(--rs);cursor:pointer;transition:var(--t)}
         .pm-item.selected{border-color:var(--blue);background:rgba(37,99,235,.05)}
         .pm-item input{accent-color:var(--blue)}.pm-label{font-size:13px;font-weight:600}.pm-desc{font-size:11px;color:var(--grey-med)}
-
         .blocked{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(10px)}
         .blocked.active{display:flex}
         .blocked-card{background:#fff;border-radius:var(--rl);padding:40px;text-align:center;max-width:400px;width:100%;animation:fadeIn .4s}
         .blocked-icon{font-size:56px;margin-bottom:12px}.blocked-title{font-size:20px;font-weight:800;margin-bottom:6px}.blocked-text{font-size:13px;color:var(--grey-med);margin-bottom:20px;line-height:1.6}
-
         .alert-popup{position:fixed;top:72px;right:24px;z-index:200;max-width:360px;width:calc(100% - 48px);border-radius:var(--r);padding:18px;box-shadow:var(--shadow-xl);transform:translateX(120%);transition:transform .4s cubic-bezier(.4,0,.2,1);background:#fff}
         .alert-popup.show{transform:translateX(0)}
         .alert-popup.al{border:2px solid var(--green)}.alert-popup.as{border:2px solid var(--red)}
@@ -161,12 +160,13 @@
         .ap-title{font-size:14px;font-weight:800}.alert-popup.al .ap-title{color:var(--green)}.alert-popup.as .ap-title{color:var(--red)}
         .ap-close{background:0 0;border:none;font-size:16px;cursor:pointer;color:var(--grey-light);padding:2px}
         .ap-body{font-size:13px;color:var(--grey-dark)}.ap-time{font-size:11px;color:var(--grey-med);margin-top:6px}
-
         @media(max-width:900px){.panels{grid-template-columns:1fr}.bottom{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}}
         @media(max-width:600px){.nav-sub,.nav-status,.nav-timer{display:none}.user-info{display:none}.main{padding:16px}.stats{grid-template-columns:1fr}}
     </style>
 </head>
 <body>
+
+<div id="flashOverlay" class="flash-overlay"></div>
 
 <div id="authScreen" class="auth">
     <div class="auth-box">
@@ -177,31 +177,31 @@
         </div>
         <div class="auth-card">
             <div class="auth-tabs">
-                <button class="auth-tab active" onclick="switchTab('login')">Giriş Yap</button>
-                <button class="auth-tab" onclick="switchTab('register')">Kayıt Ol</button>
+                <button class="auth-tab active" onclick="switchTab('login')">Giris Yap</button>
+                <button class="auth-tab" onclick="switchTab('register')">Kayit Ol</button>
             </div>
             <form id="loginForm" class="auth-form active" onsubmit="doLogin(event)">
                 <div class="fg"><label>E-posta</label><input type="email" id="lEmail" placeholder="ornek@email.com" required></div>
-                <div class="fg"><label>Şifre</label><input type="password" id="lPass" placeholder="••••••••" required></div>
-                <button type="submit" class="btn btn-primary" style="height:46px;">🚀 Giriş Yap</button>
+                <div class="fg"><label>Sifre</label><input type="password" id="lPass" placeholder="********" required></div>
+                <button type="submit" class="btn btn-primary" style="height:46px;">Giris Yap</button>
             </form>
             <form id="registerForm" class="auth-form" onsubmit="doRegister(event)">
-                <div class="fg"><label>Ad Soyad</label><input type="text" id="rName" placeholder="Adınız Soyadınız" required></div>
+                <div class="fg"><label>Ad Soyad</label><input type="text" id="rName" placeholder="Adiniz Soyadiniz" required></div>
                 <div class="fg"><label>E-posta</label><input type="email" id="rEmail" placeholder="ornek@email.com" required></div>
-                <div class="fg"><label>Şifre</label><input type="password" id="rPass" placeholder="En az 6 karakter" required minlength="6"></div>
-                <button type="submit" class="btn btn-primary" style="height:46px;">📝 Kayıt Ol & Ücretsiz Başla</button>
+                <div class="fg"><label>Sifre</label><input type="password" id="rPass" placeholder="En az 6 karakter" required minlength="6"></div>
+                <button type="submit" class="btn btn-primary" style="height:46px;">Kayit Ol & Ucretsiz Basla</button>
                 <div class="pricing-box">
                     <div class="pricing-card">
                         <span class="pricing-badge">Profesyonel Plan</span>
-                        <div class="pricing-price">₺999 <span>/ ay</span></div>
+                        <div class="pricing-price">999 TL <span>/ ay</span></div>
                         <ul class="pricing-list">
                             <li>XAUUSD & BTCUSDT takibi</li>
-                            <li>Gerçek zamanlı balina alarmı</li>
-                            <li>Sesli & masaüstü bildirim</li>
+                            <li>Gercek zamanli balina alarmi</li>
+                            <li>Sesli & masaustu bildirim</li>
                             <li>Webhook entegrasyonu</li>
-                            <li>9000+ balina takip ağı</li>
+                            <li>9000+ balina takip agi</li>
                         </ul>
-                        <div class="free-badge">🎁 İlk 24 Saat ÜCRETSİZ!</div>
+                        <div class="free-badge">Ilk 24 Saat UCRETSIZ!</div>
                     </div>
                 </div>
             </form>
@@ -213,18 +213,18 @@
     <nav class="nav">
         <div class="nav-left"><span>🐋</span><div><div class="nav-title">Balina Alarm</div><div class="nav-sub">Whale Trading Dashboard</div></div></div>
         <div class="nav-right">
-            <div class="nav-status"><span class="dot"></span><span>Bağlı</span></div>
+            <div class="nav-status"><span class="dot"></span><span>Bagli</span></div>
             <div class="nav-timer" id="navTimer">⏱️ <span id="timerDisp">24:00:00</span></div>
             <div class="nav-user" onclick="openModal('userModal')">
                 <div class="avatar" id="navAvatar">A</div>
-                <div><div class="u-name" id="navName">Kullanıcı</div><div class="u-email" id="navEmail">user@email.com</div></div>
+                <div><div class="u-name" id="navName">Kullanici</div><div class="u-email" id="navEmail">user@email.com</div></div>
             </div>
         </div>
     </nav>
 
     <div class="main">
         <div id="alertPopup" class="alert-popup">
-            <div class="ap-head"><span class="ap-title" id="apTitle"></span><button class="ap-close" onclick="closePopup()">✕</button></div>
+            <div class="ap-head"><span class="ap-title" id="apTitle"></span><button class="ap-close" onclick="closePopup()">X</button></div>
             <div class="ap-body" id="apBody"></div>
             <div class="ap-time" id="apTime"></div>
         </div>
@@ -232,13 +232,13 @@
         <div class="stats">
             <div class="stat"><div class="stat-icon">📡</div><div class="stat-val" id="statSignals">0</div><div class="stat-label">Toplam Sinyal</div></div>
             <div class="stat"><div class="stat-icon">🐋</div><div class="stat-val" id="statWhales">--</div><div class="stat-label">Takip Edilen Balina</div></div>
-            <div class="stat"><div class="stat-icon">📊</div><div class="stat-val">2</div><div class="stat-label">Aktif Çift</div></div>
+            <div class="stat"><div class="stat-icon">📊</div><div class="stat-val">2</div><div class="stat-label">Aktif Cift</div></div>
         </div>
 
         <div class="panels">
             <div class="panel">
                 <div class="panel-head">
-                    <span class="panel-title">🥇 XAUUSD <span style="font-size:12px;font-weight:400;color:var(--grey-med)">Altın</span></span>
+                    <span class="panel-title">🥇 XAUUSD <span style="font-size:12px;font-weight:400;color:var(--grey-med)">Altin</span></span>
                     <span class="panel-badge badge-wait" id="badgeXAU">Beklemede</span>
                 </div>
                 <div class="panel-status waiting" id="statusXAU">
@@ -247,7 +247,7 @@
                     <div class="panel-desc" id="descXAU">Balinalar hareket bekliyor...</div>
                 </div>
                 <div class="panel-footer">
-                    <span class="panel-time" id="timeXAU">Son güncelleme: --:--:--</span>
+                    <span class="panel-time" id="timeXAU">Son guncelleme: --:--:--</span>
                     <span class="panel-whales" id="whalesXAU">🐋 -- balina izleniyor</span>
                 </div>
                 <div class="legend">
@@ -256,7 +256,6 @@
                     <div class="leg"><div class="leg-dot" style="background:var(--red)"></div>SHORT</div>
                 </div>
             </div>
-
             <div class="panel">
                 <div class="panel-head">
                     <span class="panel-title">₿ BTCUSDT <span style="font-size:12px;font-weight:400;color:var(--grey-med)">Bitcoin</span></span>
@@ -268,7 +267,7 @@
                     <div class="panel-desc" id="descBTC">Balinalar hareket bekliyor...</div>
                 </div>
                 <div class="panel-footer">
-                    <span class="panel-time" id="timeBTC">Son güncelleme: --:--:--</span>
+                    <span class="panel-time" id="timeBTC">Son guncelleme: --:--:--</span>
                     <span class="panel-whales" id="whalesBTC">🐋 -- balina izleniyor</span>
                 </div>
                 <div class="legend">
@@ -286,26 +285,23 @@
                     <span class="card-badge cb-green">Admin Panel</span>
                 </div>
                 <span class="admin-badge">🔑 Sadece Admin</span>
-                
                 <label style="font-size:12px;font-weight:600;display:block;margin-bottom:4px;">Webhook URL:</label>
                 <div class="webhook-box">
                     <code id="whURL" style="flex:1;">https://balina-server-2.onrender.com/webhook</code>
                     <button class="copy-btn" onclick="copyWH('whURL')">Kopyala</button>
                 </div>
-                
-                <div style="font-size:12px;font-weight:600;margin:14px 0 6px;">📋 Kurulum Adımları:</div>
+                <div style="font-size:12px;font-weight:600;margin:14px 0 6px;">📋 Kurulum Adimlari:</div>
                 <ol class="steps">
-                    <li>TradingView'da "Add Alert" tıklayın</li>
-                    <li>Koşul olarak stratejinizi seçin</li>
-                    <li>Webhook URL kutusuna yukarıdaki URL'yi yapıştırın</li>
-                    <li>Mesaj kutusuna JSON girin ve alarmı kaydedin:</li>
+                    <li>TradingView'da "Add Alert" tiklayin</li>
+                    <li>Kosul olarak stratejinizi secin</li>
+                    <li>Webhook URL kutusuna yukaridaki URL'yi yapistirin</li>
+                    <li>Mesaj kutusuna JSON girin ve alarmi kaydedin:</li>
                 </ol>
                 <div class="code">{
   "symbol": "{{ticker}}",
-  "action": "{{strategy.order.action}}"
+  "action": "buy"
 }</div>
             </div>
-
             <div style="display:flex;flex-direction:column;gap:24px;">
                 <div class="card">
                     <div class="card-head">
@@ -318,40 +314,38 @@
                             <span class="sub-badge trial" id="subBadge">Deneme</span>
                         </div>
                         <div class="sub-timer">
-                            <div class="sub-timer-label" id="subLabel">Ücretsiz deneme süresi</div>
+                            <div class="sub-timer-label" id="subLabel">Ucretsiz deneme suresi</div>
                             <div class="sub-timer-value" id="subValue">24:00:00</div>
                             <div class="sub-progress"><div class="sub-progress-bar" id="subBar" style="width:100%"></div></div>
                         </div>
                     </div>
                 </div>
-
                 <div class="card" style="flex:1;">
                     <div class="card-head">
                         <span class="card-title">🔔 Son Bildirimler</span>
                         <span class="card-badge cb-blue" id="notifCount">0</span>
                     </div>
                     <div class="notif-list" id="notifList">
-                        <div class="no-notif">🔕 Henüz bildirim yok</div>
+                        <div class="no-notif">🔕 Henuz bildirim yok</div>
                     </div>
                 </div>
-
                 <div class="card">
                     <div class="card-head"><span class="card-title">⚙️ Ayarlar</span></div>
                     <div class="sg">
                         <div class="sg-title">Bildirimler</div>
                         <div class="toggle-row">
-                            <div><div class="toggle-label">🔊 Sesli Alarm</div><div class="toggle-desc">Sinyal geldiğinde ses çal</div></div>
+                            <div><div class="toggle-label">🔊 Sesli Alarm</div><div class="toggle-desc">Sinyal geldiginde ses cal</div></div>
                             <label class="toggle-switch"><input type="checkbox" id="soundToggle" checked onchange="toggleSound()"><span class="toggle-slider"></span></label>
                         </div>
                         <div class="toggle-row">
-                            <div><div class="toggle-label">📱 Tarayıcı Bildirimi</div><div class="toggle-desc">Masaüstü bildirim göster</div></div>
+                            <div><div class="toggle-label">📱 Tarayici Bildirimi</div><div class="toggle-desc">Masaustu bildirim goster</div></div>
                             <label class="toggle-switch"><input type="checkbox" id="notifToggle" checked onchange="toggleNotif()"><span class="toggle-slider"></span></label>
                         </div>
                     </div>
                     <div class="sg">
                         <div class="sg-title">Hesap</div>
                         <div style="display:flex;gap:8px;">
-                            <button class="btn btn-sm btn-outline" onclick="doLogout()" style="flex:1;">🚪 Çıkış Yap</button>
+                            <button class="btn btn-sm btn-outline" onclick="doLogout()" style="flex:1;">🚪 Cikis Yap</button>
                             <button class="btn btn-sm btn-danger" onclick="openModal('payModal')" style="flex:1;" id="upgradeBtn">⭐ Abone Ol</button>
                         </div>
                     </div>
@@ -363,46 +357,46 @@
 
 <div id="payModal" class="modal-overlay" onclick="closeModal(event,'payModal')">
     <div class="modal" onclick="event.stopPropagation()">
-        <div class="modal-head"><span class="modal-title">💳 Abonelik Satın Al</span><button class="modal-close" onclick="closeModal(null,'payModal')">✕</button></div>
+        <div class="modal-head"><span class="modal-title">💳 Abonelik Satin Al</span><button class="modal-close" onclick="closeModal(null,'payModal')">X</button></div>
         <div>
             <div class="pricing-card" style="margin-bottom:16px;">
                 <span class="pricing-badge">Profesyonel Plan</span>
-                <div class="pricing-price">₺999 <span>/ ay</span></div>
+                <div class="pricing-price">999 TL <span>/ ay</span></div>
                 <ul class="pricing-list">
                     <li>XAUUSD & BTCUSDT takibi</li>
-                    <li>Gerçek zamanlı balina alarmı</li>
-                    <li>Sesli & masaüstü bildirim</li>
+                    <li>Gercek zamanli balina alarmi</li>
+                    <li>Sesli & masaustu bildirim</li>
                 </ul>
             </div>
-            <div style="font-size:12px;font-weight:600;margin-bottom:8px;">Ödeme Yöntemi:</div>
+            <div style="font-size:12px;font-weight:600;margin-bottom:8px;">Odeme Yontemi:</div>
             <div class="pm">
-                <label class="pm-item selected" onclick="selectPM(this)"><input type="radio" name="pm" value="card" checked><div><div class="pm-label">💳 Kredi / Banka Kartı</div><div class="pm-desc">Visa, Mastercard, Troy</div></div></label>
-                <label class="pm-item" onclick="selectPM(this)"><input type="radio" name="pm" value="eft"><div><div class="pm-label">🏦 Havale / EFT</div><div class="pm-desc">Banka hesabına transfer</div></div></label>
+                <label class="pm-item selected" onclick="selectPM(this)"><input type="radio" name="pm" value="card" checked><div><div class="pm-label">💳 Kredi / Banka Karti</div><div class="pm-desc">Visa, Mastercard, Troy</div></div></label>
+                <label class="pm-item" onclick="selectPM(this)"><input type="radio" name="pm" value="eft"><div><div class="pm-label">🏦 Havale / EFT</div><div class="pm-desc">Banka hesabina transfer</div></div></label>
             </div>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-outline" onclick="closeModal(null,'payModal')">İptal</button>
-            <button class="btn btn-success" onclick="doPayment()">⚡ Ödemeyi Tamamla</button>
+            <button class="btn btn-outline" onclick="closeModal(null,'payModal')">Iptal</button>
+            <button class="btn btn-success" onclick="doPayment()">⚡ Odemeyi Tamamla</button>
         </div>
     </div>
 </div>
 
 <div id="userModal" class="modal-overlay" onclick="closeModal(event,'userModal')">
     <div class="modal" onclick="event.stopPropagation()">
-        <div class="modal-head"><span class="modal-title">👤 Hesap Bilgileri</span><button class="modal-close" onclick="closeModal(null,'userModal')">✕</button></div>
+        <div class="modal-head"><span class="modal-title">👤 Hesap Bilgileri</span><button class="modal-close" onclick="closeModal(null,'userModal')">X</button></div>
         <div style="text-align:center;margin-bottom:16px;">
             <div style="width:56px;height:56px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;color:#fff;font-size:20px;font-weight:700;" id="mAvatar">A</div>
-            <div style="font-size:16px;font-weight:700;" id="mName">Kullanıcı</div>
+            <div style="font-size:16px;font-weight:700;" id="mName">Kullanici</div>
             <div style="font-size:13px;color:var(--grey-med);" id="mEmail">user@email.com</div>
             <div id="mAdminBadge" style="display:none;margin-top:8px;"><span class="admin-badge">🔑 Admin</span></div>
         </div>
         <div style="background:var(--bg);border-radius:var(--rs);padding:14px;text-align:center;">
             <div style="font-size:11px;color:var(--grey-med);margin-bottom:3px;">Abonelik Durumu</div>
-            <div style="font-size:14px;font-weight:700;color:var(--yellow);" id="mSub">🎯 Ücretsiz Deneme</div>
+            <div style="font-size:14px;font-weight:700;color:var(--yellow);" id="mSub">🎯 Ucretsiz Deneme</div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-outline" onclick="closeModal(null,'userModal')">Kapat</button>
-            <button class="btn btn-danger" onclick="doLogout()">🚪 Çıkış</button>
+            <button class="btn btn-danger" onclick="doLogout()">🚪 Cikis</button>
         </div>
     </div>
 </div>
@@ -410,255 +404,9 @@
 <div id="blockedScreen" class="blocked">
     <div class="blocked-card">
         <div class="blocked-icon">🔒</div>
-        <div class="blocked-title">Hizmet Askıya Alındı</div>
-        <div class="blocked-text">Ücretsiz deneme süreniz dolmuştur.<br>Hizmete devam etmek için abonelik satın alın.<br><br><strong>₺999/ay</strong> ile sınırsız erişim.</div>
+        <div class="blocked-title">Hizmet Askida Alindi</div>
+        <div class="blocked-text">Ucretsiz deneme sureniz dolmustur.<br>Hizmete devam etmek icin abonelik satin alin.<br><br><strong>999 TL/ay</strong> ile sinirsiz erisim.</div>
         <button class="btn btn-primary" onclick="openModal('payModal')">💳 Abone Ol</button>
-        <button class="btn btn-outline" style="margin-top:8px;" onclick="doLogout()">🚪 Çıkış Yap</button>
+        <button class="btn btn-outline" style="margin-top:8px;" onclick="doLogout()">🚪 Cikis Yap</button>
     </div>
 </div>
-
-<script>
-const ADMIN_EMAIL = "orkun159064@outlook.com";
-
-const S = {
-    user: null, subscribed: false, trialStart: null, trialDur: 24*60*60*1000,
-    soundOn: true, notifOn: true, signalCount: 0, whaleBase: 0, active: false, isAdmin: false
-};
-
-function getDailyWhales() {
-    const today = new Date();
-    const seed = today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate();
-    let h = 0;
-    for(let i=0;i<String(seed).length;i++){h=((h<<5)-h)+String(seed).charCodeAt(i);h|=0;}
-    return 9000+Math.abs(h)%801;
-}
-
-function updateWhales() {
-    if(S.whaleBase===0) S.whaleBase=getDailyWhales();
-    document.getElementById('statWhales').textContent=S.whaleBase.toLocaleString('tr-TR');
-    document.getElementById('whalesXAU').textContent='🐋 '+S.whaleBase.toLocaleString('tr-TR')+' balina izleniyor';
-    document.getElementById('whalesBTC').textContent='🐋 '+S.whaleBase.toLocaleString('tr-TR')+' balina izleniyor';
-}
-
-function switchTab(t){
-    document.querySelectorAll('.auth-tab').forEach(b=>b.classList.remove('active'));
-    document.querySelectorAll('.auth-form').forEach(f=>f.classList.remove('active'));
-    if(t==='login'){document.querySelectorAll('.auth-tab')[0].classList.add('active');document.getElementById('loginForm').classList.add('active');}
-    else{document.querySelectorAll('.auth-tab')[1].classList.add('active');document.getElementById('registerForm').classList.add('active');}
-}
-
-function doLogin(e){
-    e.preventDefault();
-    const email=document.getElementById('lEmail').value;
-    const pass=document.getElementById('lPass').value;
-    const users=JSON.parse(localStorage.getItem('ba_users')||'[]');
-    const u=users.find(x=>x.email===email&&x.pass===pass);
-    if(u){S.user=u;S.subscribed=u.sub||false;S.trialStart=u.trialStart||Date.now();S.isAdmin=(u.email===ADMIN_EMAIL);save();goDash();}
-    else if(!users.length){const n={name:email.split('@')[0],email,pass,sub:false,trialStart:Date.now()};users.push(n);localStorage.setItem('ba_users',JSON.stringify(users));S.user=n;S.trialStart=n.trialStart;S.isAdmin=(email===ADMIN_EMAIL);save();goDash();}
-    else alert('E-posta veya şifre hatalı!');
-}
-
-function doRegister(e){
-    e.preventDefault();
-    const name=document.getElementById('rName').value,email=document.getElementById('rEmail').value,pass=document.getElementById('rPass').value;
-    const users=JSON.parse(localStorage.getItem('ba_users')||'[]');
-    if(users.find(x=>x.email===email)){alert('Bu e-posta zaten kayıtlı!');return;}
-    const n={name,email,pass,sub:false,trialStart:Date.now()};
-    users.push(n);localStorage.setItem('ba_users',JSON.stringify(users));
-    S.user=n;S.trialStart=n.trialStart;S.isAdmin=(email===ADMIN_EMAIL);save();goDash();
-}
-
-function doLogout(){localStorage.removeItem('ba_session');location.reload();}
-function save(){localStorage.setItem('ba_session',JSON.stringify({user:S.user,sub:S.subscribed,trialStart:S.trialStart}));}
-
-function goDash(){
-    S.active=true;
-    document.getElementById('authScreen').style.display='none';
-    document.getElementById('dashboard').classList.add('active');
-    updateUserUI(); updateWhales(); startTimer(); checkBlocked();
-    if(S.isAdmin){document.getElementById('adminSection').style.display='block';}
-    else{document.getElementById('adminSection').style.display='none';}
-    if('Notification' in window&&Notification.permission==='default')Notification.requestPermission();
-}
-
-function updateUserUI(){
-    if(!S.user)return;
-    document.getElementById('navName').textContent=S.user.name;
-    document.getElementById('navEmail').textContent=S.user.email;
-    document.getElementById('navAvatar').textContent=S.user.name[0].toUpperCase();
-    document.getElementById('mName').textContent=S.user.name;
-    document.getElementById('mEmail').textContent=S.user.email;
-    document.getElementById('mAvatar').textContent=S.user.name[0].toUpperCase();
-    document.getElementById('mAdminBadge').style.display=S.isAdmin?'block':'none';
-    if(S.subscribed){
-        document.getElementById('subBadge').textContent='Aktif';document.getElementById('subBadge').className='sub-badge active';
-        document.getElementById('mSub').textContent='✅ Aktif Abonelik';document.getElementById('mSub').style.color='var(--green)';
-        document.getElementById('subLabel').textContent='Abonelik süreniz';
-        document.getElementById('subBtn').style.display='none';document.getElementById('upgradeBtn').style.display='none';
-    }else{
-        document.getElementById('subBadge').textContent='Deneme';document.getElementById('subBadge').className='sub-badge trial';
-        document.getElementById('mSub').textContent='🎯 Ücretsiz Deneme';document.getElementById('mSub').style.color='var(--yellow)';
-        document.getElementById('subLabel').textContent='Ücretsiz deneme süresi';
-        document.getElementById('subBtn').style.display='block';document.getElementById('upgradeBtn').style.display='block';
-    }
-}
-
-function startTimer(){
-    setInterval(()=>{
-        if(S.subscribed){
-            const end=S.user.subEnd||(Date.now()+30*24*60*60*1000);
-            const rem=Math.max(0,end-Date.now());
-            const d=Math.floor(rem/(24*60*60*1000)),h=Math.floor((rem%(24*60*60*1000))/(60*60*1000));
-            document.getElementById('timerDisp').textContent=d+'g '+h+'sa';
-            document.getElementById('subValue').textContent=d+' Gün '+h+' Saat';
-            document.getElementById('subBar').style.width=(rem/(30*24*60*60*1000))*100+'%';
-            document.getElementById('navTimer').className='nav-timer';
-        }else{
-            const rem=Math.max(0,S.trialDur-(Date.now()-S.trialStart));
-            if(rem<=0){
-                document.getElementById('timerDisp').textContent='Süre doldu';
-                document.getElementById('subValue').textContent='Süre Doldu';
-                document.getElementById('subBar').style.width='0%';
-                document.getElementById('navTimer').className='nav-timer expired';
-                if(!document.getElementById('blockedScreen').classList.contains('active')){document.getElementById('blockedScreen').classList.add('active');}
-                return;
-            }
-            const h=Math.floor(rem/3600000),m=Math.floor((rem%3600000)/60000),s=Math.floor((rem%60000)/1000);
-            document.getElementById('timerDisp').textContent=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
-            document.getElementById('subValue').textContent=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
-            document.getElementById('subBar').style.width=(rem/S.trialDur)*100+'%';
-            document.getElementById('navTimer').className=h<1?'nav-timer urgent':'nav-timer';
-        }
-    },1000);
-}
-
-function checkBlocked(){
-    if(S.subscribed)return;
-    if(Date.now()-S.trialStart>=S.trialDur){document.getElementById('blockedScreen').classList.add('active');}
-}
-
-function processSignal(symbol,type){
-    if(!S.active)return;
-    if(!S.subscribed&&(Date.now()-S.trialStart)>=S.trialDur)return;
-    const now=new Date();
-    const isXAU=symbol.toUpperCase().includes('XAU')||symbol.toUpperCase().includes('ALTIN');
-    const pair=isXAU?'XAUUSD':'BTCUSDT';
-    const sId=isXAU?'statusXAU':'statusBTC',sigId=isXAU?'signalXAU':'signalBTC';
-    const dId=isXAU?'descXAU':'descBTC',bId=isXAU?'badgeXAU':'badgeBTC',tId=isXAU?'timeXAU':'timeBTC';
-    const el=document.getElementById(sId),sig=document.getElementById(sigId),desc=document.getElementById(dId),badge=document.getElementById(bId);
-    if(type==='buy'||type==='long'){
-        el.className='panel-status long';sig.textContent='Balinalar LONG Giriyor';
-        desc.textContent='🐋鲸 '+pair+' alım sinyali tespit edildi!';
-        badge.textContent='LONG';badge.className='panel-badge badge-live';badge.style.background='var(--green-bg)';badge.style.color='var(--green)';
-        showPopup('al','🐋 '+pair+' LONG','Balinalar '+pair+' long pozisyon açtı!',now);
-        addNotif('al','🐋 '+pair+' LONG Giriş','Balina alım sinyali tespit edildi',now);
-        playAlert(true);browserNotif('🐋 '+pair+' LONG!','Balinalar '+pair+' long pozisyon açtı!');
-    }else{
-        el.className='panel-status short';sig.textContent='Balinalar SHORT Açıyor';
-        desc.textContent='🐋鲸 '+pair+' satış sinyali tespit edildi!';
-        badge.textContent='SHORT';badge.className='panel-badge badge-live';badge.style.background='var(--red-bg)';badge.style.color='var(--red)';
-        showPopup('as','🐋 '+pair+' SHORT','Balinalar '+pair+' short pozisyon açtı!',now);
-        addNotif('as','🐋 '+pair+' SHORT Giriş','Balina satış sinyali tespit edildi',now);
-        playAlert(false);browserNotif('🐋 '+pair+' SHORT!','Balinalar '+pair+' short pozisyon açtı!');
-    }
-    document.getElementById(tId).textContent='Son güncelleme: '+now.toLocaleTimeString('tr-TR');
-    S.signalCount++;document.getElementById('statSignals').textContent=S.signalCount;
-}
-
-let notifs=[];
-function addNotif(type,title,msg,time){notifs.unshift({type,title,msg,time});if(notifs.length>10)notifs=notifs.slice(0,10);renderNotifs();}
-function renderNotifs(){
-    const el=document.getElementById('notifList');
-    if(!notifs.length){el.innerHTML='<div class="no-notif">🔕 Henüz bildirim yok</div>';}
-    else{el.innerHTML=notifs.slice(0,8).map(n=>'<div class="notif-item '+n.type+'"><div><div class="notif-title">'+n.title+'</div><div class="notif-time">'+n.time.toLocaleString('tr-TR')+'</div></div></div>').join('');}
-    document.getElementById('notifCount').textContent=notifs.length;
-}
-
-let popT;
-function showPopup(cls,title,body,time){
-    const p=document.getElementById('alertPopup');p.className='alert-popup '+cls;
-    document.getElementById('apTitle').textContent=title;document.getElementById('apBody').textContent=body;document.getElementById('apTime').textContent=time.toLocaleString('tr-TR');
-    p.classList.add('show');clearTimeout(popT);popT=setTimeout(()=>p.classList.remove('show'),8000);
-}
-function closePopup(){document.getElementById('alertPopup').classList.remove('show');clearTimeout(popT);}
-
-
-  function playAlert(isBuy){
-    if(!S.soundOn)return;
-    try{
-        const ctx=new(window.AudioContext||window.webkitAudioContext)();
-        
-        function beep(freq,dur){
-            var o=ctx.createOscillator();
-            var g=ctx.createGain();
-            o.connect(g);
-            g.connect(ctx.destination);
-            o.type='square';
-            o.frequency.value=freq;
-            g.gain.setValueAtTime(0.95,ctx.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);
-            o.start(ctx.currentTime);
-            o.stop(ctx.currentTime+dur);
-        }
-        
-        var t=ctx.currentTime;
-        
-        if(isBuy){
-            beep(800,0.15);beep(1000,0.15);beep(1200,0.15);beep(1400,0.15);
-            beep(1600,0.15);beep(1800,0.15);beep(2000,0.2);beep(2200,0.3);
-        }else{
-            beep(2200,0.15);beep(2000,0.15);beep(1800,0.15);beep(1600,0.15);
-            beep(1400,0.15);beep(1200,0.15);beep(1000,0.2);beep(800,0.3);
-        }
-    }catch(e){}
-}
-}
-function browserNotif(title,body){if(!S.notifOn||!('Notification' in window)||Notification.permission!=='granted')return;try{new Notification(title,{body,icon:'🐋',vibrate:[200,100,200]});}catch(e){}}
-
-function toggleSound(){S.soundOn=document.getElementById('soundToggle').checked;}
-function toggleNotif(){S.notifOn=document.getElementById('notifToggle').checked;if(S.notifOn&&'Notification' in window)Notification.requestPermission();}
-
-function openModal(id){document.getElementById(id).classList.add('active');}
-function closeModal(e,id){if(!e||e.target===document.getElementById(id))document.getElementById(id).classList.remove('active');}
-function selectPM(el){document.querySelectorAll('.pm-item').forEach(m=>m.classList.remove('selected'));el.classList.add('selected');}
-
-function doPayment(){
-    S.subscribed=true;S.user.sub=true;S.user.subEnd=Date.now()+30*24*60*60*1000;
-    const users=JSON.parse(localStorage.getItem('ba_users')||'[]');
-    const idx=users.findIndex(u=>u.email===S.user.email);
-    if(idx!==-1){users[idx].sub=true;users[idx].subEnd=S.user.subEnd;localStorage.setItem('ba_users',JSON.stringify(users));}
-    save();document.getElementById('blockedScreen').classList.remove('active');updateUserUI();closeModal(null,'payModal');
-}
-
-function copyWH(id){
-    const url=document.getElementById(id).textContent;
-    navigator.clipboard.writeText(url).then(()=>{const btn=document.getElementById(id).nextElementSibling;btn.textContent='Kopyalandı!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Kopyala';btn.classList.remove('copied');},2000);});
-}
-
-// ===== RENDER SUNUCU BAGLANTISI (OTOMATIK AYARLI) =====
-function connectToServer() {
-    // Siteniz Render'da çalıştığı için doğrudan /events kullanılır
-    const evtSource = new EventSource("/events");
-    evtSource.onopen = function() { console.log("Sunucuya baglanildi"); };
-    evtSource.onmessage = function(event) {
-        const data = JSON.parse(event.data);
-        if (data.type === "new_signal") {
-            processSignal(data.signal.symbol, data.signal.action);
-        }
-    };
-    evtSource.onerror = function() {
-        console.log("Baglanti kesildi, 5 sn sonra tekrar deneniyor...");
-        evtSource.close();
-        setTimeout(connectToServer, 5000);
-    };
-}
-
-document.addEventListener('DOMContentLoaded',()=>{
-    const saved=localStorage.getItem('ba_session');
-    if(saved){try{const d=JSON.parse(saved);S.user=d.user;S.subscribed=d.sub;S.trialStart=d.trialStart;S.isAdmin=(d.user.email===ADMIN_EMAIL);goDash();}catch(e){localStorage.removeItem('ba_session');}}
-    updateWhales();
-    connectToServer();
-});
-</script>
-</body>
-</html>
