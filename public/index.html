@@ -724,12 +724,19 @@ function connectToServer(){
 }
 
 document.addEventListener('DOMContentLoaded',function(){
-// ===== YASAL UYARI KONTROL =====
-function acceptLegal(){
-    localStorage.setItem('ba_legal','accepted');
-    document.getElementById('legalModal').classList.remove('active');
-    document.getElementById('legalModal').style.display='none';
-}
+    // ===== YASAL UYARI =====
+    var lm=document.getElementById('legalModal');
+    if(localStorage.getItem('ba_legal')==='accepted'){
+        if(lm){lm.style.display='none';}
+    }
+    
+    window.acceptLegal=function(){
+        localStorage.setItem('ba_legal','accepted');
+        var el=document.getElementById('legalModal');
+        if(el){el.style.display='none';}
+    };
+    // ===== YASAL UYARI KONTROL =====
+
 if(localStorage.getItem('ba_legal')==='accepted'){
     var lm=document.getElementById('legalModal');
     if(lm){lm.classList.remove('active');lm.style.display='none';}
