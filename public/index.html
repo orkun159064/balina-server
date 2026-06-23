@@ -11,9 +11,9 @@
             --navy:#0d1b2a;--navy-light:#1b2d45;--white:#fff;--bg:#f0f4f8;
             --blue:#2563eb;--blue-hover:#1d4ed8;--blue-glow:rgba(37,99,235,.3);
             --grey-dark:#374151;--grey-med:#6b7280;--grey-light:#9ca3af;
-            --green:#10b981;--green-bg:rgba(16,185,129,.1);--green-bdr:rgba(16,185,129,.3);
-            --red:#ef4444;--red-bg:rgba(239,68,68,.1);--red-bdr:rgba(239,68,68,.3);
-            --yellow:#f59e0b;--yellow-bg:rgba(245,158,11,.1);--yellow-bdr:rgba(245,158,11,.3);
+            --green:#10b981;--green-bg:rgba(16,185,129,.1);
+            --red:#ef4444;--red-bg:rgba(239,68,68,.1);
+            --yellow:#f59e0b;--yellow-bg:rgba(245,158,11,.1);
             --r:12px;--rs:8px;--rl:16px;
             --shadow:0 4px 6px -1px rgba(0,0,0,.1);--shadow-xl:0 20px 25px -5px rgba(0,0,0,.1);
             --t:all .3s ease
@@ -33,7 +33,6 @@
         .flash-bar{display:none;position:fixed;top:60px;left:0;right:0;height:6px;z-index:98}
         .flash-bar.al{display:block;background:linear-gradient(90deg,#00ff88,#10b981,#00ff88);animation:pulse .3s ease 10}
         .flash-bar.as{display:block;background:linear-gradient(90deg,#ff4444,#ef4444,#ff4444);animation:pulse .3s ease 10}
-
         .auth{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--navy),var(--navy-light),#1e3a5f);padding:20px}
         .auth-box{width:100%;max-width:440px}
         .auth-logo{text-align:center;margin-bottom:32px}
@@ -61,7 +60,7 @@
         .pricing-price{font-size:32px;font-weight:900}.pricing-price span{font-size:14px;font-weight:400;opacity:.6}
         .pricing-list{list-style:none;margin-top:12px}
         .pricing-list li{padding:5px 0;font-size:12px;display:flex;align-items:center;gap:6px;opacity:.85}
-        .pricing-list li::before{content:'✓';width:18px;height:18px;background:rgba(16,185,129,.2);color:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+        .pricing-list li::before{content:'\2713';width:18px;height:18px;background:rgba(16,185,129,.2);color:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
         .free-badge{display:block;text-align:center;margin-top:14px;padding:8px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);border-radius:var(--rs);color:var(--yellow);font-size:12px;font-weight:600}
         .dash{display:none;min-height:100vh}.dash.active{display:block}
         .nav{background:var(--navy);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.2)}
@@ -140,7 +139,7 @@
         .no-notif{text-align:center;padding:30px;color:var(--grey-light);font-size:13px}
         .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
         .modal-overlay.active{display:flex;animation:fadeIn .2s}
-        .modal{background:#fff;border-radius:var(--rl);padding:28px;width:100%;max-width:420px;box-shadow:var(--shadow-xl);animation:fadeIn .3s}
+        .modal{background:#fff;border-radius:var(--rl);padding:28px;width:100%;max-width:550px;box-shadow:var(--shadow-xl);animation:fadeIn .3s;max-height:90vh;overflow-y:auto}
         .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
         .modal-title{font-size:17px;font-weight:700}
         .modal-close{width:30px;height:30px;border:none;background:var(--bg);border-radius:50%;cursor:pointer;font-size:16px;transition:var(--t)}.modal-close:hover{background:#e5e7eb}
@@ -161,13 +160,34 @@
         .ap-close{background:0 0;border:none;font-size:16px;cursor:pointer;color:var(--grey-light);padding:2px}
         .ap-body{font-size:13px;color:var(--grey-dark)}.ap-time{font-size:11px;color:var(--grey-med);margin-top:6px}
         @media(max-width:900px){.panels{grid-template-columns:1fr}.bottom{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}}
-        @media(max-width:600px){.nav-sub,.nav-status,.nav-timer{display:none}.user-info{display:none}.main{padding:16px}.stats{grid-template-columns:1fr}}
+        @media(max-width:600px){.nav-sub,.nav-status,.nav-timer{display:none}.main{padding:16px}.stats{grid-template-columns:1fr}}
     </style>
 </head>
 <body>
 
 <div class="flash-bar" id="flashBar"></div>
 
+<!-- YASAL UYARI -->
+<div id="legalModal" class="modal-overlay active" style="z-index:2000;">
+    <div class="modal">
+        <div class="modal-head"><span class="modal-title">Yasal Uyari</span></div>
+        <div style="font-size:13px;color:var(--grey-dark);line-height:1.8;">
+            <p style="margin-bottom:12px;padding:10px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);border-radius:8px;font-weight:700;color:#b45309;text-align:center;">BU SITE YATIRIM TAVSIYESI VERMEZ</p>
+            <p style="margin-bottom:10px;"><strong>1. Sorumluluk Reddi:</strong> Bu sitede paylasilan sinyaller ve bilgiler yalnizca egitim ve bilgilendirme amaclidir. Hicbir sekilde yatirim tavsiyesi niteligi tasimaz.</p>
+            <p style="margin-bottom:10px;"><strong>2. Risk Bildirimi:</strong> Finansal piyasalarda islem yapmak yuksek risk icerir. Yatiriminizin tamamini kaybedebilirsiniz. Kaybetmeyi goze alamayacaginiz parayla islem yapmayiniz.</p>
+            <p style="margin-bottom:10px;"><strong>3. Sorumsuzluk:</strong> Bu sitedeki sinyallere dayanarak yapilan islemlerden dogan kar veya zarardan Balina Alarm ve sahipleri sorumlu degildir.</p>
+            <p style="margin-bottom:10px;"><strong>4. SPK Uyarisi:</strong> Burada yer alan bilgiler SPK (Sermaye Piyasasi Kurulu) tarafindan denetlenmemistir. Yatirim danismanligi lisansimiz bulunmamaktadir.</p>
+            <p style="margin-bottom:10px;"><strong>5. Kisisel Sorumluluk:</strong> Her yatirimci kendi arastirmasini yapmali ve kendi kararlarini vermelidir. Profesyonel yatirim danismanina basvurmaniz onerilir.</p>
+            <p style="margin-bottom:10px;"><strong>6. Gecmis Performans:</strong> Gecmis performans, gelecekteki sonuclarin garantisi degildir.</p>
+            <p style="padding:10px;background:var(--bg);border-radius:8px;font-size:12px;color:var(--grey-med);text-align:center;">Bu siteyi kullanarak yukaridaki sartlari kabul etmis sayilirsiniz.</p>
+        </div>
+        <div class="modal-footer" style="margin-top:16px;">
+            <button class="btn btn-primary" onclick="localStorage.setItem('ba_legal','accepted');document.getElementById('legalModal').style.display='none';" style="flex:1;">Okudum, Kabul Ediyorum</button>
+        </div>
+    </div>
+</div>
+
+<!-- AUTH -->
 <div id="authScreen" class="auth">
     <div class="auth-box">
         <div class="auth-logo">
@@ -189,6 +209,7 @@
                 <div class="fg"><label>Ad Soyad</label><input type="text" id="rName" placeholder="Adiniz Soyadiniz" required></div>
                 <div class="fg"><label>E-posta</label><input type="email" id="rEmail" placeholder="ornek@email.com" required></div>
                 <div class="fg"><label>Sifre</label><input type="password" id="rPass" placeholder="En az 6 karakter" required minlength="6"></div>
+                <div class="fg"><label>Telefon Numarasi</label><input type="tel" id="rPhone" placeholder="5XXXXXXXXX" required></div>
                 <button type="submit" class="btn btn-primary" style="height:46px;">Kayit Ol</button>
                 <div class="pricing-box">
                     <div class="pricing-card">
@@ -209,12 +230,13 @@
     </div>
 </div>
 
+<!-- DASHBOARD -->
 <div id="dashboard" class="dash">
     <nav class="nav">
         <div class="nav-left"><span>🐋</span><div><div class="nav-title">Balina Alarm</div><div class="nav-sub">Whale Trading Dashboard</div></div></div>
         <div class="nav-right">
             <div class="nav-status"><span class="dot"></span><span>Bagli</span></div>
-            <div class="nav-timer" id="navTimer">⏱️ <span id="timerDisp">24:00:00</span></div>
+            <div class="nav-timer" id="navTimer"><span id="timerDisp">24:00:00</span></div>
             <div class="nav-user" onclick="openModal('userModal')">
                 <div class="avatar" id="navAvatar">A</div>
                 <div><div class="u-name" id="navName">Kullanici</div><div class="u-email" id="navEmail">user@email.com</div></div>
@@ -234,113 +256,50 @@
         </div>
         <div class="panels">
             <div class="panel">
-                <div class="panel-head">
-                    <span class="panel-title">🥇 XAUUSD <span style="font-size:12px;font-weight:400;color:var(--grey-med)">Altin</span></span>
-                    <span class="panel-badge badge-wait" id="badgeXAU">Beklemede</span>
-                </div>
-                <div class="panel-status waiting" id="statusXAU">
-                    <span class="panel-emoji">🐋</span>
-                    <div class="panel-signal" id="signalXAU">Beklemede</div>
-                    <div class="panel-desc" id="descXAU">Balinalar hareket bekliyor...</div>
-                </div>
-                <div class="panel-footer">
-                    <span class="panel-time" id="timeXAU">Son guncelleme: --:--:--</span>
-                    <span class="panel-whales" id="whalesXAU">🐋 -- balina izleniyor</span>
-                </div>
-                <div class="legend">
-                    <div class="leg"><div class="leg-dot" style="background:var(--yellow)"></div>Beklemede</div>
-                    <div class="leg"><div class="leg-dot" style="background:var(--green)"></div>LONG</div>
-                    <div class="leg"><div class="leg-dot" style="background:var(--red)"></div>SHORT</div>
-                </div>
+                <div class="panel-head"><span class="panel-title">🥇 XAUUSD <span style="font-size:12px;font-weight:400;color:var(--grey-med)">Altin</span></span><span class="panel-badge badge-wait" id="badgeXAU">Beklemede</span></div>
+                <div class="panel-status waiting" id="statusXAU"><span class="panel-emoji">🐋</span><div class="panel-signal" id="signalXAU">Beklemede</div><div class="panel-desc" id="descXAU">Balinalar hareket bekliyor...</div></div>
+                <div class="panel-footer"><span class="panel-time" id="timeXAU">Son guncelleme: --:--:--</span><span class="panel-whales" id="whalesXAU">🐋 -- balina izleniyor</span></div>
+                <div class="legend"><div class="leg"><div class="leg-dot" style="background:var(--yellow)"></div>Beklemede</div><div class="leg"><div class="leg-dot" style="background:var(--green)"></div>LONG</div><div class="leg"><div class="leg-dot" style="background:var(--red)"></div>SHORT</div></div>
             </div>
             <div class="panel">
-                <div class="panel-head">
-                    <span class="panel-title">₿ BTCUSDT <span style="font-size:12px;font-weight:400;color:var(--grey-med)">Bitcoin</span></span>
-                    <span class="panel-badge badge-wait" id="badgeBTC">Beklemede</span>
-                </div>
-                <div class="panel-status waiting" id="statusBTC">
-                    <span class="panel-emoji">🐋</span>
-                    <div class="panel-signal" id="signalBTC">Beklemede</div>
-                    <div class="panel-desc" id="descBTC">Balinalar hareket bekliyor...</div>
-                </div>
-                <div class="panel-footer">
-                    <span class="panel-time" id="timeBTC">Son guncelleme: --:--:--</span>
-                    <span class="panel-whales" id="whalesBTC">🐋 -- balina izleniyor</span>
-                </div>
-                <div class="legend">
-                    <div class="leg"><div class="leg-dot" style="background:var(--yellow)"></div>Beklemede</div>
-                    <div class="leg"><div class="leg-dot" style="background:var(--green)"></div>LONG</div>
-                    <div class="leg"><div class="leg-dot" style="background:var(--red)"></div>SHORT</div>
-                </div>
+                <div class="panel-head"><span class="panel-title">₿ BTCUSDT <span style="font-size:12px;font-weight:400;color:var(--grey-med)">Bitcoin</span></span><span class="panel-badge badge-wait" id="badgeBTC">Beklemede</span></div>
+                <div class="panel-status waiting" id="statusBTC"><span class="panel-emoji">🐋</span><div class="panel-signal" id="signalBTC">Beklemede</div><div class="panel-desc" id="descBTC">Balinalar hareket bekliyor...</div></div>
+                <div class="panel-footer"><span class="panel-time" id="timeBTC">Son guncelleme: --:--:--</span><span class="panel-whales" id="whalesBTC">🐋 -- balina izleniyor</span></div>
+                <div class="legend"><div class="leg"><div class="leg-dot" style="background:var(--yellow)"></div>Beklemede</div><div class="leg"><div class="leg-dot" style="background:var(--green)"></div>LONG</div><div class="leg"><div class="leg-dot" style="background:var(--red)"></div>SHORT</div></div>
             </div>
         </div>
         <div class="bottom">
             <div class="card" id="adminSection" style="display:none;">
-                <div class="card-head">
-                    <span class="card-title">🔗 Webhook Entegrasyonu</span>
-                    <span class="card-badge cb-green">Admin Panel</span>
-                </div>
+                <div class="card-head"><span class="card-title">🔗 Webhook Entegrasyonu</span><span class="card-badge cb-green">Admin Panel</span></div>
                 <span class="admin-badge">🔑 Sadece Admin</span>
                 <label style="font-size:12px;font-weight:600;display:block;margin-bottom:4px;">Webhook URL:</label>
-                <div class="webhook-box">
-                    <code id="whURL" style="flex:1;">https://balina-server-2.onrender.com/webhook</code>
-                    <button class="copy-btn" onclick="copyWH('whURL')">Kopyala</button>
-                </div>
+                <div class="webhook-box"><code id="whURL" style="flex:1;">https://balina-server-2.onrender.com/webhook</code><button class="copy-btn" onclick="copyWH('whURL')">Kopyala</button></div>
                 <div style="font-size:12px;font-weight:600;margin:14px 0 6px;">📋 Kurulum Adimlari:</div>
-                <ol class="steps">
-                    <li>TradingView'da "Add Alert" tiklayin</li>
-                    <li>Kosul olarak stratejinizi secin</li>
-                    <li>Webhook URL kutusuna yukaridaki URL'yi yapistirin</li>
-                    <li>Mesaj kutusuna JSON girin ve alarmi kaydedin</li>
-                </ol>
+                <ol class="steps"><li>TradingView'da "Add Alert" tiklayin</li><li>Kosul olarak stratejinizi secin</li><li>Webhook URL kutusuna yukaridaki URL'yi yapistirin</li><li>Mesaj kutusuna JSON girin ve alarmi kaydedin</li></ol>
                 <div class="code">{"symbol":"BTCUSDT","action":"buy"}</div>
             </div>
             <div style="display:flex;flex-direction:column;gap:24px;">
                 <div class="card">
-                    <div class="card-head">
-                        <span class="card-title">💳 Abonelik</span>
-                        <button class="btn btn-sm btn-success" onclick="openModal('payModal')" id="subBtn">Abone Ol</button>
-                    </div>
+                    <div class="card-head"><span class="card-title">💳 Abonelik</span><button class="btn btn-sm btn-success" onclick="openModal('payModal')" id="subBtn">Abone Ol</button></div>
                     <div class="sub-card">
-                        <div class="sub-head">
-                            <span style="font-weight:700;font-size:13px;">Profesyonel Plan</span>
-                            <span class="sub-badge trial" id="subBadge">Deneme</span>
-                        </div>
-                        <div class="sub-timer">
-                            <div class="sub-timer-label" id="subLabel">Ucretsiz deneme suresi</div>
-                            <div class="sub-timer-value" id="subValue">24:00:00</div>
-                            <div class="sub-progress"><div class="sub-progress-bar" id="subBar" style="width:100%"></div></div>
-                        </div>
+                        <div class="sub-head"><span style="font-weight:700;font-size:13px;">Profesyonel Plan</span><span class="sub-badge trial" id="subBadge">Deneme</span></div>
+                        <div class="sub-timer"><div class="sub-timer-label" id="subLabel">Ucretsiz deneme suresi</div><div class="sub-timer-value" id="subValue">24:00:00</div><div class="sub-progress"><div class="sub-progress-bar" id="subBar" style="width:100%"></div></div></div>
                     </div>
                 </div>
                 <div class="card" style="flex:1;">
-                    <div class="card-head">
-                        <span class="card-title">🔔 Son Bildirimler</span>
-                        <span class="card-badge cb-blue" id="notifCount">0</span>
-                    </div>
-                    <div class="notif-list" id="notifList">
-                        <div class="no-notif">🔕 Henuz bildirim yok</div>
-                    </div>
+                    <div class="card-head"><span class="card-title">🔔 Son Bildirimler</span><span class="card-badge cb-blue" id="notifCount">0</span></div>
+                    <div class="notif-list" id="notifList"><div class="no-notif">Henuz bildirim yok</div></div>
                 </div>
                 <div class="card">
                     <div class="card-head"><span class="card-title">⚙️ Ayarlar</span></div>
                     <div class="sg">
                         <div class="sg-title">Bildirimler</div>
-                        <div class="toggle-row">
-                            <div><div class="toggle-label">🔊 Sesli Alarm</div><div class="toggle-desc">Sinyal geldiginde ses cal</div></div>
-                            <label class="toggle-switch"><input type="checkbox" id="soundToggle" checked onchange="toggleSound()"><span class="toggle-slider"></span></label>
-                        </div>
-                        <div class="toggle-row">
-                            <div><div class="toggle-label">📱 Tarayici Bildirimi</div><div class="toggle-desc">Masaustu bildirim goster</div></div>
-                            <label class="toggle-switch"><input type="checkbox" id="notifToggle" checked onchange="toggleNotif()"><span class="toggle-slider"></span></label>
-                        </div>
+                        <div class="toggle-row"><div><div class="toggle-label">🔊 Sesli Alarm</div><div class="toggle-desc">Sinyal geldiginde ses cal</div></div><label class="toggle-switch"><input type="checkbox" id="soundToggle" checked onchange="toggleSound()"><span class="toggle-slider"></span></label></div>
+                        <div class="toggle-row"><div><div class="toggle-label">📱 Tarayici Bildirimi</div><div class="toggle-desc">Masaustu bildirim goster</div></div><label class="toggle-switch"><input type="checkbox" id="notifToggle" checked onchange="toggleNotif()"><span class="toggle-slider"></span></label></div>
                     </div>
                     <div class="sg">
                         <div class="sg-title">Hesap</div>
-                        <div style="display:flex;gap:8px;">
-                            <button class="btn btn-sm btn-outline" onclick="doLogout()" style="flex:1;">🚪 Cikis Yap</button>
-                            <button class="btn btn-sm btn-danger" onclick="openModal('payModal')" style="flex:1;" id="upgradeBtn">⭐ Abone Ol</button>
-                        </div>
+                        <div style="display:flex;gap:8px;"><button class="btn btn-sm btn-outline" onclick="doLogout()" style="flex:1;">🚪 Cikis Yap</button><button class="btn btn-sm btn-danger" onclick="openModal('payModal')" style="flex:1;" id="upgradeBtn">⭐ Abone Ol</button></div>
                     </div>
                 </div>
             </div>
@@ -348,32 +307,23 @@
     </div>
 </div>
 
+<!-- PAYMENT MODAL -->
 <div id="payModal" class="modal-overlay" onclick="closeModal(event,'payModal')">
     <div class="modal" onclick="event.stopPropagation()">
         <div class="modal-head"><span class="modal-title">💳 Abonelik Satin Al</span><button class="modal-close" onclick="closeModal(null,'payModal')">X</button></div>
         <div>
-            <div class="pricing-card" style="margin-bottom:16px;">
-                <span class="pricing-badge">Profesyonel Plan</span>
-                <div class="pricing-price">999 TL <span>/ ay</span></div>
-                <ul class="pricing-list">
-                    <li>XAUUSD & BTCUSDT takibi</li>
-                    <li>Gercek zamanli balina alarmi</li>
-                    <li>Sesli & masaustu bildirim</li>
-                </ul>
-            </div>
+            <div class="pricing-card" style="margin-bottom:16px;"><span class="pricing-badge">Profesyonel Plan</span><div class="pricing-price">999 TL <span>/ ay</span></div><ul class="pricing-list"><li>XAUUSD & BTCUSDT takibi</li><li>Gercek zamanli balina alarmi</li><li>Sesli & masaustu bildirim</li></ul></div>
             <div style="font-size:12px;font-weight:600;margin-bottom:8px;">Odeme Yontemi:</div>
             <div class="pm">
                 <label class="pm-item selected" onclick="selectPM(this)"><input type="radio" name="pm" value="card" checked><div><div class="pm-label">💳 Kredi / Banka Karti</div><div class="pm-desc">Visa, Mastercard, Troy</div></div></label>
                 <label class="pm-item" onclick="selectPM(this)"><input type="radio" name="pm" value="eft"><div><div class="pm-label">🏦 Havale / EFT</div><div class="pm-desc">Banka hesabina transfer</div></div></label>
             </div>
         </div>
-        <div class="modal-footer">
-            <button class="btn btn-outline" onclick="closeModal(null,'payModal')">Iptal</button>
-            <button class="btn btn-success" onclick="doPayment()">⚡ Odemeyi Tamamla</button>
-        </div>
+        <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal(null,'payModal')">Iptal</button><button class="btn btn-success" onclick="doPayment()">⚡ Odemeyi Tamamla</button></div>
     </div>
 </div>
 
+<!-- USER MODAL -->
 <div id="userModal" class="modal-overlay" onclick="closeModal(event,'userModal')">
     <div class="modal" onclick="event.stopPropagation()">
         <div class="modal-head"><span class="modal-title">👤 Hesap Bilgileri</span><button class="modal-close" onclick="closeModal(null,'userModal')">X</button></div>
@@ -385,15 +335,13 @@
         </div>
         <div style="background:var(--bg);border-radius:var(--rs);padding:14px;text-align:center;">
             <div style="font-size:11px;color:var(--grey-med);margin-bottom:3px;">Abonelik Durumu</div>
-            <div style="font-size:14px;font-weight:700;color:var(--yellow);" id="mSub">🎯 Ucretsiz Deneme</div>
+            <div style="font-size:14px;font-weight:700;color:var(--yellow);" id="mSub">Ucretsiz Deneme</div>
         </div>
-        <div class="modal-footer">
-            <button class="btn btn-outline" onclick="closeModal(null,'userModal')">Kapat</button>
-            <button class="btn btn-danger" onclick="doLogout()">🚪 Cikis</button>
-        </div>
+        <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal(null,'userModal')">Kapat</button><button class="btn btn-danger" onclick="doLogout()">🚪 Cikis</button></div>
     </div>
 </div>
 
+<!-- BLOCKED SCREEN -->
 <div id="blockedScreen" class="blocked">
     <div class="blocked-card">
         <div class="blocked-icon">🔒</div>
@@ -404,18 +352,18 @@
     </div>
 </div>
 <script>
-const ADMIN_EMAIL = "orkun159064@outlook.com";
+var ADMIN_EMAIL = "orkun159064@outlook.com";
 
-const S = {
+var S = {
     user: null, subscribed: false, trialStart: null, trialDur: 24*60*60*1000,
     soundOn: true, notifOn: true, signalCount: 0, whaleBase: 0, active: false, isAdmin: false
 };
 
 function getDailyWhales() {
-    const today = new Date();
-    const seed = today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate();
-    let h = 0;
-    for(let i=0;i<String(seed).length;i++){h=((h<<5)-h)+String(seed).charCodeAt(i);h|=0;}
+    var today = new Date();
+    var seed = today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate();
+    var h = 0;
+    for(var i=0;i<String(seed).length;i++){h=((h<<5)-h)+String(seed).charCodeAt(i);h|=0;}
     return 9000+Math.abs(h)%801;
 }
 
@@ -427,40 +375,100 @@ function updateWhales() {
 }
 
 function switchTab(t){
-    document.querySelectorAll('.auth-tab').forEach(b=>b.classList.remove('active'));
-    document.querySelectorAll('.auth-form').forEach(f=>f.classList.remove('active'));
+    document.querySelectorAll('.auth-tab').forEach(function(b){b.classList.remove('active');});
+    document.querySelectorAll('.auth-form').forEach(function(f){f.classList.remove('active');});
     if(t==='login'){document.querySelectorAll('.auth-tab')[0].classList.add('active');document.getElementById('loginForm').classList.add('active');}
     else{document.querySelectorAll('.auth-tab')[1].classList.add('active');document.getElementById('registerForm').classList.add('active');}
 }
 
 function doLogin(e){
     e.preventDefault();
-    const email=document.getElementById('lEmail').value;
-    const pass=document.getElementById('lPass').value;
-    const users=JSON.parse(localStorage.getItem('ba_users')||'[]');
-    const u=users.find(x=>x.email===email&&x.pass===pass);
-    if(u){S.user=u;S.subscribed=u.sub||false;S.trialStart=u.trialStart||Date.now();S.isAdmin=(u.email===ADMIN_EMAIL);save();goDash();}
-    else if(!users.length){const n={name:email.split('@')[0],email,pass,sub:false,trialStart:Date.now()};users.push(n);localStorage.setItem('ba_users',JSON.stringify(users));S.user=n;S.trialStart=n.trialStart;S.isAdmin=(email===ADMIN_EMAIL);save();goDash();}
+    var email=document.getElementById('lEmail').value;
+    var pass=document.getElementById('lPass').value;
+    var users=JSON.parse(localStorage.getItem('ba_users')||'[]');
+    var u=users.find(function(x){return x.email===email&&x.pass===pass;});
+    if(u){S.user=u;S.subscribed=u.sub||false;S.trialStart=u.trialStart||Date.now();S.isAdmin=(u.email===ADMIN_EMAIL);save();checkTrialAndGo();}
+    else if(!users.length){var n={name:email.split('@')[0],email:email,pass:pass,sub:false,trialStart:Date.now()};users.push(n);localStorage.setItem('ba_users',JSON.stringify(users));S.user=n;S.trialStart=n.trialStart;S.isAdmin=(email===ADMIN_EMAIL);save();checkTrialAndGo();}
     else alert('E-posta veya sifre hatali!');
 }
 
 function doRegister(e){
     e.preventDefault();
-    const name=document.getElementById('rName').value,email=document.getElementById('rEmail').value,pass=document.getElementById('rPass').value;
-    const users=JSON.parse(localStorage.getItem('ba_users')||'[]');
-    if(users.find(x=>x.email===email)){alert('Bu e-posta zaten kayitli!');return;}
-    const n={name,email,pass,sub:false,trialStart:Date.now()};
-    users.push(n);localStorage.setItem('ba_users',JSON.stringify(users));
-    S.user=n;S.trialStart=n.trialStart;S.isAdmin=(email===ADMIN_EMAIL);save();goDash();
+    var name=document.getElementById('rName').value;
+    var email=document.getElementById('rEmail').value;
+    var pass=document.getElementById('rPass').value;
+    var phone=document.getElementById('rPhone').value.replace(/\s/g,'');
+    if(phone.length<10){alert('Gecerli bir telefon numarasi girin!');return;}
+    fetch('/api/check-phone',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({phone:phone})
+    })
+    .then(function(r){return r.json();})
+    .then(function(data){
+        if(!data.available){alert(data.message);return;}
+        var users=JSON.parse(localStorage.getItem('ba_users')||'[]');
+        if(users.find(function(x){return x.email===email;})){alert('Bu e-posta zaten kayitli!');return;}
+        fetch('/api/register',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({phone:phone,email:email,name:name})
+        });
+        var n={name:name,email:email,pass:pass,phone:phone,sub:false,trialStart:Date.now()};
+        users.push(n);localStorage.setItem('ba_users',JSON.stringify(users));
+        S.user=n;S.trialStart=n.trialStart;
+        S.isAdmin=(email===ADMIN_EMAIL);save();checkTrialAndGo();
+    })
+    .catch(function(){alert('Baglanti hatasi. Tekrar deneyin.');});
 }
 
 function doLogout(){localStorage.removeItem('ba_session');location.reload();}
 function save(){localStorage.setItem('ba_session',JSON.stringify({user:S.user,sub:S.subscribed,trialStart:S.trialStart}));}
 
+// ===== TRİAL KONTROL =====
+function checkTrialAndGo(){
+    fetch('/api/check-trial',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({email:S.user?S.user.email:''})
+    })
+    .then(function(r){return r.json();})
+    .then(function(data){
+        if(data.allowed){
+            S.trialStart=data.start;
+            goDash();
+        }else{
+            alert('Deneme sureniz dolmustur. Lutfen abone olun.');
+            localStorage.removeItem('ba_session');
+            location.reload();
+        }
+    })
+    .catch(function(){goDash();});
+}
+
+function checkExistingTrial(){
+    return fetch('/api/trial-status')
+    .then(function(r){return r.json();})
+    .then(function(data){
+        if(data.exists){
+            if(data.expired){return false;}
+            S.trialStart=data.start;
+            return true;
+        }
+        return true;
+    })
+    .catch(function(){return true;});
+}
+
 function goDash(){
     S.active=true;
     document.getElementById('authScreen').style.display='none';
     document.getElementById('dashboard').classList.add('active');
+    // Yasal uyarıyı kontrol et
+    if(localStorage.getItem('ba_legal')==='accepted'){
+        var lm=document.getElementById('legalModal');
+        if(lm){lm.style.display='none';}
+    }
     updateUserUI(); updateWhales(); startTimer(); checkBlocked();
     if(S.isAdmin){document.getElementById('adminSection').style.display='block';}
     else{document.getElementById('adminSection').style.display='none';}
@@ -490,17 +498,17 @@ function updateUserUI(){
 }
 
 function startTimer(){
-    setInterval(()=>{
+    setInterval(function(){
         if(S.subscribed){
-            const end=S.user.subEnd||(Date.now()+30*24*60*60*1000);
-            const rem=Math.max(0,end-Date.now());
-            const d=Math.floor(rem/(24*60*60*1000)),h=Math.floor((rem%(24*60*60*1000))/(60*60*1000));
+            var end=S.user.subEnd||(Date.now()+30*24*60*60*1000);
+            var rem=Math.max(0,end-Date.now());
+            var d=Math.floor(rem/(24*60*60*1000)),h=Math.floor((rem%(24*60*60*1000))/(60*60*1000));
             document.getElementById('timerDisp').textContent=d+'g '+h+'sa';
             document.getElementById('subValue').textContent=d+' Gun '+h+' Saat';
             document.getElementById('subBar').style.width=(rem/(30*24*60*60*1000))*100+'%';
             document.getElementById('navTimer').className='nav-timer';
         }else{
-            const rem=Math.max(0,S.trialDur-(Date.now()-S.trialStart));
+            var rem=Math.max(0,S.trialDur-(Date.now()-S.trialStart));
             if(rem<=0){
                 document.getElementById('timerDisp').textContent='Sure doldu';
                 document.getElementById('subValue').textContent='Sure Doldu';
@@ -509,7 +517,7 @@ function startTimer(){
                 if(!document.getElementById('blockedScreen').classList.contains('active')){document.getElementById('blockedScreen').classList.add('active');}
                 return;
             }
-            const h=Math.floor(rem/3600000),m=Math.floor((rem%3600000)/60000),s=Math.floor((rem%60000)/1000);
+            var h=Math.floor(rem/3600000),m=Math.floor((rem%3600000)/60000),s=Math.floor((rem%60000)/1000);
             document.getElementById('timerDisp').textContent=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
             document.getElementById('subValue').textContent=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
             document.getElementById('subBar').style.width=(rem/S.trialDur)*100+'%';
@@ -523,16 +531,12 @@ function checkBlocked(){
     if(Date.now()-S.trialStart>=S.trialDur){document.getElementById('blockedScreen').classList.add('active');}
 }
 
-// ===== GLOBAL AUDIO CONTEXT (TARAYICI GUVENLIGI COZUMU) =====
+// ===== GLOBAL AUDIO CONTEXT =====
 var audioCtx = null;
-
 function initAudio(){
-    if(!audioCtx){
-        try{audioCtx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}
-    }
+    if(!audioCtx){try{audioCtx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}}
     if(audioCtx&&audioCtx.state==='suspended'){audioCtx.resume();}
 }
-
 document.addEventListener('click',function(){initAudio();},{once:false});
 document.addEventListener('keydown',function(){initAudio();},{once:false});
 
@@ -544,16 +548,12 @@ function playAlert(isBuy){
     try{
         var ctx=audioCtx;
         function beep(freq,dur){
-            var o=ctx.createOscillator();
-            var g=ctx.createGain();
-            o.connect(g);
-            g.connect(ctx.destination);
-            o.type="square";
-            o.frequency.value=freq;
+            var o=ctx.createOscillator();var g=ctx.createGain();
+            o.connect(g);g.connect(ctx.destination);
+            o.type="square";o.frequency.value=freq;
             g.gain.setValueAtTime(0.95,ctx.currentTime);
             g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);
-            o.start(ctx.currentTime);
-            o.stop(ctx.currentTime+dur);
+            o.start(ctx.currentTime);o.stop(ctx.currentTime+dur);
         }
         if(isBuy){
             beep(800,0.15);beep(1000,0.15);beep(1200,0.15);beep(1400,0.15);
@@ -565,7 +565,7 @@ function playAlert(isBuy){
     }catch(e){}
 }
 
-// ===== ISIK EFEKTLERI (EKRANI KAPLAMAZ) =====
+// ===== ISIK EFEKTLERI =====
 var originalTitle=document.title;
 var titleBlink=null;
 
@@ -618,13 +618,23 @@ function processSignal(symbol,type){
     S.signalCount++;document.getElementById('statSignals').textContent=S.signalCount;
 }
 
-var notifs=[];
-function addNotif(type,title,msg,time){notifs.unshift({type,title,msg,time});if(notifs.length>10)notifs=notifs.slice(0,10);renderNotifs();}
-function renderNotifs(){
-    var el=document.getElementById('notifList');
-    if(!notifs.length){el.innerHTML='<div class="no-notif">Henuz bildirim yok</div>';}
-    else{el.innerHTML=notifs.slice(0,8).map(function(n){return '<div class="notif-item '+n.type+'"><div><div class="notif-title">'+n.title+'</div><div class="notif-time">'+n.time.toLocaleString('tr-TR')+'</div></div></div>';}).join('');}
-    document.getElementById('notifCount').textContent=notifs.length;
+// ===== BILDIRIMLER + SON 5 GEÇMİŞ =====
+var lastSignals=[];
+function addLastSignal(signal){
+    lastSignals.unshift(signal);
+    if(lastSignals.length>5)lastSignals=lastSignals.slice(0,5);
+    renderLastSignals();
+}
+function renderLastSignals(){
+    var list=document.getElementById('notifList');
+    if(!lastSignals.length)return;
+    list.innerHTML=lastSignals.map(function(s){
+        var cls=(s.action==='buy'||s.action==='long')?'al':'as';
+        var label=(s.action==='buy'||s.action==='long')?'LONG':'SHORT';
+        var t=new Date(s.time).toLocaleString('tr-TR');
+        return '<div class="notif-item '+cls+'"><div><div class="notif-title">'+s.symbol+' '+label+'</div><div class="notif-time">'+t+'</div></div></div>';
+    }).join('');
+    document.getElementById('notifCount').textContent=lastSignals.length;
 }
 
 var popT;
@@ -658,26 +668,6 @@ function copyWH(id){
 }
 
 // ===== RENDER SUNUCU BAGLANTISI =====
-var lastSignals=[];
-
-function addLastSignal(signal){
-    lastSignals.unshift(signal);
-    if(lastSignals.length>5)lastSignals=lastSignals.slice(0,5);
-    renderLastSignals();
-}
-
-function renderLastSignals(){
-    var list=document.getElementById('notifList');
-    if(!lastSignals.length)return;
-    list.innerHTML=lastSignals.map(function(s){
-        var cls=(s.action==='buy'||s.action==='long')?'al':'as';
-        var label=(s.action==='buy'||s.action==='long')?'LONG':'SHORT';
-        var t=new Date(s.time).toLocaleString('tr-TR');
-        return '<div class="notif-item '+cls+'"><div><div class="notif-title">'+s.symbol+' '+label+'</div><div class="notif-time">'+t+'</div></div></div>';
-    }).join('');
-    document.getElementById('notifCount').textContent=lastSignals.length;
-}
-
 function connectToServer(){
     var evtSource=new EventSource("/events");
     evtSource.onopen=function(){console.log("Sunucuya baglanildi");};
@@ -724,64 +714,20 @@ function connectToServer(){
 }
 
 document.addEventListener('DOMContentLoaded',function(){
-    // ===== YASAL UYARI =====
-    var lm=document.getElementById('legalModal');
-    if(localStorage.getItem('ba_legal')==='accepted'){
-        if(lm){lm.style.display='none';}
-    }
-    
-    window.acceptLegal=function(){
-        localStorage.setItem('ba_legal','accepted');
-        var el=document.getElementById('legalModal');
-        if(el){el.style.display='none';}
-    };
-    // ===== YASAL UYARI KONTROL =====
-
-if(localStorage.getItem('ba_legal')==='accepted'){
-    var lm=document.getElementById('legalModal');
-    if(lm){lm.classList.remove('active');lm.style.display='none';}
-}
     var saved=localStorage.getItem('ba_session');
-    if(saved){try{var d=JSON.parse(saved);S.user=d.user;S.subscribed=d.sub;S.trialStart=d.trialStart;S.isAdmin=(d.user.email===ADMIN_EMAIL);goDash();}catch(e){localStorage.removeItem('ba_session');}}
+    if(saved){
+        try{
+            var d=JSON.parse(saved);
+            S.user=d.user;S.subscribed=d.sub;S.trialStart=d.trialStart;
+            S.isAdmin=(d.user.email===ADMIN_EMAIL);
+            checkExistingTrial().then(function(ok){
+                if(ok){goDash();}
+                else{localStorage.removeItem('ba_session');}
+            });
+        }catch(e){localStorage.removeItem('ba_session');}
+    }
     updateWhales();connectToServer();
 });
 </script>
-<!-- ===== YASAL UYARI ===== -->
-<div id="legalModal" class="modal-overlay active" style="z-index:2000;">
-    <div class="modal" style="max-width:550px;max-height:90vh;overflow-y:auto;">
-        <div class="modal-head">
-            <span class="modal-title">⚖️ Yasal Uyarı</span>
-        </div>
-        <div style="font-size:13px;color:var(--grey-dark);line-height:1.8;">
-            <p style="margin-bottom:12px;padding:10px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);border-radius:8px;font-weight:700;color:#b45309;text-align:center;">
-                ⚠️ BU SİTE YATIRIM TAVSİYESİ VERMEZ ⚠️
-            </p>
-            <p style="margin-bottom:10px;">
-                <strong>1. Sorumluluk Reddi:</strong> Bu sitede paylaşılan sinyaller ve bilgiler yalnızca eğitim ve bilgilendirme amaçlıdır. Hiçbir şekilde yatırım tavsiyesi niteliği taşımaz.
-            </p>
-            <p style="margin-bottom:10px;">
-                <strong>2. Risk Bildirimi:</strong> Finansal piyasalarda işlem yapmak yüksek risk içerir. Yatırımınızın tamamını kaybedebilirsiniz. Kaybetmeyi göze alamayacağınız parayla işlem yapmayınız.
-            </p>
-            <p style="margin-bottom:10px;">
-                <strong>3. Sorumsuzluk:</strong> Bu sitedeki sinyallere dayanarak yapılan işlemlerden doğan kar veya zarardan Balina Alarm ve sahipleri sorumlu değildir.
-            </p>
-            <p style="margin-bottom:10px;">
-                <strong>4. SPK Uyarısı:</strong> Burada yer alan bilgiler SPK (Sermaye Piyasası Kurulu) tarafından denetlenmemiştir. Yatırım danışmanlığı lisansımız bulunmamaktadır.
-            </p>
-            <p style="margin-bottom:10px;">
-                <strong>5. Kişisel Sorumluluk:</strong> Her yatırımcı kendi araştırmasını yapmalı ve kendi kararlarını vermelidir. Profesyonel yatırım danışmanına başvurmanız önerilir.
-            </p>
-            <p style="margin-bottom:10px;">
-                <strong>6. Geçmiş Performans:</strong> Geçmiş performans, gelecekteki sonuçların garantisi değildir.
-            </p>
-            <p style="padding:10px;background:var(--bg);border-radius:8px;font-size:12px;color:var(--grey-med);text-align:center;">
-                Bu siteyi kullanarak yukarıdaki şartları kabul etmiş sayılırsınız.
-            </p>
-        </div>
-        <div class="modal-footer" style="margin-top:16px;">
-            <button class="btn btn-primary" onclick="acceptLegal()" style="flex:1;">✅ Okudum, Kabul Ediyorum</button>
-        </div>
-    </div>
-</div>
 </body>
 </html>
