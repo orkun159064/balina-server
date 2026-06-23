@@ -739,5 +739,42 @@ if(localStorage.getItem('ba_legal')==='accepted'){
     updateWhales();connectToServer();
 });
 </script>
+<!-- ===== YASAL UYARI ===== -->
+<div id="legalModal" class="modal-overlay active" style="z-index:2000;">
+    <div class="modal" style="max-width:550px;max-height:90vh;overflow-y:auto;">
+        <div class="modal-head">
+            <span class="modal-title">⚖️ Yasal Uyarı</span>
+        </div>
+        <div style="font-size:13px;color:var(--grey-dark);line-height:1.8;">
+            <p style="margin-bottom:12px;padding:10px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);border-radius:8px;font-weight:700;color:#b45309;text-align:center;">
+                ⚠️ BU SİTE YATIRIM TAVSİYESİ VERMEZ ⚠️
+            </p>
+            <p style="margin-bottom:10px;">
+                <strong>1. Sorumluluk Reddi:</strong> Bu sitede paylaşılan sinyaller ve bilgiler yalnızca eğitim ve bilgilendirme amaçlıdır. Hiçbir şekilde yatırım tavsiyesi niteliği taşımaz.
+            </p>
+            <p style="margin-bottom:10px;">
+                <strong>2. Risk Bildirimi:</strong> Finansal piyasalarda işlem yapmak yüksek risk içerir. Yatırımınızın tamamını kaybedebilirsiniz. Kaybetmeyi göze alamayacağınız parayla işlem yapmayınız.
+            </p>
+            <p style="margin-bottom:10px;">
+                <strong>3. Sorumsuzluk:</strong> Bu sitedeki sinyallere dayanarak yapılan işlemlerden doğan kar veya zarardan Balina Alarm ve sahipleri sorumlu değildir.
+            </p>
+            <p style="margin-bottom:10px;">
+                <strong>4. SPK Uyarısı:</strong> Burada yer alan bilgiler SPK (Sermaye Piyasası Kurulu) tarafından denetlenmemiştir. Yatırım danışmanlığı lisansımız bulunmamaktadır.
+            </p>
+            <p style="margin-bottom:10px;">
+                <strong>5. Kişisel Sorumluluk:</strong> Her yatırımcı kendi araştırmasını yapmalı ve kendi kararlarını vermelidir. Profesyonel yatırım danışmanına başvurmanız önerilir.
+            </p>
+            <p style="margin-bottom:10px;">
+                <strong>6. Geçmiş Performans:</strong> Geçmiş performans, gelecekteki sonuçların garantisi değildir.
+            </p>
+            <p style="padding:10px;background:var(--bg);border-radius:8px;font-size:12px;color:var(--grey-med);text-align:center;">
+                Bu siteyi kullanarak yukarıdaki şartları kabul etmiş sayılırsınız.
+            </p>
+        </div>
+        <div class="modal-footer" style="margin-top:16px;">
+            <button class="btn btn-primary" onclick="acceptLegal()" style="flex:1;">✅ Okudum, Kabul Ediyorum</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>
