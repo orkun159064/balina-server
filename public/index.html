@@ -724,6 +724,16 @@ function connectToServer(){
 }
 
 document.addEventListener('DOMContentLoaded',function(){
+// ===== YASAL UYARI KONTROL =====
+function acceptLegal(){
+    localStorage.setItem('ba_legal','accepted');
+    document.getElementById('legalModal').classList.remove('active');
+    document.getElementById('legalModal').style.display='none';
+}
+if(localStorage.getItem('ba_legal')==='accepted'){
+    var lm=document.getElementById('legalModal');
+    if(lm){lm.classList.remove('active');lm.style.display='none';}
+}
     var saved=localStorage.getItem('ba_session');
     if(saved){try{var d=JSON.parse(saved);S.user=d.user;S.subscribed=d.sub;S.trialStart=d.trialStart;S.isAdmin=(d.user.email===ADMIN_EMAIL);goDash();}catch(e){localStorage.removeItem('ba_session');}}
     updateWhales();connectToServer();
