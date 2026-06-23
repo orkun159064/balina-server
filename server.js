@@ -13,7 +13,7 @@ var clients = [];
 var trialUsers = {};
 var registeredPhones = {};
 
-var TRIAL_DURATION = 24 * 60 * 60 * 1000;
+var TRIAL_DURATION = 8 * 60 * 60 * 1000;
 
 function getIP(req) {
     return req.headers['x-forwarded-for'] || req.connection.remoteAddress || 'unknown';
