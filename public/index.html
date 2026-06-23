@@ -524,27 +524,15 @@ function initAudio(){
 document.addEventListener('click',function(){initAudio();},{once:false});
 document.addEventListener('keydown',function(){initAudio();},{once:false});
 
+var alarmSound = new Audio('/u_jlnmxtfupk-notice-313085.mp3');
+alarmSound.preload = 'auto';
+
 function playAlert(isBuy){
     if(!S.soundOn)return;
-    initAudio();
-    if(!audioCtx)return;
     try{
-        var ctx=audioCtx;
-        function beep(freq,dur){
-            var o=ctx.createOscillator();var g=ctx.createGain();
-            o.connect(g);g.connect(ctx.destination);
-            o.type="square";o.frequency.value=freq;
-            g.gain.setValueAtTime(0.95,ctx.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);
-            o.start(ctx.currentTime);o.stop(ctx.currentTime+dur);
-        }
-        if(isBuy){
-            beep(800,0.15);beep(1000,0.15);beep(1200,0.15);beep(1400,0.15);
-            beep(1600,0.15);beep(1800,0.15);beep(2000,0.2);beep(2200,0.3);
-        }else{
-            beep(2200,0.15);beep(2000,0.15);beep(1800,0.15);beep(1600,0.15);
-            beep(1400,0.15);beep(1200,0.15);beep(1000,0.2);beep(800,0.3);
-        }
+        alarmSound.currentTime = 0;
+        alarmSound.volume = 1.0;
+        alarmSound.play();
     }catch(e){}
 }
 
