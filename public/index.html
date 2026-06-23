@@ -392,35 +392,126 @@ function doLogin(e){
     else alert('E-posta veya sifre hatali!');
 }
 
-function doRegister(e){
-    e.preventDefault();
-    var name=document.getElementById('rName').value;
-    var email=document.getElementById('rEmail').value;
-    var pass=document.getElementById('rPass').value;
-    var phone=document.getElementById('rPhone').value.replace(/\s/g,'');
-    if(phone.length<10){alert('Gecerli bir telefon numarasi girin!');return;}
-    fetch('/api/check-phone',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({phone:phone})
+// ===== OTP VE KAYIT AKIŞI =====
+function sendOtpFlow() {
+    var name = document.getElementById('rName').value;
+    var email = document.getElementById('rEmail').value;
+    var pass = document.getElementById('rPass').value;
+    var phone = document.getElementById('rPhone').value.replace(/\s/g,'');
+
+    if(!name || !email || !pass || !phone) {
+        alert('Lutfen tum alanlari doldurun!');
+        return;
+    }
+    if(phone.length < 10) {
+        alert('Gecerli bir telefon numarasi girin!');
+        return;
+    }
+
+    // Önce telefon numarası ve e-posta kontrolü yap
+    fetch('/api/check-phone', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({phone: phone})
     })
     .then(function(r){return r.json();})
     .then(function(data){
-        if(!data.available){alert(data.message);return;}
-        var users=JSON.parse(localStorage.getItem('ba_users')||'[]');
-        if(users.find(function(x){return x.email===email;})){alert('Bu e-posta zaten kayitli!');return;}
-        fetch('/api/register',{
-            method:'POST',
-            headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({phone:phone,email:email,name:name})
+        if(!data.available){
+            alert(data.message);
+            return;
+        }
+
+        var users = JSON.parse(localStorage.getItem('ba_users')||'[]');
+        if(users.find(function(x){return x.email===email;})){
+            alert('Bu e-posta zaten kayitli!');
+            return;
+        }
+
+        // OTP Gönderiliyor Butonunu Güncelle
+        var btn = document.getElementById('registerForm').querySelector('button[type="submit"]');
+        btn.textContent = 'Kod Gonderiliyor...';
+        btn.disabled = true;
+
+        fetch('/api/send-otp', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({email: email})
+        })
+        .then(function(res){return res.json();})
+        .then(function(otpRes){
+            if(otpRes.success) {
+                alert(otpRes.message);
+                // OTP Giriş Alanı ve Yeni Butonu Göster
+                var otpGroup = document.getElementById('otpGroup');
+                if(!otpGroup) {
+                    var fgDiv = document.createElement('div');
+                    fgDiv.className = 'fg';
+                    fgDiv.id = 'otpGroup';
+                    fgDiv.innerHTML = '<label style="color:var(--green);">E-posta Dogrulama Kodu</label><input type="text" id="rOtp" placeholder="6 Haneli Kodu Girin" required>';
+                    document.getElementById('registerForm').insertBefore(fgDiv, btn);
+                }
+                btn.textContent = 'Kaydi Tamamla';
+                btn.disabled = false;
+                // Formun onsubmit fonksiyonunu doğrulamaya yönlendir
+                document.getElementById('registerForm').setAttribute('onsubmit', 'verifyOtpAndRegister(event)');
+            } else {
+                alert(otpRes.message);
+                btn.textContent = 'Kayit Ol';
+                btn.disabled = false;
+            }
         });
-        var n={name:name,email:email,pass:pass,phone:phone,sub:false,trialStart:Date.now()};
-        users.push(n);localStorage.setItem('ba_users',JSON.stringify(users));
-        S.user=n;S.trialStart=n.trialStart;
-        S.isAdmin=(email===ADMIN_EMAIL);save();checkTrialAndGo();
     })
-    .catch(function(){alert('Baglanti hatasi. Tekrar deneyin.');});
+    .catch(function(){alert('Sistem hatasi, tekrar deneyin.');});
 }
+
+function verifyOtpAndRegister(e) {
+    e.preventDefault();
+    var name = document.getElementById('rName').value;
+    var email = document.getElementById('rEmail').value;
+    var pass = document.getElementById('rPass').value;
+    var phone = document.getElementById('rPhone').value.replace(/\s/g,'');
+    var code = document.getElementById('rOtp').value;
+
+    if(!code) {
+        alert('Lutfen dogrulama kodunu girin!');
+        return;
+    }
+
+    // Kodu Doğrula
+    fetch('/api/verify-otp', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({email: email, code: code})
+    })
+    .then(function(r){return r.json();})
+    .then(function(verifyRes){
+        if(!verifyRes.success) {
+            alert(verifyRes.message);
+            return;
+        }
+
+        // Kod doğru, kaydı tamamla
+        fetch('/api/register', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({phone: phone, email: email, name: name})
+        });
+
+        var users = JSON.parse(localStorage.getItem('ba_users')||'[]');
+        var n = {name:name, email:email, pass:pass, phone:phone, sub:false, trialStart:Date.now()};
+        users.push(n);
+        localStorage.setItem('ba_users', JSON.stringify(users));
+        S.user = n;
+        S.trialStart = n.trialStart;
+        S.isAdmin = (email === ADMIN_EMAIL);
+        save();
+        checkTrialAndGo();
+    })
+    .catch(function(){alert('Dogrulama hatasi, tekrar deneyin.');});
+}
+
+// Formun varsayılan tetiklenmesini "sendOtpFlow" yapıyoruz
+document.getElementById('registerForm').setAttribute('onsubmit', 'sendOtpFlow(event)');
 
 function doLogout(){localStorage.removeItem('ba_session');location.reload();}
 function save(){localStorage.setItem('ba_session',JSON.stringify({user:S.user,sub:S.subscribed,trialStart:S.trialStart}));}
@@ -464,7 +555,6 @@ function goDash(){
     S.active=true;
     document.getElementById('authScreen').style.display='none';
     document.getElementById('dashboard').classList.add('active');
-    // Yasal uyarıyı kontrol et
     if(localStorage.getItem('ba_legal')==='accepted'){
         var lm=document.getElementById('legalModal');
         if(lm){lm.style.display='none';}
@@ -729,5 +819,4 @@ document.addEventListener('DOMContentLoaded',function(){
     updateWhales();connectToServer();
 });
 </script>
-</body>
 </html>
