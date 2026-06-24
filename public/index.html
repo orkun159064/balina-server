@@ -599,7 +599,7 @@ function renderLastSignals(){
     list.innerHTML=lastSignals.map(function(s){
         var cls=(s.action==='buy'||s.action==='long')?'al':'as';
         var label=(s.action==='buy'||s.action==='long')?'LONG':'SHORT';
-        var t=new Date(s.time).toLocaleString('tr-TR');
+        var t=timeAgo(s.time);
         return '<div class="notif-item '+cls+'"><div><div class="notif-title">'+s.symbol+' '+label+'</div><div class="notif-time">'+t+'</div></div></div>';
     }).join('');
     document.getElementById('notifCount').textContent=lastSignals.length;
