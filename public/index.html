@@ -34,7 +34,6 @@
         .flash-bar.al{display:block;background:linear-gradient(90deg,#00ff88,#10b981,#00ff88);animation:pulse .3s ease 10}
         .flash-bar.as{display:block;background:linear-gradient(90deg,#ff4444,#ef4444,#ff4444);animation:pulse .3s ease 10}
 
-        /* AUTH */
         .auth{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0a0e17,#111827,#0d1b2a);padding:20px}
         .auth-box{width:100%;max-width:440px}
         .auth-logo{text-align:center;margin-bottom:32px}
@@ -66,7 +65,6 @@
         .pricing-list li::before{content:'\2713';width:18px;height:18px;background:rgba(16,185,129,.2);color:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
         .free-badge{display:block;text-align:center;margin-top:14px;padding:8px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);border-radius:var(--rs);color:var(--yellow);font-size:12px;font-weight:600}
 
-        /* DASHBOARD */
         .dash{display:none;min-height:100vh}.dash.active{display:block}
         .nav{background:var(--bg3);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--bg4)}
         .nav-left{display:flex;align-items:center;gap:10px}.nav-left span{font-size:22px}
@@ -83,9 +81,22 @@
         .u-name{color:#fff;font-size:12px;font-weight:600}.u-email{color:var(--text3);font-size:10px}
         .main{padding:24px;max-width:1400px;margin:0 auto}
 
-        .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;animation:fadeIn .4s}
-        .stat{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--r);padding:18px;text-align:center}
-        .stat-icon{font-size:24px;margin-bottom:6px}.stat-val{font-size:22px;font-weight:800;color:var(--text)}.stat-label{font-size:11px;color:var(--text3);margin-top:2px}
+        .audio-hint{text-align:center;margin-bottom:20px;padding:12px;background:var(--yellow-bg);border:1px solid var(--yellow-bdr);border-radius:10px;color:var(--yellow);font-size:13px;cursor:pointer}
+        .test-btn{text-align:center;margin-bottom:20px}
+        .test-btn button{padding:14px 30px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;transition:var(--t)}
+        .test-btn button:hover{background:var(--blue-hover)}
+
+        .notif-section{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--r);padding:24px;margin-bottom:24px;animation:fadeIn .4s}
+        .notif-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+        .notif-title-main{font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px;color:#fff}
+        .notif-list{max-height:300px;overflow-y:auto}
+        .notif-item{display:flex;align-items:flex-start;gap:10px;padding:12px;border-radius:var(--rs);margin-bottom:6px}
+        .notif-item.al{background:var(--green-bg);border-left:3px solid var(--green)}
+        .notif-item.as{background:var(--red-bg);border-left:3px solid var(--red)}
+        .notif-title{font-size:12px;font-weight:700}.notif-item.al .notif-title{color:var(--green)}.notif-item.as .notif-title{color:var(--red)}
+        .notif-time{font-size:10px;color:var(--text3)}
+        .no-notif{text-align:center;padding:30px;color:var(--text3);font-size:13px}
+        .cb-blue{background:rgba(59,130,246,.15);color:var(--blue);padding:3px 10px;border-radius:16px;font-size:10px;font-weight:600}
 
         .panels{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
         .panel{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--rl);overflow:hidden;animation:fadeIn .5s;transition:var(--t)}
@@ -107,12 +118,17 @@
         .panel-time{font-size:11px;color:var(--text3)}.panel-whales{font-size:12px;font-weight:600;color:var(--text2)}
         .legend{display:flex;gap:16px;padding:12px 24px;border-top:1px solid var(--bg4)}
         .leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3)}.leg-dot{width:7px;height:7px;border-radius:50%}
+
+        .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;animation:fadeIn .4s}
+        .stat{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--r);padding:18px;text-align:center}
+        .stat-icon{font-size:24px;margin-bottom:6px}.stat-val{font-size:22px;font-weight:800;color:var(--text)}.stat-label{font-size:11px;color:var(--text3);margin-top:2px}
+
         .bottom{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
         .card{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--r);padding:24px;animation:fadeIn .5s}
         .card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
         .card-title{font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px;color:#fff}
         .card-badge{padding:3px 10px;border-radius:16px;font-size:10px;font-weight:600}
-        .cb-blue{background:rgba(59,130,246,.15);color:var(--blue)}.cb-green{background:var(--green-bg);color:var(--green)}
+        .cb-green{background:var(--green-bg);color:var(--green)}
         .webhook-box{background:var(--bg);border:2px solid var(--bg4);border-radius:var(--rs);padding:12px 14px;display:flex;align-items:center;gap:8px;font-family:monospace;font-size:12px;word-break:break-all;margin-bottom:14px;color:var(--text2)}
         .copy-btn{background:var(--blue);color:#fff;border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;transition:var(--t);font-family:inherit}
         .copy-btn:hover{background:var(--blue-hover)}.copy-btn.copied{background:var(--green)}
@@ -137,13 +153,9 @@
         .sub-timer{text-align:center}.sub-timer-label{font-size:11px;opacity:.5;margin-bottom:4px}.sub-timer-value{font-size:28px;font-weight:900;font-variant-numeric:tabular-nums}
         .sub-progress{width:100%;height:4px;background:var(--bg4);border-radius:2px;margin-top:10px;overflow:hidden}
         .sub-progress-bar{height:100%;background:var(--blue);border-radius:2px;transition:width 1s linear}
-        .notif-list{max-height:280px;overflow-y:auto}
-        .notif-item{display:flex;align-items:flex-start;gap:10px;padding:12px;border-radius:var(--rs);margin-bottom:6px}
-        .notif-item.al{background:var(--green-bg);border-left:3px solid var(--green)}
-        .notif-item.as{background:var(--red-bg);border-left:3px solid var(--red)}
-        .notif-title{font-size:12px;font-weight:700}.notif-item.al .notif-title{color:var(--green)}.notif-item.as .notif-title{color:var(--red)}
-        .notif-time{font-size:10px;color:var(--text3)}
-        .no-notif{text-align:center;padding:30px;color:var(--text3);font-size:13px}
+        .shopier-badge{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:var(--rs);margin-top:12px;font-size:12px;font-weight:600;color:var(--green)}
+        .shopier-badge span{font-size:16px}
+
         .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
         .modal-overlay.active{display:flex;animation:fadeIn .2s}
         .modal{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--rl);padding:28px;width:100%;max-width:550px;animation:fadeIn .3s;max-height:90vh;overflow-y:auto}
@@ -151,10 +163,6 @@
         .modal-title{font-size:17px;font-weight:700;color:#fff}
         .modal-close{width:30px;height:30px;border:none;background:var(--bg4);border-radius:50%;cursor:pointer;font-size:16px;transition:var(--t);color:var(--text2)}.modal-close:hover{background:var(--bg3)}
         .modal-footer{display:flex;gap:10px;margin-top:18px}.modal-footer .btn{flex:1}
-        .pm{display:flex;flex-direction:column;gap:8px}
-        .pm-item{display:flex;align-items:center;gap:10px;padding:12px;border:2px solid var(--bg4);border-radius:var(--rs);cursor:pointer;transition:var(--t)}
-        .pm-item.selected{border-color:var(--blue);background:rgba(59,130,246,.05)}
-        .pm-item input{accent-color:var(--blue)}.pm-label{font-size:13px;font-weight:600;color:var(--text)}.pm-desc{font-size:11px;color:var(--text3)}
         .blocked{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(10px)}
         .blocked.active{display:flex}
         .blocked-card{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--rl);padding:40px;text-align:center;max-width:400px;width:100%;animation:fadeIn .4s}
@@ -184,12 +192,11 @@
         <div class="modal-head"><span class="modal-title">Yasal Uyari</span></div>
         <div class="legal-text">
             <p class="legal-warn">BU SITE YATIRIM TAVSIYESI VERMEZ</p>
-            <p><strong>1. Sorumluluk Reddi:</strong> Bu sitede paylasilan sinyaller ve bilgiler yalnizca egitim ve bilgilendirme amaclidir. Hicbir sekilde yatirim tavsiyesi niteligi tasimaz.</p>
-            <p><strong>2. Risk Bildirimi:</strong> Finansal piyasalarda islem yapmak yuksek risk icerir. Yatiriminizin tamamini kaybedebilirsiniz. Kaybetmeyi goze alamayacaginiz parayla islem yapmayiniz.</p>
-            <p><strong>3. Sorumsuzluk:</strong> Bu sitedeki sinyallere dayanarak yapilan islemlerden dogan kar veya zarardan Balina Alarm ve sahipleri sorumlu degildir.</p>
-            <p><strong>4. SPK Uyarisi:</strong> Burada yer alan bilgiler SPK tarafindan denetlenmemistir. Yatirim danismanligi lisansimiz bulunmamaktadir.</p>
-            <p><strong>5. Kisisel Sorumluluk:</strong> Her yatirimci kendi arastirmasini yapmali ve kendi kararlarini vermelidir.</p>
-            <p><strong>6. Gecmis Performans:</strong> Gecmis performans, gelecekteki sonuclarin garantisi degildir.</p>
+            <p><strong>1. Sorumluluk Reddi:</strong> Bu sitede paylasilan sinyaller ve bilgiler yalnizca egitim ve bilgilendirme amaclidir.</p>
+            <p><strong>2. Risk Bildirimi:</strong> Finansal piyasalarda islem yapmak yuksek risk icerir. Yatiriminizin tamamini kaybedebilirsiniz.</p>
+            <p><strong>3. Sorumsuzluk:</strong> Bu sitedeki sinyallere dayanarak yapilan islemlerden dogan kar veya zarardan Balina Alarm sorumlu degildir.</p>
+            <p><strong>4. SPK Uyarisi:</strong> Burada yer alan bilgiler SPK tarafindan denetlenmemistir.</p>
+            <p><strong>5. Gecmis Performans:</strong> Gecmis performans, gelecekteki sonuclarin garantisi degildir.</p>
             <p class="legal-box">Bu siteyi kullanarak yukaridaki sartlari kabul etmis sayilirsiniz.</p>
         </div>
         <div class="modal-footer" style="margin-top:16px;">
@@ -230,10 +237,10 @@
                             <li>XAUUSD & BTCUSDT takibi</li>
                             <li>Gercek zamanli balina alarmi</li>
                             <li>Sesli & masaustu bildirim</li>
-                            <li>Webhook entegrasyonu</li>
                             <li>9000+ balina takip agi</li>
                         </ul>
                         <div class="free-badge">Ilk 8 Saat UCRETSIZ!</div>
+                        <div class="shopier-badge"><span>🛡️</span> Shopier ile Guvenli Odeme</div>
                     </div>
                 </div>
             </form>
@@ -260,14 +267,25 @@
             <div class="ap-body" id="apBody"></div>
             <div class="ap-time" id="apTime"></div>
         </div>
-        <div style="text-align:center;margin-bottom:20px;">
-    <button onclick="testAlert()" style="padding:14px 30px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;">🔊 Test Alarm</button>
-</div>
-        <div class="stats">
-            <div class="stat"><div class="stat-icon">📡</div><div class="stat-val" id="statSignals">0</div><div class="stat-label">Toplam Sinyal</div></div>
-            <div class="stat"><div class="stat-icon">🐋</div><div class="stat-val" id="statWhales">--</div><div class="stat-label">Takip Edilen Balina</div></div>
-            <div class="stat"><div class="stat-icon">📊</div><div class="stat-val">2</div><div class="stat-label">Aktif Cift</div></div>
+
+        <!-- ALARM HINT -->
+        <div id="audioHint" class="audio-hint" onclick="loadMp3();this.style.display='none';">
+            🔊 Alarm sesini aktif etmek icin bu yaziya tikla!
         </div>
+        <div class="test-btn">
+            <button onclick="testAlert()">🔊 Test Alarm</button>
+        </div>
+
+        <!-- SON BILDIRIMLER (EN USTTE) -->
+        <div class="notif-section">
+            <div class="notif-head">
+                <span class="notif-title-main">🔔 Son Bildirimler</span>
+                <span class="cb-blue" id="notifCount">0</span>
+            </div>
+            <div class="notif-list" id="notifList"><div class="no-notif">Henuz bildirim yok</div></div>
+        </div>
+
+        <!-- PAIR PANELS -->
         <div class="panels">
             <div class="panel">
                 <div class="panel-head"><span class="panel-title">🥇 XAUUSD <span style="font-size:12px;font-weight:400;color:var(--text3)">Altin</span></span><span class="panel-badge badge-wait" id="badgeXAU">Beklemede</span></div>
@@ -282,6 +300,15 @@
                 <div class="legend"><div class="leg"><div class="leg-dot" style="background:var(--yellow)"></div>Beklemede</div><div class="leg"><div class="leg-dot" style="background:var(--green)"></div>LONG</div><div class="leg"><div class="leg-dot" style="background:var(--red)"></div>SHORT</div></div>
             </div>
         </div>
+
+        <!-- STATS (ASAGIDA) -->
+        <div class="stats">
+            <div class="stat"><div class="stat-icon">📡</div><div class="stat-val" id="statSignals">0</div><div class="stat-label">Toplam Sinyal</div></div>
+            <div class="stat"><div class="stat-icon">🐋</div><div class="stat-val" id="statWhales">--</div><div class="stat-label">Takip Edilen Balina</div></div>
+            <div class="stat"><div class="stat-icon">📊</div><div class="stat-val">2</div><div class="stat-label">Aktif Cift</div></div>
+        </div>
+
+        <!-- BOTTOM ROW -->
         <div class="bottom">
             <div class="card" id="adminSection" style="display:none;">
                 <div class="card-head"><span class="card-title">🔗 Webhook Entegrasyonu</span><span class="card-badge cb-green">Admin Panel</span></div>
@@ -298,11 +325,8 @@
                     <div class="sub-card">
                         <div class="sub-head"><span style="font-weight:700;font-size:13px;">Profesyonel Plan</span><span class="sub-badge trial" id="subBadge">Deneme</span></div>
                         <div class="sub-timer"><div class="sub-timer-label" id="subLabel">Ucretsiz deneme suresi</div><div class="sub-timer-value" id="subValue">08:00:00</div><div class="sub-progress"><div class="sub-progress-bar" id="subBar" style="width:100%"></div></div></div>
+                        <div class="shopier-badge"><span>🛡️</span> Shopier ile Guvenli Odeme</div>
                     </div>
-                </div>
-                <div class="card" style="flex:1;">
-                    <div class="card-head"><span class="card-title">🔔 Son Bildirimler</span><span class="card-badge cb-blue" id="notifCount">0</span></div>
-                    <div class="notif-list" id="notifList"><div class="no-notif">Henuz bildirim yok</div></div>
                 </div>
                 <div class="card">
                     <div class="card-head"><span class="card-title">⚙️ Ayarlar</span></div>
@@ -321,19 +345,16 @@
     </div>
 </div>
 
-<!-- PAYMENT MODAL -->
+<!-- PAYMENT MODAL (SADECE SHOPIER) -->
 <div id="payModal" class="modal-overlay" onclick="closeModal(event,'payModal')">
     <div class="modal" onclick="event.stopPropagation()">
         <div class="modal-head"><span class="modal-title">💳 Abonelik Satin Al</span><button class="modal-close" onclick="closeModal(null,'payModal')">X</button></div>
         <div>
-            <div class="pricing-card" style="margin-bottom:16px;"><span class="pricing-badge">Profesyonel Plan</span><div class="pricing-price">999 TL <span>/ ay</span></div><ul class="pricing-list"><li>XAUUSD & BTCUSDT takibi</li><li>Gercek zamanli balina alarmi</li><li>Sesli & masaustu bildirim</li></ul></div>
-            <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--text2);">Odeme Yontemi:</div>
-            <div class="pm">
-                <label class="pm-item selected" onclick="selectPM(this)"><input type="radio" name="pm" value="card" checked><div><div class="pm-label">💳 Kredi / Banka Karti</div><div class="pm-desc">Visa, Mastercard, Troy</div></div></label>
-                <label class="pm-item" onclick="selectPM(this)"><input type="radio" name="pm" value="eft"><div><div class="pm-label">🏦 Havale / EFT</div><div class="pm-desc">Banka hesabina transfer</div></div></label>
-            </div>
+            <div class="pricing-card" style="margin-bottom:16px;"><span class="pricing-badge">Profesyonel Plan</span><div class="pricing-price">999 TL <span>/ ay</span></div><ul class="pricing-list"><li>XAUUSD & BTCUSDT takibi</li><li>Gercek zamanli balina alarmi</li><li>Sesli & masaustu bildirim</li><li>9000+ balina takip agi</li></ul></div>
+            <div class="shopier-badge" style="margin-bottom:16px;font-size:14px;padding:14px;"><span>🛡️</span> Shopier ile Guvenli Odeme</div>
+            <p style="text-align:center;color:var(--text2);font-size:12px;margin-bottom:16px;">Odeme islemi Shopier altyapisi ile guvenle gerceklestirilir.<br>Kredi karti, banka karti ve havale ile odeme yapabilirsiniz.</p>
         </div>
-        <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal(null,'payModal')">Iptal</button><button class="btn btn-success" onclick="doPayment()">⚡ Odemeyi Tamamla</button></div>
+        <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal(null,'payModal')">Iptal</button><button class="btn btn-success" onclick="doPayment()">🛒 Shopier ile Ode</button></div>
     </div>
 </div>
 
@@ -397,21 +418,102 @@ function startTimer(){setInterval(function(){if(S.subscribed){var end=S.user.sub
 function checkBlocked(){if(S.subscribed)return;if(Date.now()-S.trialStart>=S.trialDur){document.getElementById('blockedScreen').classList.add('active');}}
 
 var _baBuf=null;var _baCtx=null;
-function _loadMp3(){if(_baBuf)return;try{_baCtx=new(window.AudioContext||window.webkitAudioContext)();var r=new XMLHttpRequest();r.open('GET','/u_jlnmxtfupk-notice-313085.mp3',true);r.responseType='arraybuffer';r.onload=function(){_baCtx.decodeAudioData(r.response,function(b){_baBuf=b;});};r.send();}catch(e){}}
-document.addEventListener('click',function(){_loadMp3();},{once:false});
 
-function playAlert(isBuy){if(!S.soundOn)return;if(_baBuf&&_baCtx){try{if(_baCtx.state==='suspended')_baCtx.resume();var src=_baCtx.createBufferSource();src.buffer=_baBuf;var g=_baCtx.createGain();g.gain.value=1.0;src.connect(g);g.connect(_baCtx.destination);src.start(0);}catch(e){}}}
+function loadMp3(){
+    if(_baBuf)return;
+    try{
+        _baCtx=new(window.AudioContext||window.webkitAudioContext)();
+        var r=new XMLHttpRequest();
+        r.open('GET','/u_jlnmxtfupk-notice-313085.mp3',true);
+        r.responseType='arraybuffer';
+        r.onload=function(){
+            _baCtx.decodeAudioData(r.response,function(b){_baBuf=b;});
+        };
+        r.send();
+    }catch(e){}
+}
 
-function testAlert(){playAlert(true);processSignal('BTCUSDT','buy');}
+function playAlert(isBuy){
+    if(!S.soundOn)return;
+    if(_baBuf&&_baCtx){
+        try{
+            if(_baCtx.state==='suspended')_baCtx.resume();
+            var src=_baCtx.createBufferSource();
+            src.buffer=_baBuf;
+            var g=_baCtx.createGain();
+            g.gain.value=1.0;
+            src.connect(g);
+            g.connect(_baCtx.destination);
+            src.start(0);
+        }catch(e){}
+    }
+}
+
+function testAlert(){playAlert(true);}
 
 var originalTitle=document.title;var titleBlink=null;
-function flashScreen(type){var nav=document.querySelector('.nav');var bar=document.getElementById('flashBar');document.body.classList.remove('flash-border-green','flash-border-red');void document.body.offsetWidth;document.body.classList.add(type==='al'?'flash-border-green':'flash-border-red');if(nav){nav.classList.remove('flash-green','flash-red');void nav.offsetWidth;nav.classList.add(type==='al'?'flash-green':'flash-red');}if(bar){bar.className='flash-bar';void bar.offsetWidth;bar.className='flash-bar '+(type==='al'?'al':'as');}if(titleBlink)clearInterval(titleBlink);var msg=type==='al'?'\ud83d\udfe2\ud83d\udfe2\ud83d\udfe2 LONG SINYALI!':'\ud83d\udd34\ud83d\udd34\ud83d\udd34 SHORT SINYALI!';var isOn=true;titleBlink=setInterval(function(){document.title=isOn?msg:originalTitle;isOn=!isOn;},800);setTimeout(function(){clearInterval(titleBlink);titleBlink=null;document.title=originalTitle;document.body.classList.remove('flash-border-green','flash-border-red');if(nav)nav.classList.remove('flash-green','flash-red');if(bar)bar.className='flash-bar';},15000);}
 
-function processSignal(symbol,type){if(!S.active)return;if(!S.subscribed&&(Date.now()-S.trialStart)>=S.trialDur)return;var now=new Date();var isXAU=symbol.toUpperCase().includes('XAU')||symbol.toUpperCase().includes('ALTIN');var pair=isXAU?'XAUUSD':'BTCUSDT';var sId=isXAU?'statusXAU':'statusBTC',sigId=isXAU?'signalXAU':'signalBTC';var dId=isXAU?'descXAU':'descBTC',bId=isXAU?'badgeXAU':'badgeBTC',tId=isXAU?'timeXAU':'timeBTC';var el=document.getElementById(sId),sig=document.getElementById(sigId),desc=document.getElementById(dId),badge=document.getElementById(bId);if(type==='buy'||type==='long'){el.className='panel-status long';sig.textContent='Balinalar LONG Giriyor';desc.textContent='\ud83d\udc0b '+pair+' alim sinyali tespit edildi!';badge.textContent='LONG';badge.className='panel-badge badge-live';badge.style.background='var(--green-bg)';badge.style.color='var(--green)';showPopup('al','\ud83d\udc0b '+pair+' LONG','Balinalar '+pair+' long pozisyon acti!',now);addLastSignal({symbol:pair,action:'buy',time:now.toISOString()});playAlert(true);flashScreen('al');browserNotif('\ud83d\udc0b '+pair+' LONG!','Balinalar '+pair+' long pozisyon acti!');}else{el.className='panel-status short';sig.textContent='Balinalar SHORT Aciyor';desc.textContent='\ud83d\udc0b '+pair+' satis sinyali tespit edildi!';badge.textContent='SHORT';badge.className='panel-badge badge-live';badge.style.background='var(--red-bg)';badge.style.color='var(--red)';showPopup('as','\ud83d\udc0b '+pair+' SHORT','Balinalar '+pair+' short pozisyon acti!',now);addLastSignal({symbol:pair,action:'sell',time:now.toISOString()});playAlert(false);flashScreen('as');browserNotif('\ud83d\udc0b '+pair+' SHORT!','Balinalar '+pair+' short pozisyon acti!');}document.getElementById(tId).textContent='Son guncelleme: Az once';S.signalCount++;document.getElementById('statSignals').textContent=S.signalCount;}
+function flashScreen(type){
+    var nav=document.querySelector('.nav');
+    var bar=document.getElementById('flashBar');
+    document.body.classList.remove('flash-border-green','flash-border-red');
+    void document.body.offsetWidth;
+    document.body.classList.add(type==='al'?'flash-border-green':'flash-border-red');
+    if(nav){nav.classList.remove('flash-green','flash-red');void nav.offsetWidth;nav.classList.add(type==='al'?'flash-green':'flash-red');}
+    if(bar){bar.className='flash-bar';void bar.offsetWidth;bar.className='flash-bar '+(type==='al'?'al':'as');}
+    if(titleBlink)clearInterval(titleBlink);
+    var msg=type==='al'?'\ud83d\udfe2\ud83d\udfe2\ud83d\udfe2 LONG SINYALI!':'\ud83d\udd34\ud83d\udd34\ud83d\udd34 SHORT SINYALI!';
+    var isOn=true;
+    titleBlink=setInterval(function(){document.title=isOn?msg:originalTitle;isOn=!isOn;},800);
+    setTimeout(function(){
+        clearInterval(titleBlink);titleBlink=null;document.title=originalTitle;
+        document.body.classList.remove('flash-border-green','flash-border-red');
+        if(nav)nav.classList.remove('flash-green','flash-red');
+        if(bar)bar.className='flash-bar';
+    },15000);
+}
+
+function processSignal(symbol,type){
+    if(!S.active)return;
+    if(!S.subscribed&&(Date.now()-S.trialStart)>=S.trialDur)return;
+    var now=new Date();
+    var isXAU=symbol.toUpperCase().includes('XAU')||symbol.toUpperCase().includes('ALTIN');
+    var pair=isXAU?'XAUUSD':'BTCUSDT';
+    var sId=isXAU?'statusXAU':'statusBTC',sigId=isXAU?'signalXAU':'signalBTC';
+    var dId=isXAU?'descXAU':'descBTC',bId=isXAU?'badgeXAU':'badgeBTC',tId=isXAU?'timeXAU':'timeBTC';
+    var el=document.getElementById(sId),sig=document.getElementById(sigId),desc=document.getElementById(dId),badge=document.getElementById(bId);
+    if(type==='buy'||type==='long'){
+        el.className='panel-status long';sig.textContent='Balinalar LONG Giriyor';
+        desc.textContent='\ud83d\udc0b '+pair+' alim sinyali tespit edildi!';
+        badge.textContent='LONG';badge.className='panel-badge badge-live';badge.style.background='var(--green-bg)';badge.style.color='var(--green)';
+        showPopup('al','\ud83d\udc0b '+pair+' LONG','Balinalar '+pair+' long pozisyon acti!',now);
+        addLastSignal({symbol:pair,action:'buy',time:now.toISOString()});
+        playAlert(true);flashScreen('al');browserNotif('\ud83d\udc0b '+pair+' LONG!','Balinalar '+pair+' long pozisyon acti!');
+    }else{
+        el.className='panel-status short';sig.textContent='Balinalar SHORT Aciyor';
+        desc.textContent='\ud83d\udc0b '+pair+' satis sinyali tespit edildi!';
+        badge.textContent='SHORT';badge.className='panel-badge badge-live';badge.style.background='var(--red-bg)';badge.style.color='var(--red)';
+        showPopup('as','\ud83d\udc0b '+pair+' SHORT','Balinalar '+pair+' short pozisyon acti!',now);
+        addLastSignal({symbol:pair,action:'sell',time:now.toISOString()});
+        playAlert(false);flashScreen('as');browserNotif('\ud83d\udc0b '+pair+' SHORT!','Balinalar '+pair+' short pozisyon acti!');
+    }
+    document.getElementById(tId).textContent='Son guncelleme: Az once';
+    S.signalCount++;document.getElementById('statSignals').textContent=S.signalCount;
+}
 
 var lastSignals=[];
 function addLastSignal(s){lastSignals.unshift(s);if(lastSignals.length>5)lastSignals=lastSignals.slice(0,5);renderLastSignals();}
-function renderLastSignals(){var list=document.getElementById('notifList');if(!lastSignals.length)return;list.innerHTML=lastSignals.map(function(s){var cls=(s.action==='buy'||s.action==='long')?'al':'as';var label=(s.action==='buy'||s.action==='long')?'LONG':'SHORT';var t=timeAgo(s.time);return '<div class="notif-item '+cls+'"><div><div class="notif-title">'+s.symbol+' '+label+'</div><div class="notif-time">'+t+'</div></div></div>';}).join('');document.getElementById('notifCount').textContent=lastSignals.length;}
+function renderLastSignals(){
+    var list=document.getElementById('notifList');
+    if(!lastSignals.length)return;
+    list.innerHTML=lastSignals.map(function(s){
+        var cls=(s.action==='buy'||s.action==='long')?'al':'as';
+        var label=(s.action==='buy'||s.action==='long')?'LONG':'SHORT';
+        var t=timeAgo(s.time);
+        return '<div class="notif-item '+cls+'"><div><div class="notif-title">'+s.symbol+' '+label+'</div><div class="notif-time">'+t+'</div></div></div>';
+    }).join('');
+    document.getElementById('notifCount').textContent=lastSignals.length;
+}
 
 var popT;
 function showPopup(cls,title,body,time){var p=document.getElementById('alertPopup');p.className='alert-popup '+cls;document.getElementById('apTitle').textContent=title;document.getElementById('apBody').textContent=body;document.getElementById('apTime').textContent=timeAgo(time.toISOString());p.classList.add('show');clearTimeout(popT);popT=setTimeout(function(){p.classList.remove('show');},8000);}
@@ -422,15 +524,67 @@ function toggleSound(){S.soundOn=document.getElementById('soundToggle').checked;
 function toggleNotif(){S.notifOn=document.getElementById('notifToggle').checked;if(S.notifOn&&'Notification' in window)Notification.requestPermission();}
 function openModal(id){document.getElementById(id).classList.add('active');}
 function closeModal(e,id){if(!e||e.target===document.getElementById(id))document.getElementById(id).classList.remove('active');}
-function selectPM(el){document.querySelectorAll('.pm-item').forEach(function(m){m.classList.remove('selected');});el.classList.add('selected');}
 
 function doPayment(){S.subscribed=true;S.user.sub=true;S.user.subEnd=Date.now()+30*24*60*60*1000;var users=JSON.parse(localStorage.getItem('ba_users')||'[]');var idx=users.findIndex(function(u){return u.email===S.user.email;});if(idx!==-1){users[idx].sub=true;users[idx].subEnd=S.user.subEnd;localStorage.setItem('ba_users',JSON.stringify(users));}save();document.getElementById('blockedScreen').classList.remove('active');updateUserUI();closeModal(null,'payModal');}
 
 function copyWH(id){var url=document.getElementById(id).textContent;navigator.clipboard.writeText(url).then(function(){var btn=document.getElementById(id).nextElementSibling;btn.textContent='Kopyalandi!';btn.classList.add('copied');setTimeout(function(){btn.textContent='Kopyala';btn.classList.remove('copied');},2000);});}
 
-function connectToServer(){var evtSource=new EventSource("/events");evtSource.onopen=function(){console.log("Sunucuya baglanildi");};evtSource.onmessage=function(event){var data=JSON.parse(event.data);if(data.type==="init"&&data.signals&&data.signals.length){var allSignals=data.signals.slice(0,5);allSignals.forEach(function(s){addLastSignal(s);});var latest=allSignals[0];if(latest){var isXAU=latest.symbol.toUpperCase().includes('XAU');var tId=isXAU?'timeXAU':'timeBTC';document.getElementById(tId).textContent='Son guncelleme: '+timeAgo(latest.time);if(latest.action==='buy'||latest.action==='long'){var el=document.getElementById(isXAU?'statusXAU':'statusBTC');var sig=document.getElementById(isXAU?'signalXAU':'signalBTC');var desc=document.getElementById(isXAU?'descXAU':'descBTC');var badge=document.getElementById(isXAU?'badgeXAU':'badgeBTC');var pair=isXAU?'XAUUSD':'BTCUSDT';el.className='panel-status long';sig.textContent='Balinalar LONG Giriyor';desc.textContent='\ud83d\udc0b '+pair+' alim sinyali tespit edildi!';badge.textContent='LONG';badge.className='panel-badge badge-live';badge.style.background='var(--green-bg)';badge.style.color='var(--green)';}else{var el=document.getElementById(isXAU?'statusXAU':'statusBTC');var sig=document.getElementById(isXAU?'signalXAU':'signalBTC');var desc=document.getElementById(isXAU?'descXAU':'descBTC');var badge=document.getElementById(isXAU?'badgeXAU':'badgeBTC');var pair=isXAU?'XAUUSD':'BTCUSDT';el.className='panel-status short';sig.textContent='Balinalar SHORT Aciyor';desc.textContent='\ud83d\udc0b '+pair+' satis sinyali tespit edildi!';badge.textContent='SHORT';badge.className='panel-badge badge-live';badge.style.background='var(--red-bg)';badge.style.color='var(--red)';}}}if(data.type==="new_signal"){processSignal(data.signal.symbol,data.signal.action);}};evtSource.onerror=function(){console.log("Baglanti kesildi, 5 sn sonra tekrar deneniyor...");evtSource.close();setTimeout(connectToServer,5000);};}
+function connectToServer(){
+    var evtSource=new EventSource("/events");
+    evtSource.onopen=function(){console.log("Sunucuya baglanildi");};
+    evtSource.onmessage=function(event){
+        var data=JSON.parse(event.data);
+        if(data.type==="init"&&data.signals&&data.signals.length){
+            var allSignals=data.signals.slice(0,5);
+            allSignals.forEach(function(s){addLastSignal(s);});
+            var latest=allSignals[0];
+            if(latest){
+                var isXAU=latest.symbol.toUpperCase().includes('XAU');
+                var tId=isXAU?'timeXAU':'timeBTC';
+                document.getElementById(tId).textContent='Son guncelleme: '+timeAgo(latest.time);
+                if(latest.action==='buy'||latest.action==='long'){
+                    var el=document.getElementById(isXAU?'statusXAU':'statusBTC');
+                    var sig=document.getElementById(isXAU?'signalXAU':'signalBTC');
+                    var desc=document.getElementById(isXAU?'descXAU':'descBTC');
+                    var badge=document.getElementById(isXAU?'badgeXAU':'badgeBTC');
+                    var pair=isXAU?'XAUUSD':'BTCUSDT';
+                    el.className='panel-status long';sig.textContent='Balinalar LONG Giriyor';
+                    desc.textContent='\ud83d\udc0b '+pair+' alim sinyali tespit edildi!';
+                    badge.textContent='LONG';badge.className='panel-badge badge-live';
+                    badge.style.background='var(--green-bg)';badge.style.color='var(--green)';
+                }else{
+                    var el=document.getElementById(isXAU?'statusXAU':'statusBTC');
+                    var sig=document.getElementById(isXAU?'signalXAU':'signalBTC');
+                    var desc=document.getElementById(isXAU?'descXAU':'descBTC');
+                    var badge=document.getElementById(isXAU?'badgeXAU':'badgeBTC');
+                    var pair=isXAU?'XAUUSD':'BTCUSDT';
+                    el.className='panel-status short';sig.textContent='Balinalar SHORT Aciyor';
+                    desc.textContent='\ud83d\udc0b '+pair+' satis sinyali tespit edildi!';
+                    badge.textContent='SHORT';badge.className='panel-badge badge-live';
+                    badge.style.background='var(--red-bg)';badge.style.color='var(--red)';
+                }
+            }
+        }
+        if(data.type==="new_signal"){processSignal(data.signal.symbol,data.signal.action);}
+    };
+    evtSource.onerror=function(){console.log("Baglanti kesildi");evtSource.close();setTimeout(connectToServer,5000);};
+}
 
-document.addEventListener('DOMContentLoaded',function(){var saved=localStorage.getItem('ba_session');if(saved){try{var d=JSON.parse(saved);S.user=d.user;S.subscribed=d.sub;S.trialStart=d.trialStart;S.isAdmin=(d.user.email===ADMIN_EMAIL);checkExistingTrial().then(function(ok){if(ok){goDash();}else{localStorage.removeItem('ba_session');}});}catch(e){localStorage.removeItem('ba_session');}}updateWhales();connectToServer();});
+document.addEventListener('DOMContentLoaded',function(){
+    var saved=localStorage.getItem('ba_session');
+    if(saved){
+        try{
+            var d=JSON.parse(saved);
+            S.user=d.user;S.subscribed=d.sub;S.trialStart=d.trialStart;
+            S.isAdmin=(d.user.email===ADMIN_EMAIL);
+            checkExistingTrial().then(function(ok){
+                if(ok){goDash();}
+                else{localStorage.removeItem('ba_session');}
+            });
+        }catch(e){localStorage.removeItem('ba_session');}
+    }
+    updateWhales();connectToServer();
+});
 </script>
 </body>
 </html>
