@@ -602,7 +602,37 @@ function flashScreen(type){
 }
 
 // ===== SINYAL ISLEME =====
-function processSignal(symbol,type){
+function playAlert(isBuy){
+    if(!S.soundOn)return;
+    try{
+        var ctx=new(window.AudioContext||window.webkitAudioContext)();
+        function beep(freq,dur){
+            var o=ctx.createOscillator();
+            var g=ctx.createGain();
+            o.connect(g);
+            g.connect(ctx.destination);
+            o.type="square";
+            o.frequency.value=freq;
+            g.gain.setValueAtTime(0.9,ctx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+dur);
+            o.start(ctx.currentTime);
+            o.stop(ctx.currentTime+dur);
+        }
+        if(isBuy){
+            beep(800,0.2);beep(1000,0.2);beep(1200,0.2);beep(1400,0.2);
+            beep(1600,0.2);beep(1800,0.2);beep(2000,0.2);beep(2200,0.4);
+        }else{
+            beep(2200,0.2);beep(2000,0.2);beep(1800,0.2);beep(1600,0.2);
+            beep(1400,0.2);beep(1200,0.2);beep(1000,0.2);beep(800,0.4);
+        }
+    }catch(e){}
+}
+
+function testAlert(){
+    playAlert(true);
+    processSignal('BTCUSDT','buy');
+}
+    function processSignal(symbol,type){
     if(!S.active)return;
     if(!S.subscribed&&(Date.now()-S.trialStart)>=S.trialDur)return;
     var now=new Date();
