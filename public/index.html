@@ -551,7 +551,7 @@ document.addEventListener('click',function(){
     }
 },{once:false});
 
-function playAlert(isBuy){
+function(isBuy){
     if(!S.soundOn)return;
     try{
         if(_alarmAudio){
@@ -568,7 +568,7 @@ function playAlert(isBuy){
 document.addEventListener('click',function(){initAudio();},{once:false});
 document.addEventListener('keydown',function(){initAudio();},{once:false});
 
-function playAlert(isBuy){
+function(isBuy){
     if(!S.soundOn)return;
     try{
         var alarmSound=new Audio('/u_jlnmxtfupk-notice-313085.mp3');
@@ -617,14 +617,14 @@ function processSignal(symbol,type){
         badge.textContent='LONG';badge.className='panel-badge badge-live';badge.style.background='var(--green-bg)';badge.style.color='var(--green)';
         showPopup('al','\ud83d\udc0b '+pair+' LONG','Balinalar '+pair+' long pozisyon acti!',now);
         addLastSignal({symbol:pair,action:'buy',time:now.toISOString()});
-        playAlert(true);flashScreen('al');browserNotif('\ud83d\udc0b '+pair+' LONG!','Balinalar '+pair+' long pozisyon acti!');
+        (true);flashScreen('al');browserNotif('\ud83d\udc0b '+pair+' LONG!','Balinalar '+pair+' long pozisyon acti!');
     }else{
         el.className='panel-status short';sig.textContent='Balinalar SHORT Acıyor';
         desc.textContent='\ud83d\udc0b '+pair+' satis sinyali tespit edildi!';
         badge.textContent='SHORT';badge.className='panel-badge badge-live';badge.style.background='var(--red-bg)';badge.style.color='var(--red)';
         showPopup('as','\ud83d\udc0b '+pair+' SHORT','Balinalar '+pair+' short pozisyon acti!',now);
         addLastSignal({symbol:pair,action:'sell',time:now.toISOString()});
-        playAlert(false);flashScreen('as');browserNotif('\ud83d\udc0b '+pair+' SHORT!','Balinalar '+pair+' short pozisyon acti!');
+        (false);flashScreen('as');browserNotif('\ud83d\udc0b '+pair+' SHORT!','Balinalar '+pair+' short pozisyon acti!');
     }
     document.getElementById(tId).textContent='Son guncelleme: Az once';
     S.signalCount++;document.getElementById('statSignals').textContent=S.signalCount;
