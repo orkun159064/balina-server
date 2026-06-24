@@ -539,22 +539,43 @@ function checkBlocked(){
     if(Date.now()-S.trialStart>=S.trialDur){document.getElementById('blockedScreen').classList.add('active');}
 }
 
+var _mp3Buffer=null;
+var _mp3Ctx=null;
+
+function loadMp3(){
+    if(_mp3Buffer)return;
+    try{
+        _mp3Ctx=new(window.AudioContext||window.webkitAudioContext)();
+        var req=new XMLHttpRequest();
+        req.open('GET','/u_jlnmxtfupk-notice-313085.mp3',true);
+        req.responseType='arraybuffer';
+        req.onload=function(){
+            _mp3Ctx.decodeAudioData(req.response,function(buf){
+                _mp3Buffer=buf;
+            });
+        };
+        req.send();
+    }catch(e){}
+}
+
+document.addEventListener('click',function(){loadMp3();},{once:false});
+document.addEventListener('keydown',function(){loadMp3();},{once:false});
+
 function playAlert(isBuy){
     if(!S.soundOn)return;
-    try{
-        var ctx=new(window.AudioContext||window.webkitAudioContext)();
-        function beep(freq,dur){
-            var o=ctx.createOscillator();
-            var g=ctx.createGain();
-            o.connect(g);
-            g.connect(ctx.destination);
-            o.type="square";
-            o.frequency.value=freq;
-            g.gain.setValueAtTime(0.9,ctx.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+dur);
-            o.start(ctx.currentTime);
-            o.stop(ctx.currentTime+dur);
-        }
+    if(_mp3Buffer&&_mp3Ctx){
+        try{
+            if(_mp3Ctx.state==='suspended')_mp3Ctx.resume();
+            var source=_mp3Ctx.createBufferSource();
+            source.buffer=_mp3Buffer;
+            var gain=_mp3Ctx.createGain();
+            gain.gain.value=1.0;
+            source.connect(gain);
+            gain.connect(_mp3Ctx.destination);
+            source.start(0);
+        }catch(e){}
+    }
+}
         if(isBuy){
             beep(800,0.2);beep(1000,0.2);beep(1200,0.2);beep(1400,0.2);
             beep(1600,0.2);beep(1800,0.2);beep(2000,0.2);beep(2200,0.4);
