@@ -541,11 +541,15 @@ function checkBlocked(){
 }
 
 // ===== MP3 ALARM SESI =====
-var audioCtx=null;
-function initAudio(){
-    if(!audioCtx){try{audioCtx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}}
-    if(audioCtx&&audioCtx.state==='suspended'){audioCtx.resume();}
+function playAlert(isBuy){
+    if(!S.soundOn)return;
+    try{
+        var alarmSound=new Audio('/u_jlnmxtfupk-notice-313085.mp3');
+        alarmSound.volume=1.0;
+        alarmSound.play();
+    }catch(e){}
 }
+
 document.addEventListener('click',function(){initAudio();},{once:false});
 document.addEventListener('keydown',function(){initAudio();},{once:false});
 
