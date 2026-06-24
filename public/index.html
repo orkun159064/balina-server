@@ -541,12 +541,27 @@ function checkBlocked(){
 }
 
 // ===== MP3 ALARM SESI =====
+var _alarmAudio=null;
+
+document.addEventListener('click',function(){
+    if(!_alarmAudio){
+        _alarmAudio=new Audio('/u_jlnmxtfupk-notice-313085.mp3');
+        _alarmAudio.volume=1.0;
+        _alarmAudio.load();
+    }
+},{once:false});
+
 function playAlert(isBuy){
     if(!S.soundOn)return;
     try{
-        var alarmSound=new Audio('/u_jlnmxtfupk-notice-313085.mp3');
-        alarmSound.volume=1.0;
-        alarmSound.play();
+        if(_alarmAudio){
+            _alarmAudio.currentTime=0;
+            _alarmAudio.play();
+        }else{
+            var s=new Audio('/u_jlnmxtfupk-notice-313085.mp3');
+            s.volume=1.0;
+            s.play();
+        }
     }catch(e){}
 }
 
