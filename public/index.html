@@ -583,7 +583,7 @@ function processSignal(symbol,type){
         addLastSignal({symbol:pair,action:'sell',time:now.toISOString()});
         playAlert(false);flashScreen('as');browserNotif('\ud83d\udc0b '+pair+' SHORT!','Balinalar '+pair+' short pozisyon acti!');
     }
-    document.getElementById(tId).textContent='Son guncelleme: '+now.toLocaleTimeString('tr-TR');
+    document.getElementById(tId).textContent='Son guncelleme: Az once';
     S.signalCount++;document.getElementById('statSignals').textContent=S.signalCount;
 }
 
