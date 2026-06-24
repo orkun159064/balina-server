@@ -654,7 +654,7 @@ function connectToServer(){
                 var isXAU=s.symbol.toUpperCase().includes('XAU');
                 var tId=isXAU?'timeXAU':'timeBTC';
                 var d=new Date(s.time);
-                document.getElementById(tId).textContent='Son guncelleme: '+d.toLocaleTimeString('tr-TR');
+                document.getElementById(tId).textContent='Son guncelleme: '+timeAgo(latest.time);
                 if(s.action==='buy'||s.action==='long'){
                     var el=document.getElementById(isXAU?'statusXAU':'statusBTC');
                     var sig=document.getElementById(isXAU?'signalXAU':'signalBTC');
