@@ -415,7 +415,23 @@ function closeModal(e,id){if(!e||e.target===document.getElementById(id))document
 function doPayment(){window.open('https://www.shopier.com/balinaalarm/48434245','_blank');closeModal(null,'payModal');}
 
 function copyWH(id){var url=document.getElementById(id).textContent;navigator.clipboard.writeText(url).then(function(){var btn=document.getElementById(id).nextElementSibling;btn.textContent='Kopyalandi!';btn.classList.add('copied');setTimeout(function(){btn.textContent='Kopyala';btn.classList.remove('copied');},2000);});}
-
+// ===== ZAMAN GUNCELLEME TIMER =====
+var _timeUpdateTimer=setInterval(function(){
+    // Panel zamanlarini guncelle
+    ['XAUUSD','BTCUSDT'].forEach(function(pair){
+        try{
+            var saved=JSON.parse(localStorage.getItem('ba_panel_'+pair));
+            if(saved){
+                var isXAU=pair==='XAUUSD';
+                var tId=isXAU?'timeXAU':'timeBTC';
+                var el=document.getElementById(tId);
+                if(el){el.textContent='Son guncelleme: '+timeAgo(saved.time);}
+            }
+        }catch(e){}
+    });
+    // Bildirim zamanlarini guncelle
+    renderLastSignals();
+},30000);
 function connectToServer(){
     var evtSource=new EventSource("/events");
     evtSource.onopen=function(){console.log("Sunucuya baglanildi");};
