@@ -33,7 +33,6 @@
         .flash-bar{display:none;position:fixed;top:60px;left:0;right:0;height:6px;z-index:98}
         .flash-bar.al{display:block;background:linear-gradient(90deg,#00ff88,#10b981,#00ff88);animation:pulse .3s ease 10}
         .flash-bar.as{display:block;background:linear-gradient(90deg,#ff4444,#ef4444,#ff4444);animation:pulse .3s ease 10}
-
         .auth{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0a0e17,#111827,#0d1b2a);padding:20px}
         .auth-box{width:100%;max-width:440px}
         .auth-logo{text-align:center;margin-bottom:32px}
@@ -64,7 +63,8 @@
         .pricing-list li{padding:5px 0;font-size:12px;display:flex;align-items:center;gap:6px;color:var(--text2)}
         .pricing-list li::before{content:'\2713';width:18px;height:18px;background:rgba(16,185,129,.2);color:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
         .free-badge{display:block;text-align:center;margin-top:14px;padding:8px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);border-radius:var(--rs);color:var(--yellow);font-size:12px;font-weight:600}
-
+        .shopier-badge{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:var(--rs);margin-top:12px;font-size:12px;font-weight:600;color:var(--green)}
+        .shopier-badge span{font-size:16px}
         .dash{display:none;min-height:100vh}.dash.active{display:block}
         .nav{background:var(--bg3);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--bg4)}
         .nav-left{display:flex;align-items:center;gap:10px}.nav-left span{font-size:22px}
@@ -80,12 +80,10 @@
         .avatar{width:30px;height:30px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px}
         .u-name{color:#fff;font-size:12px;font-weight:600}.u-email{color:var(--text3);font-size:10px}
         .main{padding:24px;max-width:1400px;margin:0 auto}
-
         .audio-hint{text-align:center;margin-bottom:20px;padding:12px;background:var(--yellow-bg);border:1px solid var(--yellow-bdr);border-radius:10px;color:var(--yellow);font-size:13px;cursor:pointer}
         .test-btn{text-align:center;margin-bottom:20px}
         .test-btn button{padding:14px 30px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;transition:var(--t)}
         .test-btn button:hover{background:var(--blue-hover)}
-
         .notif-section{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--r);padding:24px;margin-bottom:24px;animation:fadeIn .4s}
         .notif-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
         .notif-title-main{font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px;color:#fff}
@@ -97,32 +95,29 @@
         .notif-time{font-size:10px;color:var(--text3)}
         .no-notif{text-align:center;padding:30px;color:var(--text3);font-size:13px}
         .cb-blue{background:rgba(59,130,246,.15);color:var(--blue);padding:3px 10px;border-radius:16px;font-size:10px;font-weight:600}
-
         .panels{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
         .panel{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--rl);overflow:hidden;animation:fadeIn .5s;transition:var(--t)}
         .panel-head{padding:18px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bg4)}
         .panel-title{font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px;color:#fff}
         .panel-badge{padding:3px 10px;border-radius:16px;font-size:10px;font-weight:700;text-transform:uppercase}
-        .badge-wait{background:var(--yellow-bg);color:var(--yellow)}.badge-live{background:var(--green-bg);color:var(--green)}
+        .badge-wait{background:var(--yellow-bg);color:var(--yellow)}
         .panel-status{padding:40px 20px;text-align:center;transition:var(--t);position:relative}
         .panel-status::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;transition:var(--t)}
-        .panel-status.waiting{background:var(--yellow-bg)}.panel-status.waiting::before{background:linear-gradient(90deg,var(--yellow),#fbbf24)}
+        .panel-status.waiting{background:rgba(255,255,255,.02)}
         .panel-status.long{background:var(--green-bg)}.panel-status.long::before{background:linear-gradient(90deg,var(--green),#34d399)}
         .panel-status.short{background:var(--red-bg)}.panel-status.short::before{background:linear-gradient(90deg,var(--red),#f87171)}
         .panel-emoji{font-size:56px;display:block;margin-bottom:12px;animation:swim 3s ease infinite}
         .panel-status.long .panel-emoji,.panel-status.short .panel-emoji{animation:pulse 1.5s ease infinite}
         .panel-signal{font-size:22px;font-weight:800;margin-bottom:6px}
-        .panel-status.waiting .panel-signal{color:var(--yellow)}.panel-status.long .panel-signal{color:var(--green)}.panel-status.short .panel-signal{color:var(--red)}
+        .panel-status.long .panel-signal{color:var(--green)}.panel-status.short .panel-signal{color:var(--red)}
         .panel-desc{font-size:13px;color:var(--text2)}
         .panel-footer{padding:16px 24px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--bg4)}
         .panel-time{font-size:11px;color:var(--text3)}.panel-whales{font-size:12px;font-weight:600;color:var(--text2)}
         .legend{display:flex;gap:16px;padding:12px 24px;border-top:1px solid var(--bg4)}
         .leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3)}.leg-dot{width:7px;height:7px;border-radius:50%}
-
         .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;animation:fadeIn .4s}
         .stat{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--r);padding:18px;text-align:center}
         .stat-icon{font-size:24px;margin-bottom:6px}.stat-val{font-size:22px;font-weight:800;color:var(--text)}.stat-label{font-size:11px;color:var(--text3);margin-top:2px}
-
         .bottom{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
         .card{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--r);padding:24px;animation:fadeIn .5s}
         .card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
@@ -153,9 +148,6 @@
         .sub-timer{text-align:center}.sub-timer-label{font-size:11px;opacity:.5;margin-bottom:4px}.sub-timer-value{font-size:28px;font-weight:900;font-variant-numeric:tabular-nums}
         .sub-progress{width:100%;height:4px;background:var(--bg4);border-radius:2px;margin-top:10px;overflow:hidden}
         .sub-progress-bar{height:100%;background:var(--blue);border-radius:2px;transition:width 1s linear}
-        .shopier-badge{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:var(--rs);margin-top:12px;font-size:12px;font-weight:600;color:var(--green)}
-        .shopier-badge span{font-size:16px}
-
         .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
         .modal-overlay.active{display:flex;animation:fadeIn .2s}
         .modal{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--rl);padding:28px;width:100%;max-width:550px;animation:fadeIn .3s;max-height:90vh;overflow-y:auto}
@@ -183,215 +175,18 @@
     </style>
 </head>
 <body>
-
 <div class="flash-bar" id="flashBar"></div>
-
-<!-- YASAL UYARI -->
-<div id="legalModal" class="modal-overlay active" style="z-index:2000;">
-    <div class="modal">
-        <div class="modal-head"><span class="modal-title">Yasal Uyari</span></div>
-        <div class="legal-text">
-            <p class="legal-warn">BU SITE YATIRIM TAVSIYESI VERMEZ</p>
-            <p><strong>1. Sorumluluk Reddi:</strong> Bu sitede paylasilan sinyaller ve bilgiler yalnizca egitim ve bilgilendirme amaclidir.</p>
-            <p><strong>2. Risk Bildirimi:</strong> Finansal piyasalarda islem yapmak yuksek risk icerir. Yatiriminizin tamamini kaybedebilirsiniz.</p>
-            <p><strong>3. Sorumsuzluk:</strong> Bu sitedeki sinyallere dayanarak yapilan islemlerden dogan kar veya zarardan Balina Alarm sorumlu degildir.</p>
-            <p><strong>4. SPK Uyarisi:</strong> Burada yer alan bilgiler SPK tarafindan denetlenmemistir.</p>
-            <p><strong>5. Gecmis Performans:</strong> Gecmis performans, gelecekteki sonuclarin garantisi degildir.</p>
-            <p class="legal-box">Bu siteyi kullanarak yukaridaki sartlari kabul etmis sayilirsiniz.</p>
-        </div>
-        <div class="modal-footer" style="margin-top:16px;">
-            <button class="btn btn-primary" onclick="localStorage.setItem('ba_legal','accepted');document.getElementById('legalModal').style.display='none';" style="flex:1;">Okudum, Kabul Ediyorum</button>
-        </div>
-    </div>
-</div>
-
-<!-- AUTH -->
-<div id="authScreen" class="auth">
-    <div class="auth-box">
-        <div class="auth-logo">
-            <span class="whale">🐋</span>
-            <h1>Balina Alarm</h1>
-            <p>Whale Trading Intelligence Platform</p>
-        </div>
-        <div class="auth-card">
-            <div class="auth-tabs">
-                <button class="auth-tab active" onclick="switchTab('login')">Giris Yap</button>
-                <button class="auth-tab" onclick="switchTab('register')">Kayit Ol</button>
-            </div>
-            <form id="loginForm" class="auth-form active" onsubmit="doLogin(event)">
-                <div class="fg"><label>E-posta</label><input type="email" id="lEmail" placeholder="ornek@email.com" required></div>
-                <div class="fg"><label>Sifre</label><input type="password" id="lPass" placeholder="********" required></div>
-                <button type="submit" class="btn btn-primary" style="height:46px;">Giris Yap</button>
-            </form>
-            <form id="registerForm" class="auth-form" onsubmit="doRegister(event)">
-                <div class="fg"><label>Ad Soyad</label><input type="text" id="rName" placeholder="Adiniz Soyadiniz" required></div>
-                <div class="fg"><label>E-posta</label><input type="email" id="rEmail" placeholder="ornek@email.com" required></div>
-                <div class="fg"><label>Sifre</label><input type="password" id="rPass" placeholder="En az 6 karakter" required minlength="6"></div>
-                <div class="fg"><label>Telefon Numarasi</label><input type="tel" id="rPhone" placeholder="5XXXXXXXXX" required></div>
-                <button type="submit" class="btn btn-primary" style="height:46px;">Kayit Ol</button>
-                <div class="pricing-box">
-                    <div class="pricing-card">
-                        <span class="pricing-badge">Profesyonel Plan</span>
-                        <div class="pricing-price">999 TL <span>/ ay</span></div>
-                        <ul class="pricing-list">
-                            <li>XAUUSD & BTCUSDT takibi</li>
-                            <li>Gercek zamanli balina alarmi</li>
-                            <li>Sesli & masaustu bildirim</li>
-                            <li>9000+ balina takip agi</li>
-                        </ul>
-                        <div class="free-badge">Ilk 8 Saat UCRETSIZ!</div>
-                        <div class="shopier-badge"><span>🛡️</span> Shopier ile Guvenli Odeme</div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- DASHBOARD -->
-<div id="dashboard" class="dash">
-    <nav class="nav">
-        <div class="nav-left"><span>🐋</span><div><div class="nav-title">Balina Alarm</div><div class="nav-sub">Whale Trading Dashboard</div></div></div>
-        <div class="nav-right">
-            <div class="nav-status"><span class="dot"></span><span>Bagli</span></div>
-            <div class="nav-timer" id="navTimer"><span id="timerDisp">08:00:00</span></div>
-            <div class="nav-user" onclick="openModal('userModal')">
-                <div class="avatar" id="navAvatar">A</div>
-                <div><div class="u-name" id="navName">Kullanici</div><div class="u-email" id="navEmail">user@email.com</div></div>
-            </div>
-        </div>
-    </nav>
-    <div class="main">
-        <div id="alertPopup" class="alert-popup">
-            <div class="ap-head"><span class="ap-title" id="apTitle"></span><button class="ap-close" onclick="closePopup()">X</button></div>
-            <div class="ap-body" id="apBody"></div>
-            <div class="ap-time" id="apTime"></div>
-        </div>
-
-        <!-- ALARM HINT -->
-        <div id="audioHint" class="audio-hint" onclick="loadMp3();this.style.display='none';">
-            🔊 Alarm sesini aktif etmek icin bu yaziya tikla!
-        </div>
-        <div class="test-btn">
-            <button onclick="testAlert()">🔊 Test Alarm</button>
-        </div>
-
-        <!-- SON BILDIRIMLER (EN USTTE) -->
-        <div class="notif-section">
-            <div class="notif-head">
-                <span class="notif-title-main">🔔 Son Bildirimler</span>
-                <span class="cb-blue" id="notifCount">0</span>
-            </div>
-            <div class="notif-list" id="notifList"><div class="no-notif">Henuz bildirim yok</div></div>
-        </div>
-
-        <!-- PAIR PANELS -->
-        <div class="panels">
-            <div class="panel">
-                <div class="panel-head"><span class="panel-title">🥇 XAUUSD <span style="font-size:12px;font-weight:400;color:var(--text3)">Altin</span></span><span class="panel-badge badge-wait" id="badgeXAU">Beklemede</span></div>
-                <div class="panel-status waiting" id="statusXAU"><span class="panel-emoji">🐋</span><div class="panel-signal" id="signalXAU">Beklemede</div><div class="panel-desc" id="descXAU">Balinalar hareket bekliyor...</div></div>
-                <div class="panel-footer"><span class="panel-time" id="timeXAU">Son guncelleme: --</span><span class="panel-whales" id="whalesXAU">🐋 -- balina izleniyor</span></div>
-                <div class="legend"><div class="leg"><div class="leg-dot" style="background:var(--yellow)"></div>Beklemede</div><div class="leg"><div class="leg-dot" style="background:var(--green)"></div>LONG</div><div class="leg"><div class="leg-dot" style="background:var(--red)"></div>SHORT</div></div>
-            </div>
-            <div class="panel">
-                <div class="panel-head"><span class="panel-title">₿ BTCUSDT <span style="font-size:12px;font-weight:400;color:var(--text3)">Bitcoin</span></span><span class="panel-badge badge-wait" id="badgeBTC">Beklemede</span></div>
-                <div class="panel-status waiting" id="statusBTC"><span class="panel-emoji">🐋</span><div class="panel-signal" id="signalBTC">Beklemede</div><div class="panel-desc" id="descBTC">Balinalar hareket bekliyor...</div></div>
-                <div class="panel-footer"><span class="panel-time" id="timeBTC">Son guncelleme: --</span><span class="panel-whales" id="whalesBTC">🐋 -- balina izleniyor</span></div>
-                <div class="legend"><div class="leg"><div class="leg-dot" style="background:var(--yellow)"></div>Beklemede</div><div class="leg"><div class="leg-dot" style="background:var(--green)"></div>LONG</div><div class="leg"><div class="leg-dot" style="background:var(--red)"></div>SHORT</div></div>
-            </div>
-        </div>
-
-        <!-- STATS (ASAGIDA) -->
-        <div class="stats">
-            <div class="stat"><div class="stat-icon">📡</div><div class="stat-val" id="statSignals">0</div><div class="stat-label">Toplam Sinyal</div></div>
-            <div class="stat"><div class="stat-icon">🐋</div><div class="stat-val" id="statWhales">--</div><div class="stat-label">Takip Edilen Balina</div></div>
-            <div class="stat"><div class="stat-icon">📊</div><div class="stat-val">2</div><div class="stat-label">Aktif Cift</div></div>
-        </div>
-
-        <!-- BOTTOM ROW -->
-        <div class="bottom">
-            <div class="card" id="adminSection" style="display:none;">
-                <div class="card-head"><span class="card-title">🔗 Webhook Entegrasyonu</span><span class="card-badge cb-green">Admin Panel</span></div>
-                <span class="admin-badge">🔑 Sadece Admin</span>
-                <label style="font-size:12px;font-weight:600;display:block;margin-bottom:4px;color:var(--text2);">Webhook URL:</label>
-                <div class="webhook-box"><code id="whURL" style="flex:1;">https://balina-server-2.onrender.com/webhook</code><button class="copy-btn" onclick="copyWH('whURL')">Kopyala</button></div>
-                <div style="font-size:12px;font-weight:600;margin:14px 0 6px;color:var(--text2);">📋 Kurulum Adimlari:</div>
-                <ol class="steps"><li>TradingView'da "Add Alert" tiklayin</li><li>Kosul olarak stratejinizi secin</li><li>Webhook URL kutusuna yukaridaki URL'yi yapistirin</li><li>Mesaj kutusuna JSON girin ve alarmi kaydedin</li></ol>
-                <div class="code">{"symbol":"BTCUSDT","action":"buy"}</div>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:24px;">
-                <div class="card">
-                    <div class="card-head"><span class="card-title">💳 Abonelik</span><button class="btn btn-sm btn-success" onclick="openModal('payModal')" id="subBtn">Abone Ol</button></div>
-                    <div class="sub-card">
-                        <div class="sub-head"><span style="font-weight:700;font-size:13px;">Profesyonel Plan</span><span class="sub-badge trial" id="subBadge">Deneme</span></div>
-                        <div class="sub-timer"><div class="sub-timer-label" id="subLabel">Ucretsiz deneme suresi</div><div class="sub-timer-value" id="subValue">08:00:00</div><div class="sub-progress"><div class="sub-progress-bar" id="subBar" style="width:100%"></div></div></div>
-                        <div class="shopier-badge"><span>🛡️</span> Shopier ile Guvenli Odeme</div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-head"><span class="card-title">⚙️ Ayarlar</span></div>
-                    <div class="sg">
-                        <div class="sg-title">Bildirimler</div>
-                        <div class="toggle-row"><div><div class="toggle-label">🔊 Sesli Alarm</div><div class="toggle-desc">Sinyal geldiginde ses cal</div></div><label class="toggle-switch"><input type="checkbox" id="soundToggle" checked onchange="toggleSound()"><span class="toggle-slider"></span></label></div>
-                        <div class="toggle-row"><div><div class="toggle-label">📱 Tarayici Bildirimi</div><div class="toggle-desc">Masaustu bildirim goster</div></div><label class="toggle-switch"><input type="checkbox" id="notifToggle" checked onchange="toggleNotif()"><span class="toggle-slider"></span></label></div>
-                    </div>
-                    <div class="sg">
-                        <div class="sg-title">Hesap</div>
-                        <div style="display:flex;gap:8px;"><button class="btn btn-sm btn-outline" onclick="doLogout()" style="flex:1;">🚪 Cikis Yap</button><button class="btn btn-sm btn-danger" onclick="openModal('payModal')" style="flex:1;" id="upgradeBtn">⭐ Abone Ol</button></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- PAYMENT MODAL (SADECE SHOPIER) -->
-<div id="payModal" class="modal-overlay" onclick="closeModal(event,'payModal')">
-    <div class="modal" onclick="event.stopPropagation()">
-        <div class="modal-head"><span class="modal-title">💳 Abonelik Satin Al</span><button class="modal-close" onclick="closeModal(null,'payModal')">X</button></div>
-        <div>
-            <div class="pricing-card" style="margin-bottom:16px;"><span class="pricing-badge">Profesyonel Plan</span><div class="pricing-price">999 TL <span>/ ay</span></div><ul class="pricing-list"><li>XAUUSD & BTCUSDT takibi</li><li>Gercek zamanli balina alarmi</li><li>Sesli & masaustu bildirim</li><li>9000+ balina takip agi</li></ul></div>
-            <div class="shopier-badge" style="margin-bottom:16px;font-size:14px;padding:14px;"><span>🛡️</span> Shopier ile Guvenli Odeme</div>
-            <p style="text-align:center;color:var(--text2);font-size:12px;margin-bottom:16px;">Odeme islemi Shopier altyapisi ile guvenle gerceklestirilir.<br>Kredi karti, banka karti ve havale ile odeme yapabilirsiniz.</p>
-        </div>
-        <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal(null,'payModal')">Iptal</button><button class="btn btn-success" onclick="doPayment()">🛒 Shopier ile Ode</button></div>
-    </div>
-</div>
-
-<!-- USER MODAL -->
-<div id="userModal" class="modal-overlay" onclick="closeModal(event,'userModal')">
-    <div class="modal" onclick="event.stopPropagation()">
-        <div class="modal-head"><span class="modal-title">👤 Hesap Bilgileri</span><button class="modal-close" onclick="closeModal(null,'userModal')">X</button></div>
-        <div style="text-align:center;margin-bottom:16px;">
-            <div style="width:56px;height:56px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;color:#fff;font-size:20px;font-weight:700;" id="mAvatar">A</div>
-            <div style="font-size:16px;font-weight:700;color:#fff;" id="mName">Kullanici</div>
-            <div style="font-size:13px;color:var(--text3);" id="mEmail">user@email.com</div>
-            <div id="mAdminBadge" style="display:none;margin-top:8px;"><span class="admin-badge">🔑 Admin</span></div>
-        </div>
-        <div style="background:var(--bg);border:1px solid var(--bg4);border-radius:var(--rs);padding:14px;text-align:center;">
-            <div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Abonelik Durumu</div>
-            <div style="font-size:14px;font-weight:700;color:var(--yellow);" id="mSub">Ucretsiz Deneme</div>
-        </div>
-        <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal(null,'userModal')">Kapat</button><button class="btn btn-danger" onclick="doLogout()">🚪 Cikis</button></div>
-    </div>
-</div>
-
-<!-- BLOCKED SCREEN -->
-<div id="blockedScreen" class="blocked">
-    <div class="blocked-card">
-        <div class="blocked-icon">🔒</div>
-        <div class="blocked-title">Hizmet Askida Alindi</div>
-        <div class="blocked-text">Ucretsiz deneme sureniz dolmustur.<br>Hizmete devam etmek icin abonelik satin alin.<br><br><strong>999 TL/ay</strong> ile sinirsiz erisim.</div>
-        <button class="btn btn-primary" onclick="openModal('payModal')">💳 Abone Ol</button>
-        <button class="btn btn-outline" style="margin-top:8px;" onclick="doLogout()">🚪 Cikis Yap</button>
-    </div>
-</div>
+<div id="legalModal" class="modal-overlay active" style="z-index:2000;"><div class="modal"><div class="modal-head"><span class="modal-title">Yasal Uyari</span></div><div class="legal-text"><p class="legal-warn">BU SITE YATIRIM TAVSIYESI VERMEZ</p><p><strong>1. Sorumluluk Reddi:</strong> Bu sitede paylasilan sinyaller yalnizca egitim amaclidir.</p><p><strong>2. Risk Bildirimi:</strong> Finansal piyasalarda islem yapmak yuksek risk icerir.</p><p><strong>3. Sorumsuzluk:</strong> Yapilan islemlerden dogan kar veya zarardan Balina Alarm sorumlu degildir.</p><p><strong>4. SPK Uyarisi:</strong> Burada yer alan bilgiler SPK tarafindan denetlenmemistir.</p><p class="legal-box">Bu siteyi kullanarak yukaridaki sartlari kabul etmis sayilirsiniz.</p></div><div class="modal-footer" style="margin-top:16px;"><button class="btn btn-primary" onclick="localStorage.setItem('ba_legal','accepted');document.getElementById('legalModal').style.display='none';" style="flex:1;">Okudum, Kabul Ediyorum</button></div></div></div>
+<div id="authScreen" class="auth"><div class="auth-box"><div class="auth-logo"><span class="whale">🐋</span><h1>Balina Alarm</h1><p>Whale Trading Intelligence Platform</p></div><div class="auth-card"><div class="auth-tabs"><button class="auth-tab active" onclick="switchTab('login')">Giris Yap</button><button class="auth-tab" onclick="switchTab('register')">Kayit Ol</button></div><form id="loginForm" class="auth-form active" onsubmit="doLogin(event)"><div class="fg"><label>E-posta</label><input type="email" id="lEmail" placeholder="ornek@email.com" required></div><div class="fg"><label>Sifre</label><input type="password" id="lPass" placeholder="********" required></div><button type="submit" class="btn btn-primary" style="height:46px;">Giris Yap</button></form><form id="registerForm" class="auth-form" onsubmit="doRegister(event)"><div class="fg"><label>Ad Soyad</label><input type="text" id="rName" placeholder="Adiniz Soyadiniz" required></div><div class="fg"><label>E-posta</label><input type="email" id="rEmail" placeholder="ornek@email.com" required></div><div class="fg"><label>Sifre</label><input type="password" id="rPass" placeholder="En az 6 karakter" required minlength="6"></div><div class="fg"><label>Telefon Numarasi</label><input type="tel" id="rPhone" placeholder="5XXXXXXXXX" required></div><button type="submit" class="btn btn-primary" style="height:46px;">Kayit Ol</button><div class="pricing-box"><div class="pricing-card"><span class="pricing-badge">Profesyonel Plan</span><div class="pricing-price">999 TL <span>/ ay</span></div><ul class="pricing-list"><li>XAUUSD & BTCUSDT takibi</li><li>Gercek zamanli balina alarmi</li><li>Sesli & masaustu bildirim</li><li>9000+ balina takip agi</li></ul><div class="free-badge">Ilk 8 Saat UCRETSIZ!</div><div class="shopier-badge"><span>🛡️</span> Shopier ile Guvenli Odeme</div></div></div></form></div></div></div>
+<div id="dashboard" class="dash"><nav class="nav"><div class="nav-left"><span>🐋</span><div><div class="nav-title">Balina Alarm</div><div class="nav-sub">Whale Trading Dashboard</div></div></div><div class="nav-right"><div class="nav-status"><span class="dot"></span><span>Bagli</span></div><div class="nav-timer" id="navTimer"><span id="timerDisp">08:00:00</span></div><div class="nav-user" onclick="openModal('userModal')"><div class="avatar" id="navAvatar">A</div><div><div class="u-name" id="navName">Kullanici</div><div class="u-email" id="navEmail">user@email.com</div></div></div></div></nav><div class="main"><div id="alertPopup" class="alert-popup"><div class="ap-head"><span class="ap-title" id="apTitle"></span><button class="ap-close" onclick="closePopup()">X</button></div><div class="ap-body" id="apBody"></div><div class="ap-time" id="apTime"></div></div><div id="audioHint" class="audio-hint" onclick="loadMp3();this.style.display='none';">🔊 Alarm sesini aktif etmek icin bu yaziya tikla!</div><div class="test-btn"><button onclick="testAlert()">🔊 Test Alarm</button></div><div class="notif-section"><div class="notif-head"><span class="notif-title-main">🔔 Son Bildirimler</span><span class="cb-blue" id="notifCount">0</span></div><div class="notif-list" id="notifList"><div class="no-notif">Henuz bildirim yok</div></div></div><div class="panels"><div class="panel"><div class="panel-head"><span class="panel-title">🥇 XAUUSD <span style="font-size:12px;font-weight:400;color:var(--text3)">Altin</span></span><span class="panel-badge badge-wait" id="badgeXAU"></span></div><div class="panel-status waiting" id="statusXAU"><span class="panel-emoji">🐋</span><div class="panel-signal" id="signalXAU"></div><div class="panel-desc" id="descXAU"></div></div><div class="panel-footer"><span class="panel-time" id="timeXAU">Son guncelleme: --</span><span class="panel-whales" id="whalesXAU">🐋 -- balina izleniyor</span></div><div class="legend"><div class="leg"><div class="leg-dot" style="background:var(--yellow)"></div>Beklemede</div><div class="leg"><div class="leg-dot" style="background:var(--green)"></div>LONG</div><div class="leg"><div class="leg-dot" style="background:var(--red)"></div>SHORT</div></div></div><div class="panel"><div class="panel-head"><span class="panel-title">₿ BTCUSDT <span style="font-size:12px;font-weight:400;color:var(--text3)">Bitcoin</span></span><span class="panel-badge badge-wait" id="badgeBTC"></span></div><div class="panel-status waiting" id="statusBTC"><span class="panel-emoji">🐋</span><div class="panel-signal" id="signalBTC"></div><div class="panel-desc" id="descBTC"></div></div><div class="panel-footer"><span class="panel-time" id="timeBTC">Son guncelleme: --</span><span class="panel-whales" id="whalesBTC">🐋 -- balina izleniyor</span></div><div class="legend"><div class="leg"><div class="leg-dot" style="background:var(--yellow)"></div>Beklemede</div><div class="leg"><div class="leg-dot" style="background:var(--green)"></div>LONG</div><div class="leg"><div class="leg-dot" style="background:var(--red)"></div>SHORT</div></div></div></div><div class="stats"><div class="stat"><div class="stat-icon">📡</div><div class="stat-val" id="statSignals">0</div><div class="stat-label">Toplam Sinyal</div></div><div class="stat"><div class="stat-icon">🐋</div><div class="stat-val" id="statWhales">--</div><div class="stat-label">Takip Edilen Balina</div></div><div class="stat"><div class="stat-icon">📊</div><div class="stat-val">2</div><div class="stat-label">Aktif Cift</div></div></div><div class="bottom"><div class="card" id="adminSection" style="display:none;"><div class="card-head"><span class="card-title">🔗 Webhook Entegrasyonu</span><span class="card-badge cb-green">Admin Panel</span></div><span class="admin-badge">🔑 Sadece Admin</span><label style="font-size:12px;font-weight:600;display:block;margin-bottom:4px;color:var(--text2);">Webhook URL:</label><div class="webhook-box"><code id="whURL" style="flex:1;">https://balina-server-2.onrender.com/webhook</code><button class="copy-btn" onclick="copyWH('whURL')">Kopyala</button></div><div style="font-size:12px;font-weight:600;margin:14px 0 6px;color:var(--text2);">📋 Kurulum Adimlari:</div><ol class="steps"><li>TradingView'da "Add Alert" tiklayin</li><li>Kosul olarak stratejinizi secin</li><li>Webhook URL kutusuna yukaridaki URL'yi yapistirin</li><li>Mesaj kutusuna JSON girin ve alarmi kaydedin</li></ol><div class="code">{"symbol":"BTCUSDT","action":"buy"}</div></div><div style="display:flex;flex-direction:column;gap:24px;"><div class="card"><div class="card-head"><span class="card-title">💳 Abonelik</span><button class="btn btn-sm btn-success" onclick="openModal('payModal')" id="subBtn">Abone Ol</button></div><div class="sub-card"><div class="sub-head"><span style="font-weight:700;font-size:13px;">Profesyonel Plan</span><span class="sub-badge trial" id="subBadge">Deneme</span></div><div class="sub-timer"><div class="sub-timer-label" id="subLabel">Ucretsiz deneme suresi</div><div class="sub-timer-value" id="subValue">08:00:00</div><div class="sub-progress"><div class="sub-progress-bar" id="subBar" style="width:100%"></div></div></div><div class="shopier-badge"><span>🛡️</span> Shopier ile Guvenli Odeme</div></div></div><div class="card"><div class="card-head"><span class="card-title">⚙️ Ayarlar</span></div><div class="sg"><div class="sg-title">Bildirimler</div><div class="toggle-row"><div><div class="toggle-label">🔊 Sesli Alarm</div><div class="toggle-desc">Sinyal geldiginde ses cal</div></div><label class="toggle-switch"><input type="checkbox" id="soundToggle" checked onchange="toggleSound()"><span class="toggle-slider"></span></label></div><div class="toggle-row"><div><div class="toggle-label">📱 Tarayici Bildirimi</div><div class="toggle-desc">Masaustu bildirim goster</div></div><label class="toggle-switch"><input type="checkbox" id="notifToggle" checked onchange="toggleNotif()"><span class="toggle-slider"></span></label></div></div><div class="sg"><div class="sg-title">Hesap</div><div style="display:flex;gap:8px;"><button class="btn btn-sm btn-outline" onclick="doLogout()" style="flex:1;">🚪 Cikis Yap</button><button class="btn btn-sm btn-danger" onclick="openModal('payModal')" style="flex:1;" id="upgradeBtn">⭐ Abone Ol</button></div></div></div></div></div></div></div>
+<div id="payModal" class="modal-overlay" onclick="closeModal(event,'payModal')"><div class="modal" onclick="event.stopPropagation()"><div class="modal-head"><span class="modal-title">💳 Abonelik Satin Al</span><button class="modal-close" onclick="closeModal(null,'payModal')">X</button></div><div><div class="pricing-card" style="margin-bottom:16px;"><span class="pricing-badge">Profesyonel Plan</span><div class="pricing-price">999 TL <span>/ ay</span></div><ul class="pricing-list"><li>XAUUSD & BTCUSDT takibi</li><li>Gercek zamanli balina alarmi</li><li>Sesli & masaustu bildirim</li><li>9000+ balina takip agi</li></ul></div><div class="shopier-badge" style="margin-bottom:16px;font-size:14px;padding:14px;"><span>🛡️</span> Shopier ile Guvenli Odeme</div><p style="text-align:center;color:var(--text2);font-size:12px;">Odeme islemi Shopier altyapisi ile guvenle gerceklestirilir.</p></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal(null,'payModal')">Iptal</button><button class="btn btn-success" onclick="doPayment()">🛒 Shopier ile Ode</button></div></div></div>
+<div id="userModal" class="modal-overlay" onclick="closeModal(event,'userModal')"><div class="modal" onclick="event.stopPropagation()"><div class="modal-head"><span class="modal-title">👤 Hesap Bilgileri</span><button class="modal-close" onclick="closeModal(null,'userModal')">X</button></div><div style="text-align:center;margin-bottom:16px;"><div style="width:56px;height:56px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;color:#fff;font-size:20px;font-weight:700;" id="mAvatar">A</div><div style="font-size:16px;font-weight:700;color:#fff;" id="mName">Kullanici</div><div style="font-size:13px;color:var(--text3);" id="mEmail">user@email.com</div><div id="mAdminBadge" style="display:none;margin-top:8px;"><span class="admin-badge">🔑 Admin</span></div></div><div style="background:var(--bg);border:1px solid var(--bg4);border-radius:var(--rs);padding:14px;text-align:center;"><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Abonelik Durumu</div><div style="font-size:14px;font-weight:700;color:var(--yellow);" id="mSub">Ucretsiz Deneme</div></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal(null,'userModal')">Kapat</button><button class="btn btn-danger" onclick="doLogout()">🚪 Cikis</button></div></div></div>
+<div id="blockedScreen" class="blocked"><div class="blocked-card"><div class="blocked-icon">🔒</div><div class="blocked-title">Hizmet Askida Alindi</div><div class="blocked-text">Ucretsiz deneme sureniz dolmustur.<br><br><strong>999 TL/ay</strong> ile sinirsiz erisim.</div><button class="btn btn-primary" onclick="openModal('payModal')">💳 Abone Ol</button><button class="btn btn-outline" style="margin-top:8px;" onclick="doLogout()">🚪 Cikis Yap</button></div></div>
 <script>
 var ADMIN_EMAIL="orkun159064@outlook.com";
 var S={user:null,subscribed:false,trialStart:null,trialDur:8*60*60*1000,soundOn:true,notifOn:true,signalCount:0,whaleBase:0,active:false,isAdmin:false};
 
 function getDailyWhales(){var t=new Date();var s=t.getFullYear()*10000+(t.getMonth()+1)*100+t.getDate();var h=0;for(var i=0;i<String(s).length;i++){h=((h<<5)-h)+String(s).charCodeAt(i);h|=0;}return 9000+Math.abs(h)%801;}
-
 function updateWhales(){if(S.whaleBase===0)S.whaleBase=getDailyWhales();document.getElementById('statWhales').textContent=S.whaleBase.toLocaleString('tr-TR');document.getElementById('whalesXAU').textContent='\ud83d\udc0b '+S.whaleBase.toLocaleString('tr-TR')+' balina izleniyor';document.getElementById('whalesBTC').textContent='\ud83d\udc0b '+S.whaleBase.toLocaleString('tr-TR')+' balina izleniyor';}
 
 function timeAgo(ds){var n=Date.now();var t=new Date(ds).getTime();var d=Math.floor((n-t)/1000);if(d<60)return 'Az once';if(d<3600)return Math.floor(d/60)+' dakika once';if(d<86400)return Math.floor(d/3600)+' saat once';return Math.floor(d/86400)+' gun once';}
@@ -409,7 +204,7 @@ function checkTrialAndGo(){fetch('/api/check-trial',{method:'POST',headers:{'Con
 
 function checkExistingTrial(){return fetch('/api/trial-status').then(function(r){return r.json();}).then(function(data){if(data.exists){if(data.expired){return false;}S.trialStart=data.start;return true;}return true;}).catch(function(){return true;});}
 
-function goDash(){S.active=true;document.getElementById('authScreen').style.display='none';document.getElementById('dashboard').classList.add('active');if(localStorage.getItem('ba_legal')==='accepted'){var lm=document.getElementById('legalModal');if(lm){lm.style.display='none';}}updateUserUI();updateWhales();startTimer();checkBlocked();if(S.isAdmin){document.getElementById('adminSection').style.display='block';}else{document.getElementById('adminSection').style.display='none';}if('Notification' in window&&Notification.permission==='default')Notification.requestPermission();}
+function goDash(){S.active=true;document.getElementById('authScreen').style.display='none';document.getElementById('dashboard').classList.add('active');if(localStorage.getItem('ba_legal')==='accepted'){var lm=document.getElementById('legalModal');if(lm){lm.style.display='none';}}updateUserUI();updateWhales();startTimer();checkBlocked();restorePanels();if(S.isAdmin){document.getElementById('adminSection').style.display='block';}else{document.getElementById('adminSection').style.display='none';}if('Notification' in window&&Notification.permission==='default')Notification.requestPermission();}
 
 function updateUserUI(){if(!S.user)return;document.getElementById('navName').textContent=S.user.name;document.getElementById('navEmail').textContent=S.user.email;document.getElementById('navAvatar').textContent=S.user.name[0].toUpperCase();document.getElementById('mName').textContent=S.user.name;document.getElementById('mEmail').textContent=S.user.email;document.getElementById('mAvatar').textContent=S.user.name[0].toUpperCase();document.getElementById('mAdminBadge').style.display=S.isAdmin?'block':'none';if(S.subscribed){document.getElementById('subBadge').textContent='Aktif';document.getElementById('subBadge').className='sub-badge active';document.getElementById('mSub').textContent='Aktif Abonelik';document.getElementById('mSub').style.color='var(--green)';document.getElementById('subLabel').textContent='Abonelik sureniz';document.getElementById('subBtn').style.display='none';document.getElementById('upgradeBtn').style.display='none';}else{document.getElementById('subBadge').textContent='Deneme';document.getElementById('subBadge').className='sub-badge trial';document.getElementById('mSub').textContent='Ucretsiz Deneme';document.getElementById('mSub').style.color='var(--yellow)';document.getElementById('subLabel').textContent='Ucretsiz deneme suresi';document.getElementById('subBtn').style.display='block';document.getElementById('upgradeBtn').style.display='block';}}
 
@@ -418,59 +213,43 @@ function startTimer(){setInterval(function(){if(S.subscribed){var end=S.user.sub
 function checkBlocked(){if(S.subscribed)return;if(Date.now()-S.trialStart>=S.trialDur){document.getElementById('blockedScreen').classList.add('active');}}
 
 var _baBuf=null;var _baCtx=null;
+function loadMp3(){if(_baBuf)return;try{_baCtx=new(window.AudioContext||window.webkitAudioContext)();var r=new XMLHttpRequest();r.open('GET','/u_jlnmxtfupk-notice-313085.mp3',true);r.responseType='arraybuffer';r.onload=function(){_baCtx.decodeAudioData(r.response,function(b){_baBuf=b;});};r.send();}catch(e){}}
 
-function loadMp3(){
-    if(_baBuf)return;
-    try{
-        _baCtx=new(window.AudioContext||window.webkitAudioContext)();
-        var r=new XMLHttpRequest();
-        r.open('GET','/u_jlnmxtfupk-notice-313085.mp3',true);
-        r.responseType='arraybuffer';
-        r.onload=function(){
-            _baCtx.decodeAudioData(r.response,function(b){_baBuf=b;});
-        };
-        r.send();
-    }catch(e){}
-}
+function playAlert(isBuy){if(!S.soundOn)return;if(_baBuf&&_baCtx){try{if(_baCtx.state==='suspended')_baCtx.resume();var src=_baCtx.createBufferSource();src.buffer=_baBuf;var g=_baCtx.createGain();g.gain.value=1.0;src.connect(g);g.connect(_baCtx.destination);src.start(0);}catch(e){}}}
 
-function playAlert(isBuy){
-    if(!S.soundOn)return;
-    if(_baBuf&&_baCtx){
-        try{
-            if(_baCtx.state==='suspended')_baCtx.resume();
-            var src=_baCtx.createBufferSource();
-            src.buffer=_baBuf;
-            var g=_baCtx.createGain();
-            g.gain.value=1.0;
-            src.connect(g);
-            g.connect(_baCtx.destination);
-            src.start(0);
-        }catch(e){}
-    }
-}
-
-function testAlert(){playAlert(true);}
+function testAlert(){playAlert(true);processSignal('BTCUSDT','buy');}
 
 var originalTitle=document.title;var titleBlink=null;
+function flashScreen(type){var nav=document.querySelector('.nav');var bar=document.getElementById('flashBar');document.body.classList.remove('flash-border-green','flash-border-red');void document.body.offsetWidth;document.body.classList.add(type==='al'?'flash-border-green':'flash-border-red');if(nav){nav.classList.remove('flash-green','flash-red');void nav.offsetWidth;nav.classList.add(type==='al'?'flash-green':'flash-red');}if(bar){bar.className='flash-bar';void bar.offsetWidth;bar.className='flash-bar '+(type==='al'?'al':'as');}if(titleBlink)clearInterval(titleBlink);var msg=type==='al'?'\ud83d\udfe2\ud83d\udfe2\ud83d\udfe2 LONG SINYALI!':'\ud83d\udd34\ud83d\udd34\ud83d\udd34 SHORT SINYALI!';var isOn=true;titleBlink=setInterval(function(){document.title=isOn?msg:originalTitle;isOn=!isOn;},800);setTimeout(function(){clearInterval(titleBlink);titleBlink=null;document.title=originalTitle;document.body.classList.remove('flash-border-green','flash-border-red');if(nav)nav.classList.remove('flash-green','flash-red');if(bar)bar.className='flash-bar';},15000);}
 
-function flashScreen(type){
-    var nav=document.querySelector('.nav');
-    var bar=document.getElementById('flashBar');
-    document.body.classList.remove('flash-border-green','flash-border-red');
-    void document.body.offsetWidth;
-    document.body.classList.add(type==='al'?'flash-border-green':'flash-border-red');
-    if(nav){nav.classList.remove('flash-green','flash-red');void nav.offsetWidth;nav.classList.add(type==='al'?'flash-green':'flash-red');}
-    if(bar){bar.className='flash-bar';void bar.offsetWidth;bar.className='flash-bar '+(type==='al'?'al':'as');}
-    if(titleBlink)clearInterval(titleBlink);
-    var msg=type==='al'?'\ud83d\udfe2\ud83d\udfe2\ud83d\udfe2 LONG SINYALI!':'\ud83d\udd34\ud83d\udd34\ud83d\udd34 SHORT SINYALI!';
-    var isOn=true;
-    titleBlink=setInterval(function(){document.title=isOn?msg:originalTitle;isOn=!isOn;},800);
-    setTimeout(function(){
-        clearInterval(titleBlink);titleBlink=null;document.title=originalTitle;
-        document.body.classList.remove('flash-border-green','flash-border-red');
-        if(nav)nav.classList.remove('flash-green','flash-red');
-        if(bar)bar.className='flash-bar';
-    },15000);
+function applyPanel(pair,action,timeStr){
+    var isXAU=pair==='XAUUSD';
+    var el=document.getElementById(isXAU?'statusXAU':'statusBTC');
+    var sig=document.getElementById(isXAU?'signalXAU':'signalBTC');
+    var desc=document.getElementById(isXAU?'descXAU':'descBTC');
+    var badge=document.getElementById(isXAU?'badgeXAU':'badgeBTC');
+    var tId=isXAU?'timeXAU':'timeBTC';
+    if(action==='buy'||action==='long'){
+        el.className='panel-status long';sig.textContent='Balinalar LONG Giriyor';
+        desc.textContent='\ud83d\udc0b '+pair+' alim sinyali tespit edildi!';
+        badge.textContent='LONG';badge.className='panel-badge badge-live';
+        badge.style.background='var(--green-bg)';badge.style.color='var(--green)';
+    }else{
+        el.className='panel-status short';sig.textContent='Balinalar SHORT Aciyor';
+        desc.textContent='\ud83d\udc0b '+pair+' satis sinyali tespit edildi!';
+        badge.textContent='SHORT';badge.className='panel-badge badge-live';
+        badge.style.background='var(--red-bg)';badge.style.color='var(--red)';
+    }
+    document.getElementById(tId).textContent='Son guncelleme: '+timeAgo(timeStr);
+}
+
+function restorePanels(){
+    ['XAUUSD','BTCUSDT'].forEach(function(pair){
+        try{
+            var saved=JSON.parse(localStorage.getItem('ba_panel_'+pair));
+            if(saved){applyPanel(pair,saved.action,saved.time);}
+        }catch(e){}
+    });
 }
 
 function processSignal(symbol,type){
@@ -479,41 +258,18 @@ function processSignal(symbol,type){
     var now=new Date();
     var isXAU=symbol.toUpperCase().includes('XAU')||symbol.toUpperCase().includes('ALTIN');
     var pair=isXAU?'XAUUSD':'BTCUSDT';
-    var sId=isXAU?'statusXAU':'statusBTC',sigId=isXAU?'signalXAU':'signalBTC';
-    var dId=isXAU?'descXAU':'descBTC',bId=isXAU?'badgeXAU':'badgeBTC',tId=isXAU?'timeXAU':'timeBTC';
-    var el=document.getElementById(sId),sig=document.getElementById(sigId),desc=document.getElementById(dId),badge=document.getElementById(bId);
-    if(type==='buy'||type==='long'){
-        el.className='panel-status long';sig.textContent='Balinalar LONG Giriyor';
-        desc.textContent='\ud83d\udc0b '+pair+' alim sinyali tespit edildi!';
-        badge.textContent='LONG';badge.className='panel-badge badge-live';badge.style.background='var(--green-bg)';badge.style.color='var(--green)';
-        showPopup('al','\ud83d\udc0b '+pair+' LONG','Balinalar '+pair+' long pozisyon acti!',now);
-        addLastSignal({symbol:pair,action:'buy',time:now.toISOString()});
-        playAlert(true);flashScreen('al');browserNotif('\ud83d\udc0b '+pair+' LONG!','Balinalar '+pair+' long pozisyon acti!');
-    }else{
-        el.className='panel-status short';sig.textContent='Balinalar SHORT Aciyor';
-        desc.textContent='\ud83d\udc0b '+pair+' satis sinyali tespit edildi!';
-        badge.textContent='SHORT';badge.className='panel-badge badge-live';badge.style.background='var(--red-bg)';badge.style.color='var(--red)';
-        showPopup('as','\ud83d\udc0b '+pair+' SHORT','Balinalar '+pair+' short pozisyon acti!',now);
-        addLastSignal({symbol:pair,action:'sell',time:now.toISOString()});
-        playAlert(false);flashScreen('as');browserNotif('\ud83d\udc0b '+pair+' SHORT!','Balinalar '+pair+' short pozisyon acti!');
-    }
-    document.getElementById(tId).textContent='Son guncelleme: Az once';
+    applyPanel(pair,type,now.toISOString());
+    showPopup(type==='buy'||type==='long'?'al':'as','\ud83d\udc0b '+pair+' '+(type==='buy'||type==='long'?'LONG':'SHORT'),'Balinalar '+pair+' '+(type==='buy'||type==='long'?'long':'short')+' pozisyon acti!',now);
+    addLastSignal({symbol:pair,action:type,time:now.toISOString()});
+    try{localStorage.setItem('ba_panel_'+pair,JSON.stringify({action:type,time:now.toISOString()}));}catch(e){}
+    if(type==='buy'||type==='long'){playAlert(true);flashScreen('al');browserNotif('\ud83d\udc0b '+pair+' LONG!','Balinalar '+pair+' long pozisyon acti!');}
+    else{playAlert(false);flashScreen('as');browserNotif('\ud83d\udc0b '+pair+' SHORT!','Balinalar '+pair+' short pozisyon acti!');}
     S.signalCount++;document.getElementById('statSignals').textContent=S.signalCount;
 }
 
 var lastSignals=[];
 function addLastSignal(s){lastSignals.unshift(s);if(lastSignals.length>5)lastSignals=lastSignals.slice(0,5);renderLastSignals();}
-function renderLastSignals(){
-    var list=document.getElementById('notifList');
-    if(!lastSignals.length)return;
-    list.innerHTML=lastSignals.map(function(s){
-        var cls=(s.action==='buy'||s.action==='long')?'al':'as';
-        var label=(s.action==='buy'||s.action==='long')?'LONG':'SHORT';
-        var t=timeAgo(s.time);
-        return '<div class="notif-item '+cls+'"><div><div class="notif-title">'+s.symbol+' '+label+'</div><div class="notif-time">'+t+'</div></div></div>';
-    }).join('');
-    document.getElementById('notifCount').textContent=lastSignals.length;
-}
+function renderLastSignals(){var list=document.getElementById('notifList');if(!lastSignals.length)return;list.innerHTML=lastSignals.map(function(s){var cls=(s.action==='buy'||s.action==='long')?'al':'as';var label=(s.action==='buy'||s.action==='long')?'LONG':'SHORT';var t=timeAgo(s.time);return '<div class="notif-item '+cls+'"><div><div class="notif-title">'+s.symbol+' '+label+'</div><div class="notif-time">'+t+'</div></div></div>';}).join('');document.getElementById('notifCount').textContent=lastSignals.length;}
 
 var popT;
 function showPopup(cls,title,body,time){var p=document.getElementById('alertPopup');p.className='alert-popup '+cls;document.getElementById('apTitle').textContent=title;document.getElementById('apBody').textContent=body;document.getElementById('apTime').textContent=timeAgo(time.toISOString());p.classList.add('show');clearTimeout(popT);popT=setTimeout(function(){p.classList.remove('show');},8000);}
@@ -535,35 +291,17 @@ function connectToServer(){
     evtSource.onmessage=function(event){
         var data=JSON.parse(event.data);
         if(data.type==="init"&&data.signals&&data.signals.length){
-            var allSignals=data.signals.slice(0,5);
+            var allSignals=data.signals.slice(0,20);
             allSignals.forEach(function(s){addLastSignal(s);});
-            var latest=allSignals[0];
-            if(latest){
-                var isXAU=latest.symbol.toUpperCase().includes('XAU');
-                var tId=isXAU?'timeXAU':'timeBTC';
-                document.getElementById(tId).textContent='Son guncelleme: '+timeAgo(latest.time);
-                if(latest.action==='buy'||latest.action==='long'){
-                    var el=document.getElementById(isXAU?'statusXAU':'statusBTC');
-                    var sig=document.getElementById(isXAU?'signalXAU':'signalBTC');
-                    var desc=document.getElementById(isXAU?'descXAU':'descBTC');
-                    var badge=document.getElementById(isXAU?'badgeXAU':'badgeBTC');
-                    var pair=isXAU?'XAUUSD':'BTCUSDT';
-                    el.className='panel-status long';sig.textContent='Balinalar LONG Giriyor';
-                    desc.textContent='\ud83d\udc0b '+pair+' alim sinyali tespit edildi!';
-                    badge.textContent='LONG';badge.className='panel-badge badge-live';
-                    badge.style.background='var(--green-bg)';badge.style.color='var(--green)';
-                }else{
-                    var el=document.getElementById(isXAU?'statusXAU':'statusBTC');
-                    var sig=document.getElementById(isXAU?'signalXAU':'signalBTC');
-                    var desc=document.getElementById(isXAU?'descXAU':'descBTC');
-                    var badge=document.getElementById(isXAU?'badgeXAU':'badgeBTC');
-                    var pair=isXAU?'XAUUSD':'BTCUSDT';
-                    el.className='panel-status short';sig.textContent='Balinalar SHORT Aciyor';
-                    desc.textContent='\ud83d\udc0b '+pair+' satis sinyali tespit edildi!';
-                    badge.textContent='SHORT';badge.className='panel-badge badge-live';
-                    badge.style.background='var(--red-bg)';badge.style.color='var(--red)';
-                }
+            var latestXAU=null;var latestBTC=null;
+            for(var i=0;i<allSignals.length;i++){
+                var s=allSignals[i];
+                var sym=s.symbol.toUpperCase();
+                if(sym.includes('XAU')&&!latestXAU)latestXAU=s;
+                if(sym.includes('BTC')&&!latestBTC)latestBTC=s;
             }
+            if(latestXAU){applyPanel('XAUUSD',latestXAU.action,latestXAU.time);try{localStorage.setItem('ba_panel_XAUUSD',JSON.stringify({action:latestXAU.action,time:latestXAU.time}));}catch(e){}}
+            if(latestBTC){applyPanel('BTCUSDT',latestBTC.action,latestBTC.time);try{localStorage.setItem('ba_panel_BTCUSDT',JSON.stringify({action:latestBTC.action,time:latestBTC.time}));}catch(e){}}
         }
         if(data.type==="new_signal"){processSignal(data.signal.symbol,data.signal.action);}
     };
@@ -572,17 +310,7 @@ function connectToServer(){
 
 document.addEventListener('DOMContentLoaded',function(){
     var saved=localStorage.getItem('ba_session');
-    if(saved){
-        try{
-            var d=JSON.parse(saved);
-            S.user=d.user;S.subscribed=d.sub;S.trialStart=d.trialStart;
-            S.isAdmin=(d.user.email===ADMIN_EMAIL);
-            checkExistingTrial().then(function(ok){
-                if(ok){goDash();}
-                else{localStorage.removeItem('ba_session');}
-            });
-        }catch(e){localStorage.removeItem('ba_session');}
-    }
+    if(saved){try{var d=JSON.parse(saved);S.user=d.user;S.subscribed=d.sub;S.trialStart=d.trialStart;S.isAdmin=(d.user.email===ADMIN_EMAIL);checkExistingTrial().then(function(ok){if(ok){goDash();}else{localStorage.removeItem('ba_session');}});}catch(e){localStorage.removeItem('ba_session');}}
     updateWhales();connectToServer();
 });
 </script>
