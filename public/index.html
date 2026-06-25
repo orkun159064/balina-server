@@ -27,7 +27,7 @@
 
         /* LANDING */
         .landing{min-height:100vh;background:linear-gradient(135deg,#0a0e17,#0d1b2a,#111827);position:relative;overflow:hidden}
-        .landing::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 50% 50%,rgba(59,130,246,.03) 0%,transparent 50%);animation:rotate 30s linear infinite}
+        .landing::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 50% 50%,rgba(59,130,246,.03) 0%,transparent 50%);animation:rotate 30s linear infinite;pointer-events:none}
         @keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
         .landing-top{position:sticky;top:0;z-index:100;background:var(--bg3);border-bottom:1px solid var(--bg4);padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
         .landing-top-logo{display:flex;align-items:center;gap:8px;color:#fff;font-weight:700;font-size:16px}
