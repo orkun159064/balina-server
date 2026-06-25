@@ -7,21 +7,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        :root{
-            --bg:#0a0e17;--bg2:#111827;--bg3:#1a2332;--bg4:#243044;
-            --navy:#0d1b2a;--white:#fff;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
-            --blue:#3b82f6;--blue-hover:#2563eb;--blue-glow:rgba(59,130,246,.3);
-            --green:#10b981;--green-bg:rgba(16,185,129,.12);--green-bdr:rgba(16,185,129,.3);
-            --red:#ef4444;--red-bg:rgba(239,68,68,.12);--red-bdr:rgba(239,68,68,.3);
-            --yellow:#f59e0b;--yellow-bg:rgba(245,158,11,.12);--yellow-bdr:rgba(245,158,11,.3);
-            --r:12px;--rs:8px;--rl:16px;
-            --shadow:0 4px 6px -1px rgba(0,0,0,.3);
-            --t:all .3s ease
-        }
+        :root{--bg:#0a0e17;--bg2:#111827;--bg3:#1a2332;--bg4:#243044;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--blue:#3b82f6;--blue-hover:#2563eb;--blue-glow:rgba(59,130,246,.3);--green:#10b981;--green-bg:rgba(16,185,129,.12);--red:#ef4444;--red-bg:rgba(239,68,68,.12);--yellow:#f59e0b;--yellow-bg:rgba(245,158,11,.12);--yellow-bdr:rgba(245,158,11,.3);--orange:#f97316;--orange-bg:rgba(249,115,22,.12);--orange-bdr:rgba(249,115,22,.3);--r:12px;--rs:8px;--rl:16px;--shadow:0 4px 6px -1px rgba(0,0,0,.3);--t:all .3s ease}
         body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
         @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
         @keyframes swim{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+        @keyframes glow{0%,100%{box-shadow:0 0 20px rgba(59,130,246,.3)}50%{box-shadow:0 0 40px rgba(59,130,246,.6)}}
         @keyframes flashNavGreen{0%,100%{background:var(--bg3)}50%{background:#00cc66}}
         @keyframes flashNavRed{0%,100%{background:var(--bg3)}50%{background:#cc0000}}
         .nav.flash-green{animation:flashNavGreen .4s ease 8}
@@ -33,7 +24,50 @@
         .flash-bar{display:none;position:fixed;top:60px;left:0;right:0;height:6px;z-index:98}
         .flash-bar.al{display:block;background:linear-gradient(90deg,#00ff88,#10b981,#00ff88);animation:pulse .3s ease 10}
         .flash-bar.as{display:block;background:linear-gradient(90deg,#ff4444,#ef4444,#ff4444);animation:pulse .3s ease 10}
-        .auth{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0a0e17,#111827,#0d1b2a);padding:20px}
+
+        /* LANDING */
+        .landing{min-height:100vh;background:linear-gradient(135deg,#0a0e17,#0d1b2a,#111827);position:relative;overflow:hidden}
+        .landing::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 50% 50%,rgba(59,130,246,.03) 0%,transparent 50%);animation:rotate 30s linear infinite}
+        @keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+        .landing-top{position:sticky;top:0;z-index:100;background:var(--bg3);border-bottom:1px solid var(--bg4);padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
+        .landing-top-logo{display:flex;align-items:center;gap:8px;color:#fff;font-weight:700;font-size:16px}
+        .landing-top-logo span{font-size:20px}
+        .landing-online{display:flex;align-items:center;gap:6px;padding:5px 12px;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);border-radius:16px;font-size:11px;font-weight:600;color:var(--green)}
+        .landing-online-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s ease infinite}
+        .landing-hero{max-width:700px;margin:0 auto;padding:60px 24px 40px;text-align:center;position:relative;z-index:1}
+        .landing-whale{font-size:80px;display:block;margin-bottom:16px;animation:swim 3s ease infinite}
+        .landing-title{font-size:38px;font-weight:900;color:#fff;margin-bottom:12px;letter-spacing:-1px}
+        .landing-sub{font-size:16px;color:var(--text3);margin-bottom:36px;line-height:1.6}
+        .landing-alert-banner{max-width:700px;margin:0 auto 24px;padding:0 24px}
+        .landing-alert-box{padding:14px 18px;background:var(--orange-bg);border:2px solid var(--orange-bdr);border-radius:var(--r);text-align:center;animation:pulse 3s ease infinite}
+        .landing-alert-text{font-size:14px;font-weight:700;color:var(--orange)}
+        .landing-features{max-width:700px;margin:0 auto 32px;padding:0 24px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+        .landing-feature{display:flex;align-items:center;gap:10px;padding:14px;background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--r);transition:var(--t)}
+        .landing-feature:hover{border-color:var(--blue);transform:translateX(4px)}
+        .landing-feature span{font-size:18px}
+        .landing-feature p{font-size:13px;color:var(--text);font-weight:500}
+        .landing-about{max-width:700px;margin:0 auto 32px;padding:0 24px}
+        .landing-about-card{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--rl);padding:28px}
+        .landing-about-title{font-size:20px;font-weight:800;color:#fff;margin-bottom:16px;text-align:center}
+        .landing-about-text{font-size:13px;color:var(--text2);line-height:1.8;margin-bottom:16px}
+        .landing-about-list{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+        .landing-about-list li{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text)}
+        .landing-about-list li span{color:var(--green);font-weight:700}
+        .landing-about-mission{font-size:13px;color:var(--text3);line-height:1.8;text-align:center;font-style:italic;border-top:1px solid var(--bg4);padding-top:16px}
+        .landing-about-slogan{text-align:center;margin-top:16px;font-size:16px;font-weight:800;color:var(--blue)}
+        .landing-cta{max-width:700px;margin:0 auto;padding:0 24px 60px;text-align:center}
+        .landing-free{padding:14px 20px;background:var(--yellow-bg);border:1px solid var(--yellow-bdr);border-radius:var(--r);margin-bottom:20px;display:inline-block}
+        .landing-free-text{font-size:18px;font-weight:800;color:var(--yellow)}
+        .landing-shopier{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:var(--r);margin-bottom:24px;font-size:13px;font-weight:600;color:var(--green);max-width:300px;margin-left:auto;margin-right:auto}
+        .landing-shopier span{font-size:18px}
+        .landing-btn{display:inline-block;padding:16px 52px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-size:18px;font-weight:800;cursor:pointer;transition:var(--t);font-family:inherit;animation:glow 2s ease infinite;text-decoration:none}
+        .landing-btn:hover{background:var(--blue-hover);transform:translateY(-2px)}
+        .landing-price{margin-top:20px;font-size:14px;color:var(--text3)}
+        .landing-price strong{color:var(--text);font-size:24px;font-weight:900}
+
+        /* AUTH */
+        .auth{display:none;min-height:100vh;align-items:center;justify-content:center;background:linear-gradient(135deg,#0a0e17,#111827,#0d1b2a);padding:20px}
+        .auth.active{display:flex}
         .auth-box{width:100%;max-width:440px}
         .auth-logo{text-align:center;margin-bottom:32px}
         .auth-logo .whale{font-size:56px;display:block;animation:swim 3s ease infinite}
@@ -44,13 +78,14 @@
         .auth-tab{flex:1;padding:10px;text-align:center;border:none;background:0 0;color:var(--text3);font-weight:600;font-size:13px;cursor:pointer;border-radius:6px;transition:var(--t);font-family:inherit}
         .auth-tab.active{background:var(--bg3);color:var(--text);box-shadow:var(--shadow)}
         .auth-form{display:none}.auth-form.active{display:block;animation:fadeIn .3s}
-        .fg{margin-bottom:16px}
-        .fg label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:4px}
+        .auth-back{display:block;text-align:center;margin-top:16px;font-size:13px;color:var(--text3);cursor:pointer;text-decoration:none}
+        .auth-back:hover{color:var(--blue)}
+        .fg{margin-bottom:16px}.fg label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:4px}
         .fg input{width:100%;padding:11px 14px;border:2px solid var(--bg4);border-radius:var(--rs);font-size:14px;font-family:inherit;transition:var(--t);outline:0;color:var(--text);background:var(--bg)}
         .fg input:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-glow)}
         .fg input::placeholder{color:var(--text3)}
         .btn{width:100%;padding:12px;border:none;border-radius:var(--rs);font-size:14px;font-weight:700;cursor:pointer;transition:var(--t);font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
-        .btn-primary{background:var(--blue);color:#fff}.btn-primary:hover{background:var(--blue-hover);transform:translateY(-1px);box-shadow:0 4px 12px var(--blue-glow)}
+        .btn-primary{background:var(--blue);color:#fff}.btn-primary:hover{background:var(--blue-hover);transform:translateY(-1px)}
         .btn-outline{background:0 0;color:var(--blue);border:2px solid var(--blue)}.btn-outline:hover{background:var(--blue);color:#fff}
         .btn-success{background:var(--green);color:#fff}.btn-success:hover{background:#059669}
         .btn-danger{background:var(--red);color:#fff}.btn-danger:hover{background:#dc2626}
@@ -59,12 +94,13 @@
         .pricing-card{background:linear-gradient(135deg,var(--bg),var(--bg3));border:1px solid var(--bg4);border-radius:var(--r);padding:20px;color:#fff}
         .pricing-badge{display:inline-block;background:var(--blue);padding:3px 10px;border-radius:16px;font-size:10px;font-weight:700;text-transform:uppercase;margin-bottom:10px}
         .pricing-price{font-size:32px;font-weight:900}.pricing-price span{font-size:14px;font-weight:400;opacity:.6}
-        .pricing-list{list-style:none;margin-top:12px}
-        .pricing-list li{padding:5px 0;font-size:12px;display:flex;align-items:center;gap:6px;color:var(--text2)}
+        .pricing-list{list-style:none;margin-top:12px}.pricing-list li{padding:5px 0;font-size:12px;display:flex;align-items:center;gap:6px;color:var(--text2)}
         .pricing-list li::before{content:'\2713';width:18px;height:18px;background:rgba(16,185,129,.2);color:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
-        .free-badge{display:block;text-align:center;margin-top:14px;padding:8px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);border-radius:var(--rs);color:var(--yellow);font-size:12px;font-weight:600}
+        .free-badge{display:block;text-align:center;margin-top:14px;padding:8px;background:rgba(245,158,11,.15);border:1px solid var(--yellow-bdr);border-radius:var(--rs);color:var(--yellow);font-size:12px;font-weight:600}
         .shopier-badge{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:var(--rs);margin-top:12px;font-size:12px;font-weight:600;color:var(--green)}
         .shopier-badge span{font-size:16px}
+
+        /* DASHBOARD */
         .dash{display:none;min-height:100vh}.dash.active{display:block}
         .nav{background:var(--bg3);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--bg4)}
         .nav-left{display:flex;align-items:center;gap:10px}.nav-left span{font-size:22px}
@@ -80,17 +116,16 @@
         .avatar{width:30px;height:30px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px}
         .u-name{color:#fff;font-size:12px;font-weight:600}.u-email{color:var(--text3);font-size:10px}
         .main{padding:24px;max-width:1400px;margin:0 auto}
-        .audio-hint{text-align:center;margin-bottom:20px;padding:12px;background:var(--yellow-bg);border:1px solid var(--yellow-bdr);border-radius:10px;color:var(--yellow);font-size:13px;cursor:pointer}
-        .test-btn{text-align:center;margin-bottom:20px}
-        .test-btn button{padding:14px 30px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;transition:var(--t)}
-        .test-btn button:hover{background:var(--blue-hover)}
+        .alert-banner{padding:10px 20px;background:var(--orange-bg);border:1px solid var(--orange-bdr);border-radius:var(--r);margin-bottom:16px;text-align:center}
+        .alert-banner-text{font-size:13px;font-weight:700;color:var(--orange)}
+        .audio-hint{text-align:center;margin-bottom:16px;padding:12px;background:var(--yellow-bg);border:1px solid var(--yellow-bdr);border-radius:10px;color:var(--yellow);font-size:13px;cursor:pointer}
+        .test-btn{text-align:center;margin-bottom:20px}.test-btn button{padding:14px 30px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;transition:var(--t)}.test-btn button:hover{background:var(--blue-hover)}
         .notif-section{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--r);padding:24px;margin-bottom:24px;animation:fadeIn .4s}
         .notif-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
         .notif-title-main{font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px;color:#fff}
         .notif-list{max-height:300px;overflow-y:auto}
         .notif-item{display:flex;align-items:flex-start;gap:10px;padding:12px;border-radius:var(--rs);margin-bottom:6px}
-        .notif-item.al{background:var(--green-bg);border-left:3px solid var(--green)}
-        .notif-item.as{background:var(--red-bg);border-left:3px solid var(--red)}
+        .notif-item.al{background:var(--green-bg);border-left:3px solid var(--green)}.notif-item.as{background:var(--red-bg);border-left:3px solid var(--red)}
         .notif-title{font-size:12px;font-weight:700}.notif-item.al .notif-title{color:var(--green)}.notif-item.as .notif-title{color:var(--red)}
         .notif-time{font-size:10px;color:var(--text3)}
         .no-notif{text-align:center;padding:30px;color:var(--text3);font-size:13px}
@@ -127,17 +162,14 @@
         .webhook-box{background:var(--bg);border:2px solid var(--bg4);border-radius:var(--rs);padding:12px 14px;display:flex;align-items:center;gap:8px;font-family:monospace;font-size:12px;word-break:break-all;margin-bottom:14px;color:var(--text2)}
         .copy-btn{background:var(--blue);color:#fff;border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;transition:var(--t);font-family:inherit}
         .copy-btn:hover{background:var(--blue-hover)}.copy-btn.copied{background:var(--green)}
-        .steps{list-style:none;counter-reset:step}
-        .steps li{counter-increment:step;padding:10px 0;border-bottom:1px solid var(--bg4);display:flex;align-items:flex-start;gap:10px;font-size:12px;color:var(--text2)}
-        .steps li:last-child{border-bottom:0}
+        .steps{list-style:none;counter-reset:step}.steps li{counter-increment:step;padding:10px 0;border-bottom:1px solid var(--bg4);display:flex;align-items:flex-start;gap:10px;font-size:12px;color:var(--text2)}.steps li:last-child{border-bottom:0}
         .steps li::before{content:counter(step);display:flex;align-items:center;justify-content:center;width:22px;height:22px;background:var(--blue);color:#fff;border-radius:50%;font-size:10px;font-weight:700;flex-shrink:0}
         .code{background:var(--bg);border:1px solid var(--bg4);border-radius:var(--rs);padding:12px;margin-top:10px;font-family:monospace;font-size:11px;color:#a5f3fc;white-space:pre;line-height:1.5;overflow-x:auto}
         .admin-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:16px;font-size:10px;font-weight:700;background:rgba(245,158,11,.15);color:var(--yellow);text-transform:uppercase;margin-bottom:12px}
         .sg{margin-bottom:16px}.sg-title{font-size:11px;font-weight:700;color:var(--text2);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px}
         .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--bg4)}.toggle-row:last-child{border-bottom:0}
         .toggle-label{font-size:13px;color:var(--text)}.toggle-desc{font-size:11px;color:var(--text3);margin-top:1px}
-        .toggle-switch{position:relative;width:44px;height:24px;flex-shrink:0}
-        .toggle-switch input{opacity:0;width:0;height:0}
+        .toggle-switch{position:relative;width:44px;height:24px;flex-shrink:0}.toggle-switch input{opacity:0;width:0;height:0}
         .toggle-slider{position:absolute;cursor:pointer;inset:0;background:var(--bg4);border-radius:24px;transition:var(--t)}
         .toggle-slider::before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:var(--t)}
         .toggle-switch input:checked+.toggle-slider{background:var(--blue)}.toggle-switch input:checked+.toggle-slider::before{transform:translateX(20px)}
@@ -146,8 +178,7 @@
         .sub-badge{padding:3px 10px;border-radius:16px;font-size:10px;font-weight:700;text-transform:uppercase}
         .sub-badge.trial{background:rgba(245,158,11,.2);color:var(--yellow)}.sub-badge.active{background:rgba(16,185,129,.2);color:var(--green)}
         .sub-timer{text-align:center}.sub-timer-label{font-size:11px;opacity:.5;margin-bottom:4px}.sub-timer-value{font-size:28px;font-weight:900;font-variant-numeric:tabular-nums}
-        .sub-progress{width:100%;height:4px;background:var(--bg4);border-radius:2px;margin-top:10px;overflow:hidden}
-        .sub-progress-bar{height:100%;background:var(--blue);border-radius:2px;transition:width 1s linear}
+        .sub-progress{width:100%;height:4px;background:var(--bg4);border-radius:2px;margin-top:10px;overflow:hidden}.sub-progress-bar{height:100%;background:var(--blue);border-radius:2px;transition:width 1s linear}
         .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
         .modal-overlay.active{display:flex;animation:fadeIn .2s}
         .modal{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--rl);padding:28px;width:100%;max-width:550px;animation:fadeIn .3s;max-height:90vh;overflow-y:auto}
@@ -155,32 +186,122 @@
         .modal-title{font-size:17px;font-weight:700;color:#fff}
         .modal-close{width:30px;height:30px;border:none;background:var(--bg4);border-radius:50%;cursor:pointer;font-size:16px;transition:var(--t);color:var(--text2)}.modal-close:hover{background:var(--bg3)}
         .modal-footer{display:flex;gap:10px;margin-top:18px}.modal-footer .btn{flex:1}
-        .blocked{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(10px)}
-        .blocked.active{display:flex}
+        .blocked{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(10px)}.blocked.active{display:flex}
         .blocked-card{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--rl);padding:40px;text-align:center;max-width:400px;width:100%;animation:fadeIn .4s}
         .blocked-icon{font-size:56px;margin-bottom:12px}.blocked-title{font-size:20px;font-weight:800;margin-bottom:6px;color:#fff}.blocked-text{font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.6}
         .alert-popup{position:fixed;top:72px;right:24px;z-index:200;max-width:360px;width:calc(100% - 48px);border-radius:var(--r);padding:18px;transform:translateX(120%);transition:transform .4s cubic-bezier(.4,0,.2,1);background:var(--bg2);border:1px solid var(--bg4)}
-        .alert-popup.show{transform:translateX(0)}
-        .alert-popup.al{border-color:var(--green)}.alert-popup.as{border-color:var(--red)}
+        .alert-popup.show{transform:translateX(0)}.alert-popup.al{border-color:var(--green)}.alert-popup.as{border-color:var(--red)}
         .ap-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
         .ap-title{font-size:14px;font-weight:800}.alert-popup.al .ap-title{color:var(--green)}.alert-popup.as .ap-title{color:var(--red)}
         .ap-close{background:0 0;border:none;font-size:16px;cursor:pointer;color:var(--text3);padding:2px}
         .ap-body{font-size:13px;color:var(--text)}.ap-time{font-size:11px;color:var(--text3);margin-top:6px}
-        .legal-text{font-size:13px;color:var(--text);line-height:1.8}
-        .legal-text p{margin-bottom:10px}
-        .legal-warn{margin-bottom:12px;padding:10px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);border-radius:8px;font-weight:700;color:var(--yellow);text-align:center}
+        .legal-text{font-size:13px;color:var(--text);line-height:1.8}.legal-text p{margin-bottom:10px}
+        .legal-warn{margin-bottom:12px;padding:10px;background:rgba(245,158,11,.15);border:1px solid var(--yellow-bdr);border-radius:8px;font-weight:700;color:var(--yellow);text-align:center}
         .legal-box{padding:10px;background:var(--bg);border-radius:8px;font-size:12px;color:var(--text3);text-align:center}
         @media(max-width:900px){.panels{grid-template-columns:1fr}.bottom{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}}
-        @media(max-width:600px){.nav-sub,.nav-status,.nav-timer{display:none}.main{padding:16px}.stats{grid-template-columns:1fr}}
+        @media(max-width:600px){.nav-sub,.nav-status,.nav-timer{display:none}.main{padding:16px}.stats{grid-template-columns:1fr}.landing-title{font-size:28px}.landing-whale{font-size:60px}.landing-features{grid-template-columns:1fr}}
     </style>
 </head>
 <body>
 <div class="flash-bar" id="flashBar"></div>
-<div id="legalModal" class="modal-overlay active" style="z-index:2000;"><div class="modal"><div class="modal-head"><span class="modal-title">Yasal Uyari</span></div><div class="legal-text"><p class="legal-warn">BU SITE YATIRIM TAVSIYESI VERMEZ</p><p><strong>1. Sorumluluk Reddi:</strong> Bu sitede paylasilan sinyaller yalnizca egitim amaclidir.</p><p><strong>2. Risk Bildirimi:</strong> Finansal piyasalarda islem yapmak yuksek risk icerir.</p><p><strong>3. Sorumsuzluk:</strong> Yapilan islemlerden dogan kar veya zarardan Balina Alarm sorumlu degildir.</p><p><strong>4. SPK Uyarisi:</strong> Burada yer alan bilgiler SPK tarafindan denetlenmemistir.</p><p class="legal-box">Bu siteyi kullanarak yukaridaki sartlari kabul etmis sayilirsiniz.</p></div><div class="modal-footer" style="margin-top:16px;"><button class="btn btn-primary" onclick="localStorage.setItem('ba_legal','accepted');document.getElementById('legalModal').style.display='none';" style="flex:1;">Okudum, Kabul Ediyorum</button></div></div></div>
-<div id="authScreen" class="auth"><div class="auth-box"><div class="auth-logo"><span class="whale">🐋</span><h1>Balina Alarm</h1><p>Whale Trading Intelligence Platform</p></div><div class="auth-card"><div class="auth-tabs"><button class="auth-tab active" onclick="switchTab('login')">Giris Yap</button><button class="auth-tab" onclick="switchTab('register')">Kayit Ol</button></div><form id="loginForm" class="auth-form active" onsubmit="doLogin(event)"><div class="fg"><label>E-posta</label><input type="email" id="lEmail" placeholder="ornek@email.com" required></div><div class="fg"><label>Sifre</label><input type="password" id="lPass" placeholder="********" required></div><button type="submit" class="btn btn-primary" style="height:46px;">Giris Yap</button></form><form id="registerForm" class="auth-form" onsubmit="doRegister(event)"><div class="fg"><label>Ad Soyad</label><input type="text" id="rName" placeholder="Adiniz Soyadiniz" required></div><div class="fg"><label>E-posta</label><input type="email" id="rEmail" placeholder="ornek@email.com" required></div><div class="fg"><label>Sifre</label><input type="password" id="rPass" placeholder="En az 6 karakter" required minlength="6"></div><div class="fg"><label>Telefon Numarasi</label><input type="tel" id="rPhone" placeholder="5XXXXXXXXX" required></div><button type="submit" class="btn btn-primary" style="height:46px;">Kayit Ol</button><div class="pricing-box"><div class="pricing-card"><span class="pricing-badge">Profesyonel Plan</span><div class="pricing-price">999 TL <span>/ ay</span></div><ul class="pricing-list"><li>XAUUSD & BTCUSDT takibi</li><li>Gercek zamanli balina alarmi</li><li>Sesli & masaustu bildirim</li><li>9000+ balina takip agi</li></ul><div class="free-badge">Ilk 8 Saat UCRETSIZ!</div><div class="shopier-badge"><span>🛡️</span> Shopier ile Guvenli Odeme</div></div></div></form></div></div></div>
-<div id="dashboard" class="dash"><nav class="nav"><div class="nav-left"><span>🐋</span><div><div class="nav-title">Balina Alarm</div><div class="nav-sub">Whale Trading Dashboard</div></div></div><div class="nav-right"><div class="nav-status"><span class="dot"></span><span>Bagli</span></div><div class="nav-timer" id="navTimer"><span id="timerDisp">08:00:00</span></div><div class="nav-user" onclick="openModal('userModal')"><div class="avatar" id="navAvatar">A</div><div><div class="u-name" id="navName">Kullanici</div><div class="u-email" id="navEmail">user@email.com</div></div></div></div></nav><div class="main"><div id="alertPopup" class="alert-popup"><div class="ap-head"><span class="ap-title" id="apTitle"></span><button class="ap-close" onclick="closePopup()">X</button></div><div class="ap-body" id="apBody"></div><div class="ap-time" id="apTime"></div></div><div id="audioHint" class="audio-hint" onclick="loadMp3();this.style.display='none';">🔊 Alarm sesini aktif etmek icin bu yaziya tikla!</div><div class="test-btn"><button onclick="testAlert()">🔊 Test Alarm</button></div><div class="notif-section"><div class="notif-head"><span class="notif-title-main">🔔 Son Bildirimler</span><span class="cb-blue" id="notifCount">0</span></div><div class="notif-list" id="notifList"><div class="no-notif">Henuz bildirim yok</div></div></div><div class="panels"><div class="panel"><div class="panel-head"><span class="panel-title">🥇 XAUUSD <span style="font-size:12px;font-weight:400;color:var(--text3)">Altin</span></span><span class="panel-badge badge-wait" id="badgeXAU"></span></div><div class="panel-status waiting" id="statusXAU"><span class="panel-emoji">🐋</span><div class="panel-signal" id="signalXAU"></div><div class="panel-desc" id="descXAU"></div></div><div class="panel-footer"><span class="panel-time" id="timeXAU">Son guncelleme: --</span><span class="panel-whales" id="whalesXAU">🐋 -- balina izleniyor</span></div><div class="legend"><div class="leg"><div class="leg-dot" style="background:var(--yellow)"></div>Beklemede</div><div class="leg"><div class="leg-dot" style="background:var(--green)"></div>LONG</div><div class="leg"><div class="leg-dot" style="background:var(--red)"></div>SHORT</div></div></div><div class="panel"><div class="panel-head"><span class="panel-title">₿ BTCUSDT <span style="font-size:12px;font-weight:400;color:var(--text3)">Bitcoin</span></span><span class="panel-badge badge-wait" id="badgeBTC"></span></div><div class="panel-status waiting" id="statusBTC"><span class="panel-emoji">🐋</span><div class="panel-signal" id="signalBTC"></div><div class="panel-desc" id="descBTC"></div></div><div class="panel-footer"><span class="panel-time" id="timeBTC">Son guncelleme: --</span><span class="panel-whales" id="whalesBTC">🐋 -- balina izleniyor</span></div><div class="legend"><div class="leg"><div class="leg-dot" style="background:var(--yellow)"></div>Beklemede</div><div class="leg"><div class="leg-dot" style="background:var(--green)"></div>LONG</div><div class="leg"><div class="leg-dot" style="background:var(--red)"></div>SHORT</div></div></div></div><div class="stats"><div class="stat"><div class="stat-icon">📡</div><div class="stat-val" id="statSignals">0</div><div class="stat-label">Toplam Sinyal</div></div><div class="stat"><div class="stat-icon">🐋</div><div class="stat-val" id="statWhales">--</div><div class="stat-label">Takip Edilen Balina</div></div><div class="stat"><div class="stat-icon">📊</div><div class="stat-val">2</div><div class="stat-label">Aktif Cift</div></div></div><div class="bottom"><div class="card" id="adminSection" style="display:none;"><div class="card-head"><span class="card-title">🔗 Webhook Entegrasyonu</span><span class="card-badge cb-green">Admin Panel</span></div><span class="admin-badge">🔑 Sadece Admin</span><label style="font-size:12px;font-weight:600;display:block;margin-bottom:4px;color:var(--text2);">Webhook URL:</label><div class="webhook-box"><code id="whURL" style="flex:1;">https://balina-server-2.onrender.com/webhook</code><button class="copy-btn" onclick="copyWH('whURL')">Kopyala</button></div><div style="font-size:12px;font-weight:600;margin:14px 0 6px;color:var(--text2);">📋 Kurulum Adimlari:</div><ol class="steps"><li>TradingView'da "Add Alert" tiklayin</li><li>Kosul olarak stratejinizi secin</li><li>Webhook URL kutusuna yukaridaki URL'yi yapistirin</li><li>Mesaj kutusuna JSON girin ve alarmi kaydedin</li></ol><div class="code">{"symbol":"BTCUSDT","action":"buy"}</div></div><div style="display:flex;flex-direction:column;gap:24px;"><div class="card"><div class="card-head"><span class="card-title">💳 Abonelik</span><button class="btn btn-sm btn-success" onclick="openModal('payModal')" id="subBtn">Abone Ol</button></div><div class="sub-card"><div class="sub-head"><span style="font-weight:700;font-size:13px;">Profesyonel Plan</span><span class="sub-badge trial" id="subBadge">Deneme</span></div><div class="sub-timer"><div class="sub-timer-label" id="subLabel">Ucretsiz deneme suresi</div><div class="sub-timer-value" id="subValue">08:00:00</div><div class="sub-progress"><div class="sub-progress-bar" id="subBar" style="width:100%"></div></div></div><div class="shopier-badge"><span>🛡️</span> Shopier ile Guvenli Odeme</div></div></div><div class="card"><div class="card-head"><span class="card-title">⚙️ Ayarlar</span></div><div class="sg"><div class="sg-title">Bildirimler</div><div class="toggle-row"><div><div class="toggle-label">🔊 Sesli Alarm</div><div class="toggle-desc">Sinyal geldiginde ses cal</div></div><label class="toggle-switch"><input type="checkbox" id="soundToggle" checked onchange="toggleSound()"><span class="toggle-slider"></span></label></div><div class="toggle-row"><div><div class="toggle-label">📱 Tarayici Bildirimi</div><div class="toggle-desc">Masaustu bildirim goster</div></div><label class="toggle-switch"><input type="checkbox" id="notifToggle" checked onchange="toggleNotif()"><span class="toggle-slider"></span></label></div></div><div class="sg"><div class="sg-title">Hesap</div><div style="display:flex;gap:8px;"><button class="btn btn-sm btn-outline" onclick="doLogout()" style="flex:1;">🚪 Cikis Yap</button><button class="btn btn-sm btn-danger" onclick="openModal('payModal')" style="flex:1;" id="upgradeBtn">⭐ Abone Ol</button></div></div></div></div></div></div></div>
-<div id="payModal" class="modal-overlay" onclick="closeModal(event,'payModal')"><div class="modal" onclick="event.stopPropagation()"><div class="modal-head"><span class="modal-title">💳 Abonelik Satin Al</span><button class="modal-close" onclick="closeModal(null,'payModal')">X</button></div><div><div class="pricing-card" style="margin-bottom:16px;"><span class="pricing-badge">Profesyonel Plan</span><div class="pricing-price">999 TL <span>/ ay</span></div><ul class="pricing-list"><li>XAUUSD & BTCUSDT takibi</li><li>Gercek zamanli balina alarmi</li><li>Sesli & masaustu bildirim</li><li>9000+ balina takip agi</li></ul></div><div class="shopier-badge" style="margin-bottom:16px;font-size:14px;padding:14px;"><span>🛡️</span> Shopier ile Guvenli Odeme</div><p style="text-align:center;color:var(--text2);font-size:12px;">Odeme islemi Shopier altyapisi ile guvenle gerceklestirilir.</p></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal(null,'payModal')">Iptal</button><button class="btn btn-success" onclick="doPayment()">🛒 Shopier ile Guvenli Odeme</button></div></div></div>
+
+<!-- YASAL UYARI -->
+<div id="legalModal" class="modal-overlay active" style="z-index:2000;"><div class="modal"><div class="modal-head"><span class="modal-title">Yasal Uyari</span></div><div class="legal-text"><p class="legal-warn">BU SITE YATIRIM TAVSIYESI VERMEZ</p><p><strong>1. Sorumluluk Reddi:</strong> Bu sitede paylasilan sinyaller yalnizca egitim amaclidir.</p><p><strong>2. Risk Bildirimi:</strong> Finansal piyasalarda islem yapmak yuksek risk icerir.</p><p><strong>3. Sorumsuzluk:</strong> Yapilan islemlerden dogan zarardan Balina Alarm sorumlu degildir.</p><p><strong>4. SPK Uyarisi:</strong> Burada yer alan bilgiler SPK tarafindan denetlenmemistir.</p><p class="legal-box">Bu siteyi kullanarak yukaridaki sartlari kabul etmis sayilirsiniz.</p></div><div class="modal-footer" style="margin-top:16px;"><button class="btn btn-primary" onclick="localStorage.setItem('ba_legal','accepted');document.getElementById('legalModal').style.display='none';" style="flex:1;">Okudum, Kabul Ediyorum</button></div></div></div>
+
+<!-- LANDING PAGE -->
+<div id="landingPage" class="landing">
+    <div class="landing-top">
+        <div class="landing-top-logo"><span>🐋</span> Balina Alarm</div>
+        <div class="landing-online"><span class="landing-online-dot"></span><span id="onlineCount">5.247</span> Aktif Kullanici</div>
+    </div>
+    <div class="landing-hero">
+        <span class="landing-whale">🐋</span>
+        <h1 class="landing-title">Balina Alarm</h1>
+        <p class="landing-sub">Piyasada buyuk oyuncular harekete gectiginde anlik bildirim al, harekete gec!</p>
+    </div>
+    <div class="landing-alert-banner">
+        <div class="landing-alert-box">
+            <div class="landing-alert-text">⚠️ Bu platformu stratejiniz ile beraber teyit amaciyla kullaniniz!</div>
+        </div>
+    </div>
+    <div class="landing-features">
+        <div class="landing-feature"><span>📊</span><p>XAUUSD & BTCUSDT takibi</p></div>
+        <div class="landing-feature"><span>🔔</span><p>Anlik sesli & gorsel alarm</p></div>
+        <div class="landing-feature"><span>🐋</span><p>9000+ balina takip agi</p></div>
+        <div class="landing-feature"><span>📱</span><p>Masaustu bildirim</p></div>
+        <div class="landing-feature"><span>⚡</span><p>7/24 aktif sistem</p></div>
+        <div class="landing-feature"><span>🛡️</span><p>Shopier ile guvenli odeme</p></div>
+    </div>
+    <div class="landing-about">
+        <div class="landing-about-card">
+            <div class="landing-about-title">🐋 Biz Kimiz?</div>
+            <p class="landing-about-text">BalinaAlarm, finansal piyasalardaki onemli hareketleri ve buyuk yatirimci islemlerini anlik olarak takip etmek isteyen yatirimcilar icin gelistirilmis bir alarm ve bildirim platformudur.</p>
+            <p class="landing-about-text">Piyasalarda buyuk oyuncularin yaptigi islemler cogun zaman fiyat hareketlerinin yonunu belirler. Ancak bu hareketleri manuel olarak takip etmek hem zaman alici hem de zordur. BalinaAlarm, gelismis analiz sistemleri sayesinde onemli alim-satim sinyallerini tespit ederek kullanicilarina aninda bildirim gonderir.</p>
+            <p class="landing-about-text">Misyonumuz, profesyonel yatirim araclarini herkes icin erisilebilir hale getirmek ve yatirimcilarin piyasadaaki firsatlari daha hizli yakalamasina yardimci olmaktir.</p>
+            <ul class="landing-about-list">
+                <li><span>✅</span> Anlik alim-satim sinyalleri alin</li>
+                <li><span>✅</span> Onemli piyasa hareketlerini kacirmayin</li>
+                <li><span>✅</span> Buyuk yatirimci aktivitelerini takip edin</li>
+                <li><span>✅</span> Mobil ve web uzerinden bildirimlere ulasin</li>
+                <li><span>✅</span> Zamaninda bilgiyle daha bilincli kararlar verin</li>
+            </ul>
+            <p class="landing-about-mission">Amacimiz, yatirimcilarin piyasalari 7/24 takip etmek zorunda kalmadan onemli gelismelerden haberdar olmasini saglayan guvenilir bir alarm sistemi sunmaktir.</p>
+            <div class="landing-about-slogan">BalinaAlarm – Buyuk Hareketleri Ilk Sen Fark Et.</div>
+        </div>
+    </div>
+    <div class="landing-cta">
+        <div class="landing-free"><div class="landing-free-text">⏰ Ilk 8 Saat UCRETSIZ Dene!</div></div>
+        <div class="landing-shopier"><span>🛡️</span> Shopier ile Guvenli Odeme</div>
+        <br><br>
+        <button class="landing-btn" onclick="showAuth()">🚀 Hemen Basla</button>
+        <div class="landing-price">Sadece <strong>999 TL</strong> / ay</div>
+    </div>
+</div>
+
+<!-- AUTH -->
+<div id="authScreen" class="auth">
+    <div class="auth-box">
+        <div class="auth-logo"><span class="whale">🐋</span><h1>Balina Alarm</h1><p>Whale Trading Intelligence Platform</p></div>
+        <div class="auth-card">
+            <div class="auth-tabs"><button class="auth-tab active" onclick="switchTab('login')">Giris Yap</button><button class="auth-tab" onclick="switchTab('register')">Kayit Ol</button></div>
+            <form id="loginForm" class="auth-form active" onsubmit="doLogin(event)"><div class="fg"><label>E-posta</label><input type="email" id="lEmail" placeholder="ornek@email.com" required></div><div class="fg"><label>Sifre</label><input type="password" id="lPass" placeholder="********" required></div><button type="submit" class="btn btn-primary" style="height:46px;">Giris Yap</button></form>
+            <form id="registerForm" class="auth-form" onsubmit="doRegister(event)"><div class="fg"><label>Ad Soyad</label><input type="text" id="rName" placeholder="Adiniz Soyadiniz" required></div><div class="fg"><label>E-posta</label><input type="email" id="rEmail" placeholder="ornek@email.com" required></div><div class="fg"><label>Sifre</label><input type="password" id="rPass" placeholder="En az 6 karakter" required minlength="6"></div><div class="fg"><label>Telefon Numarasi</label><input type="tel" id="rPhone" placeholder="5XXXXXXXXX" required></div><button type="submit" class="btn btn-primary" style="height:46px;">Kayit Ol</button><div class="pricing-box"><div class="pricing-card"><span class="pricing-badge">Profesyonel Plan</span><div class="pricing-price">999 TL <span>/ ay</span></div><ul class="pricing-list"><li>XAUUSD & BTCUSDT takibi</li><li>Gercek zamanli balina alarmi</li><li>Sesli & masaustu bildirim</li><li>9000+ balina takip agi</li></ul><div class="free-badge">Ilk 8 Saat UCRETSIZ!</div><div class="shopier-badge"><span>🛡️</span> Shopier ile Guvenli Odeme</div></div></div></form>
+            <span class="auth-back" onclick="showLanding()">← Ana Sayfaya Don</span>
+        </div>
+    </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="dash">
+    <nav class="nav"><div class="nav-left"><span>🐋</span><div><div class="nav-title">Balina Alarm</div><div class="nav-sub">Whale Trading Dashboard</div></div></div><div class="nav-right"><div class="nav-status"><span class="dot"></span><span>Bagli</span></div><div class="nav-timer" id="navTimer"><span id="timerDisp">08:00:00</span></div><div class="nav-user" onclick="openModal('userModal')"><div class="avatar" id="navAvatar">A</div><div><div class="u-name" id="navName">Kullanici</div><div class="u-email" id="navEmail">user@email.com</div></div></div></div></nav>
+    <div class="main">
+        <div id="alertPopup" class="alert-popup"><div class="ap-head"><span class="ap-title" id="apTitle"></span><button class="ap-close" onclick="closePopup()">X</button></div><div class="ap-body" id="apBody"></div><div class="ap-time" id="apTime"></div></div>
+        <div class="alert-banner"><div class="alert-banner-text">⚠️ Bu platformu stratejiniz ile beraber teyit amaciyla kullaniniz!</div></div>
+        <div id="audioHint" class="audio-hint" onclick="loadMp3();this.style.display='none';">🔊 Alarm sesini aktif etmek icin bu yaziya tikla!</div>
+        <div class="test-btn"><button onclick="testAlert()">🔊 Test Alarm</button></div>
+        <div class="notif-section"><div class="notif-head"><span class="notif-title-main">🔔 Son Bildirimler</span><span class="cb-blue" id="notifCount">0</span></div><div class="notif-list" id="notifList"><div class="no-notif">Henuz bildirim yok</div></div></div>
+        <div class="panels">
+            <div class="panel"><div class="panel-head"><span class="panel-title">🥇 XAUUSD <span style="font-size:12px;font-weight:400;color:var(--text3)">Altin</span></span><span class="panel-badge badge-wait" id="badgeXAU"></span></div><div class="panel-status waiting" id="statusXAU"><span class="panel-emoji">🐋</span><div class="panel-signal" id="signalXAU"></div><div class="panel-desc" id="descXAU"></div></div><div class="panel-footer"><span class="panel-time" id="timeXAU">Son guncelleme: --</span><span class="panel-whales" id="whalesXAU">🐋 -- balina izleniyor</span></div><div class="legend"><div class="leg"><div class="leg-dot" style="background:var(--yellow)"></div>Beklemede</div><div class="leg"><div class="leg-dot" style="background:var(--green)"></div>LONG</div><div class="leg"><div class="leg-dot" style="background:var(--red)"></div>SHORT</div></div></div>
+            <div class="panel"><div class="panel-head"><span class="panel-title">₿ BTCUSDT <span style="font-size:12px;font-weight:400;color:var(--text3)">Bitcoin</span></span><span class="panel-badge badge-wait" id="badgeBTC"></span></div><div class="panel-status waiting" id="statusBTC"><span class="panel-emoji">🐋</span><div class="panel-signal" id="signalBTC"></div><div class="panel-desc" id="descBTC"></div></div><div class="panel-footer"><span class="panel-time" id="timeBTC">Son guncelleme: --</span><span class="panel-whales" id="whalesBTC">🐋 -- balina izleniyor</span></div><div class="legend"><div class="leg"><div class="leg-dot" style="background:var(--yellow)"></div>Beklemede</div><div class="leg"><div class="leg-dot" style="background:var(--green)"></div>LONG</div><div class="leg"><div class="leg-dot" style="background:var(--red)"></div>SHORT</div></div></div>
+        </div>
+        <div class="stats"><div class="stat"><div class="stat-icon">📡</div><div class="stat-val" id="statSignals">0</div><div class="stat-label">Toplam Sinyal</div></div><div class="stat"><div class="stat-icon">🐋</div><div class="stat-val" id="statWhales">--</div><div class="stat-label">Takip Edilen Balina</div></div><div class="stat"><div class="stat-icon">📊</div><div class="stat-val">2</div><div class="stat-label">Aktif Cift</div></div></div>
+        <div class="bottom">
+            <div class="card" id="adminSection" style="display:none;"><div class="card-head"><span class="card-title">🔗 Webhook Entegrasyonu</span><span class="card-badge cb-green">Admin Panel</span></div><span class="admin-badge">🔑 Sadece Admin</span><label style="font-size:12px;font-weight:600;display:block;margin-bottom:4px;color:var(--text2);">Webhook URL:</label><div class="webhook-box"><code id="whURL" style="flex:1;">https://balina-server-2.onrender.com/webhook</code><button class="copy-btn" onclick="copyWH('whURL')">Kopyala</button></div><div style="font-size:12px;font-weight:600;margin:14px 0 6px;color:var(--text2);">📋 Kurulum:</div><ol class="steps"><li>TradingView'da Alert olustur</li><li>Webhook URL'yi yapistir</li><li>JSON mesaj gonder</li></ol><div class="code">{"symbol":"BTCUSDT","action":"buy"}</div></div>
+            <div style="display:flex;flex-direction:column;gap:24px;">
+                <div class="card"><div class="card-head"><span class="card-title">💳 Abonelik</span><button class="btn btn-sm btn-success" onclick="openModal('payModal')" id="subBtn">Abone Ol</button></div><div class="sub-card"><div class="sub-head"><span style="font-weight:700;font-size:13px;">Profesyonel Plan</span><span class="sub-badge trial" id="subBadge">Deneme</span></div><div class="sub-timer"><div class="sub-timer-label" id="subLabel">Ucretsiz deneme suresi</div><div class="sub-timer-value" id="subValue">08:00:00</div><div class="sub-progress"><div class="sub-progress-bar" id="subBar" style="width:100%"></div></div></div><div class="shopier-badge"><span>🛡️</span> Shopier ile Guvenli Odeme</div></div></div>
+                <div class="card"><div class="card-head"><span class="card-title">⚙️ Ayarlar</span></div><div class="sg"><div class="sg-title">Bildirimler</div><div class="toggle-row"><div><div class="toggle-label">🔊 Sesli Alarm</div><div class="toggle-desc">Sinyal geldiginde ses cal</div></div><label class="toggle-switch"><input type="checkbox" id="soundToggle" checked onchange="toggleSound()"><span class="toggle-slider"></span></label></div><div class="toggle-row"><div><div class="toggle-label">📱 Tarayici Bildirimi</div><div class="toggle-desc">Masaustu bildirim goster</div></div><label class="toggle-switch"><input type="checkbox" id="notifToggle" checked onchange="toggleNotif()"><span class="toggle-slider"></span></label></div></div><div class="sg"><div class="sg-title">Hesap</div><div style="display:flex;gap:8px;"><button class="btn btn-sm btn-outline" onclick="doLogout()" style="flex:1;">🚪 Cikis Yap</button><button class="btn btn-sm btn-danger" onclick="openModal('payModal')" style="flex:1;" id="upgradeBtn">⭐ Abone Ol</button></div></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div id="payModal" class="modal-overlay" onclick="closeModal(event,'payModal')"><div class="modal" onclick="event.stopPropagation()"><div class="modal-head"><span class="modal-title">💳 Abonelik Satin Al</span><button class="modal-close" onclick="closeModal(null,'payModal')">X</button></div><div><div class="pricing-card" style="margin-bottom:16px;"><span class="pricing-badge">Profesyonel Plan</span><div class="pricing-price">999 TL <span>/ ay</span></div><ul class="pricing-list"><li>XAUUSD & BTCUSDT takibi</li><li>Gercek zamanli balina alarmi</li><li>Sesli & masaustu bildirim</li><li>9000+ balina takip agi</li></ul></div><div class="shopier-badge" style="margin-bottom:16px;font-size:14px;padding:14px;"><span>🛡️</span> Shopier ile Guvenli Odeme</div><p style="text-align:center;color:var(--text2);font-size:12px;">Odeme Shopier altyapisi ile guvenle gerceklestirilir.<br>Kredi karti, banka karti ve havale ile odeme yapabilirsiniz.</p></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal(null,'payModal')">Iptal</button><button class="btn btn-success" onclick="doPayment()">🛒 Shopier ile Ode</button></div></div></div>
+
+<!-- USER MODAL -->
 <div id="userModal" class="modal-overlay" onclick="closeModal(event,'userModal')"><div class="modal" onclick="event.stopPropagation()"><div class="modal-head"><span class="modal-title">👤 Hesap Bilgileri</span><button class="modal-close" onclick="closeModal(null,'userModal')">X</button></div><div style="text-align:center;margin-bottom:16px;"><div style="width:56px;height:56px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;color:#fff;font-size:20px;font-weight:700;" id="mAvatar">A</div><div style="font-size:16px;font-weight:700;color:#fff;" id="mName">Kullanici</div><div style="font-size:13px;color:var(--text3);" id="mEmail">user@email.com</div><div id="mAdminBadge" style="display:none;margin-top:8px;"><span class="admin-badge">🔑 Admin</span></div></div><div style="background:var(--bg);border:1px solid var(--bg4);border-radius:var(--rs);padding:14px;text-align:center;"><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Abonelik Durumu</div><div style="font-size:14px;font-weight:700;color:var(--yellow);" id="mSub">Ucretsiz Deneme</div></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal(null,'userModal')">Kapat</button><button class="btn btn-danger" onclick="doLogout()">🚪 Cikis</button></div></div></div>
+
+<!-- BLOCKED SCREEN -->
 <div id="blockedScreen" class="blocked"><div class="blocked-card"><div class="blocked-icon">🔒</div><div class="blocked-title">Hizmet Askida Alindi</div><div class="blocked-text">Ucretsiz deneme sureniz dolmustur.<br><br><strong>999 TL/ay</strong> ile sinirsiz erisim.</div><button class="btn btn-primary" onclick="openModal('payModal')">💳 Abone Ol</button><button class="btn btn-outline" style="margin-top:8px;" onclick="doLogout()">🚪 Cikis Yap</button></div></div>
 <script>
 var ADMIN_EMAIL="orkun159064@outlook.com";
@@ -189,7 +310,20 @@ var S={user:null,subscribed:false,trialStart:null,trialDur:8*60*60*1000,soundOn:
 function getDailyWhales(){var t=new Date();var s=t.getFullYear()*10000+(t.getMonth()+1)*100+t.getDate();var h=0;for(var i=0;i<String(s).length;i++){h=((h<<5)-h)+String(s).charCodeAt(i);h|=0;}return 9000+Math.abs(h)%801;}
 function updateWhales(){if(S.whaleBase===0)S.whaleBase=getDailyWhales();document.getElementById('statWhales').textContent=S.whaleBase.toLocaleString('tr-TR');document.getElementById('whalesXAU').textContent='\ud83d\udc0b '+S.whaleBase.toLocaleString('tr-TR')+' balina izleniyor';document.getElementById('whalesBTC').textContent='\ud83d\udc0b '+S.whaleBase.toLocaleString('tr-TR')+' balina izleniyor';}
 
+// ===== ONLINE KULLANICI SAYISI (4000-7000 arasi, her 15 dk degisir) =====
+function updateOnlineCount(){
+    var base=4000+Math.floor(Math.random()*3001);
+    var el=document.getElementById('onlineCount');
+    if(el){el.textContent=base.toLocaleString('tr-TR');}
+}
+updateOnlineCount();
+setInterval(updateOnlineCount,15*60*1000);
+
 function timeAgo(ds){var n=Date.now();var t=new Date(ds).getTime();var d=Math.floor((n-t)/1000);if(d<60)return 'Az once';if(d<3600)return Math.floor(d/60)+' dakika once';if(d<86400)return Math.floor(d/3600)+' saat once';return Math.floor(d/86400)+' gun once';}
+
+// ===== LANDING / AUTH GECISLERI =====
+function showAuth(){document.getElementById('landingPage').style.display='none';document.getElementById('authScreen').classList.add('active');}
+function showLanding(){document.getElementById('authScreen').classList.remove('active');document.getElementById('landingPage').style.display='block';}
 
 function switchTab(t){document.querySelectorAll('.auth-tab').forEach(function(b){b.classList.remove('active');});document.querySelectorAll('.auth-form').forEach(function(f){f.classList.remove('active');});if(t==='login'){document.querySelectorAll('.auth-tab')[0].classList.add('active');document.getElementById('loginForm').classList.add('active');}else{document.querySelectorAll('.auth-tab')[1].classList.add('active');document.getElementById('registerForm').classList.add('active');}}
 
@@ -204,7 +338,7 @@ function checkTrialAndGo(){fetch('/api/check-trial',{method:'POST',headers:{'Con
 
 function checkExistingTrial(){return fetch('/api/trial-status').then(function(r){return r.json();}).then(function(data){if(data.exists){if(data.expired){return false;}S.trialStart=data.start;return true;}return true;}).catch(function(){return true;});}
 
-function goDash(){S.active=true;document.getElementById('authScreen').style.display='none';document.getElementById('dashboard').classList.add('active');if(localStorage.getItem('ba_legal')==='accepted'){var lm=document.getElementById('legalModal');if(lm){lm.style.display='none';}}updateUserUI();updateWhales();startTimer();checkBlocked();restorePanels();if(S.isAdmin){document.getElementById('adminSection').style.display='block';}else{document.getElementById('adminSection').style.display='none';}if('Notification' in window&&Notification.permission==='default')Notification.requestPermission();}
+function goDash(){S.active=true;document.getElementById('landingPage').style.display='none';document.getElementById('authScreen').classList.remove('active');document.getElementById('dashboard').classList.add('active');if(localStorage.getItem('ba_legal')==='accepted'){var lm=document.getElementById('legalModal');if(lm){lm.style.display='none';}}updateUserUI();updateWhales();startTimer();checkBlocked();restorePanels();if(S.isAdmin){document.getElementById('adminSection').style.display='block';}else{document.getElementById('adminSection').style.display='none';}if('Notification' in window&&Notification.permission==='default')Notification.requestPermission();}
 
 function updateUserUI(){if(!S.user)return;document.getElementById('navName').textContent=S.user.name;document.getElementById('navEmail').textContent=S.user.email;document.getElementById('navAvatar').textContent=S.user.name[0].toUpperCase();document.getElementById('mName').textContent=S.user.name;document.getElementById('mEmail').textContent=S.user.email;document.getElementById('mAvatar').textContent=S.user.name[0].toUpperCase();document.getElementById('mAdminBadge').style.display=S.isAdmin?'block':'none';if(S.subscribed){document.getElementById('subBadge').textContent='Aktif';document.getElementById('subBadge').className='sub-badge active';document.getElementById('mSub').textContent='Aktif Abonelik';document.getElementById('mSub').style.color='var(--green)';document.getElementById('subLabel').textContent='Abonelik sureniz';document.getElementById('subBtn').style.display='none';document.getElementById('upgradeBtn').style.display='none';}else{document.getElementById('subBadge').textContent='Deneme';document.getElementById('subBadge').className='sub-badge trial';document.getElementById('mSub').textContent='Ucretsiz Deneme';document.getElementById('mSub').style.color='var(--yellow)';document.getElementById('subLabel').textContent='Ucretsiz deneme suresi';document.getElementById('subBtn').style.display='block';document.getElementById('upgradeBtn').style.display='block';}}
 
@@ -245,10 +379,7 @@ function applyPanel(pair,action,timeStr){
 
 function restorePanels(){
     ['XAUUSD','BTCUSDT'].forEach(function(pair){
-        try{
-            var saved=JSON.parse(localStorage.getItem('ba_panel_'+pair));
-            if(saved){applyPanel(pair,saved.action,saved.time);}
-        }catch(e){}
+        try{var saved=JSON.parse(localStorage.getItem('ba_panel_'+pair));if(saved){applyPanel(pair,saved.action,saved.time);}}catch(e){}
     });
 }
 
@@ -281,7 +412,7 @@ function toggleNotif(){S.notifOn=document.getElementById('notifToggle').checked;
 function openModal(id){document.getElementById(id).classList.add('active');}
 function closeModal(e,id){if(!e||e.target===document.getElementById(id))document.getElementById(id).classList.remove('active');}
 
-function doPayment(){window.open('https://www.shopier.com/balinaalarm/48434245','_blank');closeModal(null,'payModal');}var users=JSON.parse(localStorage.getItem('ba_users')||'[]');var idx=users.findIndex(function(u){return u.email===S.user.email;});if(idx!==-1){users[idx].sub=true;users[idx].subEnd=S.user.subEnd;localStorage.setItem('ba_users',JSON.stringify(users));}save();document.getElementById('blockedScreen').classList.remove('active');updateUserUI();closeModal(null,'payModal');}
+function doPayment(){window.open('https://www.shopier.com/balinaalarm/48434245','_blank');closeModal(null,'payModal');}
 
 function copyWH(id){var url=document.getElementById(id).textContent;navigator.clipboard.writeText(url).then(function(){var btn=document.getElementById(id).nextElementSibling;btn.textContent='Kopyalandi!';btn.classList.add('copied');setTimeout(function(){btn.textContent='Kopyala';btn.classList.remove('copied');},2000);});}
 
@@ -295,8 +426,7 @@ function connectToServer(){
             allSignals.forEach(function(s){addLastSignal(s);});
             var latestXAU=null;var latestBTC=null;
             for(var i=0;i<allSignals.length;i++){
-                var s=allSignals[i];
-                var sym=s.symbol.toUpperCase();
+                var s=allSignals[i];var sym=s.symbol.toUpperCase();
                 if(sym.includes('XAU')&&!latestXAU)latestXAU=s;
                 if(sym.includes('BTC')&&!latestBTC)latestBTC=s;
             }
