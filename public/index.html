@@ -351,15 +351,7 @@ function loadMp3(){if(_baBuf)return;try{_baCtx=new(window.AudioContext||window.w
 
 function playAlert(isBuy){if(!S.soundOn)return;if(_baBuf&&_baCtx){try{if(_baCtx.state==='suspended')_baCtx.resume();var src=_baCtx.createBufferSource();src.buffer=_baBuf;var g=_baCtx.createGain();g.gain.value=1.0;src.connect(g);g.connect(_baCtx.destination);src.start(0);}catch(e){}}}
 
-function testAlert(){
-    playAlert(true);
-    var now=new Date();
-    applyPanel('BTCUSDT','buy',now.toISOString());
-    showPopup('al','\ud83d\udc0b BTCUSDT LONG','Test sinyali!',now);
-    addLastSignal({symbol:'BTCUSDT',action:'buy',time:now.toISOString()});
-    flashScreen('al');
-    S.signalCount++;document.getElementById('statSignals').textContent=S.signalCount;
-}
+function testAlert(){playAlert(true);}
 
 var originalTitle=document.title;var titleBlink=null;
 function flashScreen(type){var nav=document.querySelector('.nav');var bar=document.getElementById('flashBar');document.body.classList.remove('flash-border-green','flash-border-red');void document.body.offsetWidth;document.body.classList.add(type==='al'?'flash-border-green':'flash-border-red');if(nav){nav.classList.remove('flash-green','flash-red');void nav.offsetWidth;nav.classList.add(type==='al'?'flash-green':'flash-red');}if(bar){bar.className='flash-bar';void bar.offsetWidth;bar.className='flash-bar '+(type==='al'?'al':'as');}if(titleBlink)clearInterval(titleBlink);var msg=type==='al'?'\ud83d\udfe2\ud83d\udfe2\ud83d\udfe2 LONG SINYALI!':'\ud83d\udd34\ud83d\udd34\ud83d\udd34 SHORT SINYALI!';var isOn=true;titleBlink=setInterval(function(){document.title=isOn?msg:originalTitle;isOn=!isOn;},800);setTimeout(function(){clearInterval(titleBlink);titleBlink=null;document.title=originalTitle;document.body.classList.remove('flash-border-green','flash-border-red');if(nav)nav.classList.remove('flash-green','flash-red');if(bar)bar.className='flash-bar';},15000);}
