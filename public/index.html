@@ -437,7 +437,17 @@ var _timeUpdateTimer=setInterval(function(){
     // Bildirim zamanlarini guncelle
     renderLastSignals();
 },30000);
-function connectToServer(){
+// ===== BILDIRIMLERI LOCALSTORAGE'DAN GERI YUKLE =====
+function restoreNotifs(){
+    try{
+        var saved=JSON.parse(localStorage.getItem('ba_notifs'));
+        if(saved&&saved.length){
+            lastSignals=saved;
+            renderLastSignals();
+        }
+    }catch(e){}
+}
+    function connectToServer(){
     var evtSource=new EventSource("/events");
     evtSource.onopen=function(){console.log("Sunucuya baglanildi");};
     evtSource.onmessage=function(event){
