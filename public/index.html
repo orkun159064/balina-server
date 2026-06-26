@@ -399,7 +399,12 @@ function processSignal(symbol,type){
 }
 
 var lastSignals=[];
-function addLastSignal(s){lastSignals.unshift(s);if(lastSignals.length>5)lastSignals=lastSignals.slice(0,5);renderLastSignals();}
+function addLastSignal(s){
+    lastSignals.unshift(s);
+    if(lastSignals.length>5)lastSignals=lastSignals.slice(0,5);
+    renderLastSignals();
+    try{localStorage.setItem('ba_notifs',JSON.stringify(lastSignals));}catch(e){}
+}
 function renderLastSignals(){var list=document.getElementById('notifList');if(!lastSignals.length)return;list.innerHTML=lastSignals.map(function(s){var cls=(s.action==='buy'||s.action==='long')?'al':'as';var label=(s.action==='buy'||s.action==='long')?'LONG':'SHORT';var t=timeAgo(s.time);return '<div class="notif-item '+cls+'"><div><div class="notif-title">'+s.symbol+' '+label+'</div><div class="notif-time">'+t+'</div></div></div>';}).join('');document.getElementById('notifCount').textContent=lastSignals.length;}
 
 var popT;
