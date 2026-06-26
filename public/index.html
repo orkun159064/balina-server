@@ -472,7 +472,7 @@ function restoreNotifs(){
 document.addEventListener('DOMContentLoaded',function(){
     var saved=localStorage.getItem('ba_session');
     if(saved){try{var d=JSON.parse(saved);S.user=d.user;S.subscribed=d.sub;S.trialStart=d.trialStart;S.isAdmin=(d.user.email===ADMIN_EMAIL);checkExistingTrial().then(function(ok){if(ok){goDash();}else{localStorage.removeItem('ba_session');}});}catch(e){localStorage.removeItem('ba_session');}}
-    updateWhales();connectToServer();
+   updateWhales();restoreNotifs();connectToServer();
 });
 </script>
 </body>
