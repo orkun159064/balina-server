@@ -441,11 +441,26 @@ var _timeUpdateTimer=setInterval(function(){
 function restoreNotifs(){
     try{
         var saved=JSON.parse(localStorage.getItem('ba_notifs'));
-        if(saved&&saved.length){
-            lastSignals=saved;
-            renderLastSignals();
-        }
+        if(saved&&saved.length){lastSignals=saved;}
     }catch(e){}
+    // Panel durumlarindan da bildirim olustur
+    ['XAUUSD','BTCUSDT'].forEach(function(pair){
+        try{
+            var p=JSON.parse(localStorage.getItem('ba_panel_'+pair));
+            if(p){
+                var exists=lastSignals.find(function(s){return s.symbol===pair;});
+                if(!exists){
+                    lastSignals.unshift({symbol:pair,action:p.action,time:p.time});
+                }else if(new Date(p.time)>new Date(exists.time)){
+                    lastSignals=lastSignals.filter(function(s){return s.symbol!==pair;});
+                    lastSignals.unshift({symbol:pair,action:p.action,time:p.time});
+                }
+            }
+        }catch(e){}
+    });
+    if(lastSignals.length>5)lastSignals=lastSignals.slice(0,5);
+    renderLastSignals();
+    try{localStorage.setItem('ba_notifs',JSON.stringify(lastSignals));}catch(e){}
 }
     function connectToServer(){
     var evtSource=new EventSource("/events");
