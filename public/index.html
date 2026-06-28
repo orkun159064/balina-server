@@ -319,7 +319,12 @@ function updateOnlineCount(){
 updateOnlineCount();
 setInterval(updateOnlineCount,15*60*1000);
 
-function timeAgo(ds){var n=Date.now();var t=new Date(ds).getTime();var d=Math.floor((n-t)/1000);if(d<60)return 'Az once';if(d<3600)return Math.floor(d/60)+' dakika once';if(d<86400)return Math.floor(d/3600)+' saat once';return Math.floor(d/86400)+' gun once';}
+function timeAgo(ds){
+    var d=new Date(ds);
+    var h=String(d.getHours()).padStart(2,'0');
+    var m=String(d.getMinutes()).padStart(2,'0');
+    return h+':'+m+' de geldi';
+}
 
 // ===== LANDING / AUTH GECISLERI =====
 function showAuth(){document.getElementById('landingPage').style.display='none';document.getElementById('authScreen').classList.add('active');}
