@@ -8,62 +8,103 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_KEY = process.env.SUPABASE_KEY;
+const TRIAL_DURATION = 8 * 60 * 60 * 1000;
+
 var signals = [];
 var clients = [];
-var trialUsers = {};
-var registeredPhones = {};
 
-var TRIAL_DURATION = 8 * 60 * 60 * 1000;
+async function supabaseQuery(table, method, body, params) {
+    var url = SUPABASE_URL + '/rest/v1/' + table;
+    if (params) url += '?' + params;
+    var options = {
+        method: method,
+        headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': 'Bearer ' + SUPABASE_KEY,
+            'Content-Type': 'application/json',
+            'Prefer': method === 'POST' ? 'return=minimal' : 'return=representation'
+        }
+    };
+    if (body) options.body = JSON.stringify(body);
+    var resp = await fetch(url, options);
+    if (method === 'GET') return await resp.json();
+    return resp.ok;
+}
 
 function getIP(req) {
     return req.headers['x-forwarded-for'] || req.connection.remoteAddress || 'unknown';
 }
 
-app.post('/api/check-phone', function(req, res) {
+app.post('/api/check-phone', async function(req, res) {
     var phone = (req.body.phone || '').replace(/\s/g, '');
-    if (registeredPhones[phone]) {
-        res.json({ available: false, message: 'Bu telefon numarasi zaten kayitli!' });
-    } else {
+    try {
+        var data = await supabaseQuery('registered_phones', 'GET', null, 'phone=eq.' + phone + '&select=phone');
+        if (data && data.length > 0) {
+            res.json({ available: false, message: 'Bu telefon numarasi zaten kayitli!' });
+        } else {
+            res.json({ available: true, message: 'Uygun.' });
+        }
+    } catch (e) {
         res.json({ available: true, message: 'Uygun.' });
     }
 });
 
-app.post('/api/register', function(req, res) {
+app.post('/api/register', async function(req, res) {
     var phone = (req.body.phone || '').replace(/\s/g, '');
     var email = req.body.email || '';
     var name = req.body.name || '';
-    if (registeredPhones[phone]) {
-        res.json({ success: false, message: 'Bu telefon numarasi zaten kayitli!' });
-        return;
+    try {
+        var existing = await supabaseQuery('registered_phones', 'GET', null, 'phone=eq.' + phone + '&select=phone');
+        if (existing && existing.length > 0) {
+            res.json({ success: false, message: 'Bu telefon numarasi zaten kayitli!' });
+            return;
+        }
+        await supabaseQuery('registered_phones', 'POST', { phone: phone, email: email, name: name, created_at: Date.now() });
+        await supabaseQuery('registered_emails', 'POST', { email: email });
+        console.log('Yeni kayit:', name, email, phone);
+        res.json({ success: true, message: 'Kayit basarili.' });
+    } catch (e) {
+        console.log('Kayit hatasi:', e.message);
+        res.json({ success: true, message: 'Kayit basarili.' });
     }
-    registeredPhones[phone] = { email: email, name: name, time: Date.now() };
-    console.log('Yeni kayit:', name, email, phone);
-    res.json({ success: true, message: 'Kayit basarili.' });
 });
 
-app.post('/api/check-trial', function(req, res) {
+app.post('/api/check-trial', async function(req, res) {
     var ip = getIP(req);
     var email = req.body.email || '';
-    if (trialUsers[ip]) {
-        var elapsed = Date.now() - trialUsers[ip].start;
-        if (elapsed >= TRIAL_DURATION) {
-            res.json({ allowed: false, message: 'Deneme sureniz dolmustur.', remaining: 0 });
+    try {
+        var data = await supabaseQuery('trial_users', 'GET', null, 'ip=eq.' + ip + '&select=*');
+        if (data && data.length > 0) {
+            var elapsed = Date.now() - data[0].start_time;
+            if (elapsed >= TRIAL_DURATION) {
+                res.json({ allowed: false, message: 'Deneme sureniz dolmustur.', remaining: 0 });
+            } else {
+                res.json({ allowed: true, message: 'Deneme devam ediyor.', remaining: TRIAL_DURATION - elapsed, start: data[0].start_time });
+            }
         } else {
-            res.json({ allowed: true, message: 'Deneme devam ediyor.', remaining: TRIAL_DURATION - elapsed, start: trialUsers[ip].start });
+            await supabaseQuery('trial_users', 'POST', { ip: ip, email: email, start_time: Date.now() });
+            res.json({ allowed: true, message: 'Deneme baslatildi.', remaining: TRIAL_DURATION, start: Date.now() });
         }
-    } else {
-        trialUsers[ip] = { start: Date.now(), email: email };
+    } catch (e) {
+        console.log('Trial hatasi:', e.message);
         res.json({ allowed: true, message: 'Deneme baslatildi.', remaining: TRIAL_DURATION, start: Date.now() });
     }
 });
 
-app.get('/api/trial-status', function(req, res) {
+app.get('/api/trial-status', async function(req, res) {
     var ip = getIP(req);
-    if (trialUsers[ip]) {
-        var elapsed = Date.now() - trialUsers[ip].start;
-        var remaining = Math.max(0, TRIAL_DURATION - elapsed);
-        res.json({ exists: true, remaining: remaining, start: trialUsers[ip].start, expired: remaining <= 0 });
-    } else {
+    try {
+        var data = await supabaseQuery('trial_users', 'GET', null, 'ip=eq.' + ip + '&select=*');
+        if (data && data.length > 0) {
+            var elapsed = Date.now() - data[0].start_time;
+            var remaining = Math.max(0, TRIAL_DURATION - elapsed);
+            res.json({ exists: true, remaining: remaining, start: data[0].start_time, expired: remaining <= 0 });
+        } else {
+            res.json({ exists: false, remaining: 0, expired: false });
+        }
+    } catch (e) {
         res.json({ exists: false, remaining: 0, expired: false });
     }
 });
