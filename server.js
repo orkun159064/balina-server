@@ -1,148 +1,250 @@
 const express = require('express');
-const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('public'));
 
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_KEY;
-const TRIAL_DURATION = 8 * 60 * 60 * 1000;
+// ===== VERİ DOSYASI =====
+const DATA_FILE = './data.json';
+let users = [];
+let trials = {};
+let signals = [];
 
-var signals = [];
-var clients = [];
-
-async function supabaseQuery(table, method, body, params) {
-    var url = SUPABASE_URL + '/rest/v1/' + table;
-    if (params) url += '?' + params;
-    var options = {
-        method: method,
-        headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': 'Bearer ' + SUPABASE_KEY,
-            'Content-Type': 'application/json',
-            'Prefer': method === 'POST' ? 'return=minimal' : 'return=representation'
+function loadData() {
+    try {
+        if (fs.existsSync(DATA_FILE)) {
+            const d = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+            users = d.users || [];
+            trials = d.trials || {};
+            signals = d.signals || [];
         }
-    };
-    if (body) options.body = JSON.stringify(body);
-    var resp = await fetch(url, options);
-    if (method === 'GET') return await resp.json();
-    return resp.ok;
+    } catch (e) { console.log('Veri yükleme hatası:', e.message); }
 }
 
+function saveData() {
+    try {
+        fs.writeFileSync(DATA_FILE, JSON.stringify({ users, trials, signals }, null, 2));
+    } catch (e) { console.log('Veri kaydetme hatası:', e.message); }
+}
+
+loadData();
+
+// ===== YARDIMCI FONKSİYONLAR =====
 function getIP(req) {
-    return req.headers['x-forwarded-for'] || req.connection.remoteAddress || 'unknown';
+    return (req.headers['x-forwarded-for'] || '').split(',')[0].trim() ||
+           req.connection.remoteAddress ||
+           req.socket.remoteAddress ||
+           'unknown';
 }
 
-app.post('/api/check-phone', async function(req, res) {
-    var phone = (req.body.phone || '').replace(/\s/g, '');
-    try {
-        var data = await supabaseQuery('registered_phones', 'GET', null, 'phone=eq.' + phone + '&select=phone');
-        if (data && data.length > 0) {
-            res.json({ available: false, message: 'Bu telefon numarasi zaten kayitli!' });
-        } else {
-            res.json({ available: true, message: 'Uygun.' });
-        }
-    } catch (e) {
-        res.json({ available: true, message: 'Uygun.' });
+const TRIAL_MS = 8 * 60 * 60 * 1000; // 8 saat
+const MAX_TRIAL_PER_IP = 1;
+
+function getActiveTrialByEmail(email) {
+    return trials[email] || null;
+}
+
+function getTrialsByIP(ip) {
+    return Object.values(trials).filter(t => t.ip === ip);
+}
+
+function hasActiveTrialOnIP(ip) {
+    const ipTrials = getTrialsByIP(ip);
+    return ipTrials.some(t => {
+        const elapsed = Date.now() - t.start;
+        return elapsed < TRIAL_MS;
+    });
+}
+
+// ===== API: TELEFON KONTROL =====
+app.post('/api/check-phone', (req, res) => {
+    const { phone } = req.body;
+    if (!phone) return res.json({ available: false, message: 'Telefon numarası gerekli.' });
+
+    const exists = users.find(u => u.phone === phone);
+    if (exists) {
+        return res.json({ available: false, message: 'Bu telefon numarası zaten kayıtlı!' });
     }
+    res.json({ available: true });
 });
 
-app.post('/api/register', async function(req, res) {
-    var phone = (req.body.phone || '').replace(/\s/g, '');
-    var email = req.body.email || '';
-    var name = req.body.name || '';
-    try {
-        var existing = await supabaseQuery('registered_phones', 'GET', null, 'phone=eq.' + phone + '&select=phone');
-        if (existing && existing.length > 0) {
-            res.json({ success: false, message: 'Bu telefon numarasi zaten kayitli!' });
-            return;
-        }
-        await supabaseQuery('registered_phones', 'POST', { phone: phone, email: email, name: name, created_at: Date.now() });
-        await supabaseQuery('registered_emails', 'POST', { email: email });
-        console.log('Yeni kayit:', name, email, phone);
-        res.json({ success: true, message: 'Kayit basarili.' });
-    } catch (e) {
-        console.log('Kayit hatasi:', e.message);
-        res.json({ success: true, message: 'Kayit basarili.' });
+// ===== API: KAYIT =====
+app.post('/api/register', (req, res) => {
+    const { phone, email, name } = req.body;
+    const ip = getIP(req);
+
+    // E-posta kontrolü
+    if (users.find(u => u.email === email)) {
+        return res.json({ success: false, message: 'Bu e-posta zaten kayıtlı!' });
     }
+
+    // Telefon kontrolü
+    if (users.find(u => u.phone === phone)) {
+        return res.json({ success: false, message: 'Bu telefon numarası zaten kayıtlı!' });
+    }
+
+    // IP bazlı deneme hakkı kontrolü
+    if (hasActiveTrialOnIP(ip)) {
+        const existing = getTrialsByIP(ip).find(t => (Date.now() - t.start) < TRIAL_MS);
+        const existingUser = users.find(u => u.email === existing?.email);
+        if (existingUser) {
+            return res.json({
+                success: false,
+                message: 'Bu cihazdan zaten bir deneme hesabı oluşturulmuş. Lütfen giriş yapın veya abone olun.'
+            });
+        }
+    }
+
+    // IP'de süresi dolmuş deneme varsa yeni deneme verilmez
+    const ipTrials = getTrialsByIP(ip);
+    if (ipTrials.length >= MAX_TRIAL_PER_IP) {
+        const anyActive = ipTrials.some(t => (Date.now() - t.start) < TRIAL_MS);
+        if (!anyActive) {
+            return res.json({
+                success: false,
+                message: 'Bu cihazdan deneme hakkı daha önce kullanılmış. Abone olmak için ödeme yapın.'
+            });
+        }
+    }
+
+    // Kullanıcı oluştur
+    const user = {
+        name, email, phone, ip,
+        sub: false, subEnd: null,
+        createdAt: Date.now()
+    };
+    users.push(user);
+
+    // Deneme hakkı oluştur
+    trials[email] = {
+        ip, email,
+        start: Date.now(),
+        createdAt: Date.now()
+    };
+
+    saveData();
+    console.log(`Yeni kayıt: ${email} | IP: ${ip}`);
+    res.json({ success: true });
 });
 
-app.post('/api/check-trial', async function(req, res) {
-    var ip = getIP(req);
-    var email = req.body.email || '';
-    try {
-        var data = await supabaseQuery('trial_users', 'GET', null, 'ip=eq.' + ip + '&select=*');
-        if (data && data.length > 0) {
-            var elapsed = Date.now() - data[0].start_time;
-            if (elapsed >= TRIAL_DURATION) {
-                res.json({ allowed: false, message: 'Deneme sureniz dolmustur.', remaining: 0 });
-            } else {
-                res.json({ allowed: true, message: 'Deneme devam ediyor.', remaining: TRIAL_DURATION - elapsed, start: data[0].start_time });
-            }
-        } else {
-            await supabaseQuery('trial_users', 'POST', { ip: ip, email: email, start_time: Date.now() });
-            res.json({ allowed: true, message: 'Deneme baslatildi.', remaining: TRIAL_DURATION, start: Date.now() });
-        }
-    } catch (e) {
-        console.log('Trial hatasi:', e.message);
-        res.json({ allowed: true, message: 'Deneme baslatildi.', remaining: TRIAL_DURATION, start: Date.now() });
+// ===== API: DENEME KONTROLÜ =====
+app.post('/api/check-trial', (req, res) => {
+    const { email } = req.body;
+    const ip = getIP(req);
+
+    if (!email) return res.json({ allowed: false });
+
+    // Abonelik kontrolü
+    const user = users.find(u => u.email === email);
+    if (user && user.sub && user.subEnd && user.subEnd > Date.now()) {
+        return res.json({ allowed: true, start: trials[email]?.start || Date.now(), subscribed: true });
     }
+
+    // Deneme hakkı kontrolü
+    const trial = trials[email];
+    if (!trial) {
+        // Yeni deneme - IP kontrolü
+        if (hasActiveTrialOnIP(ip)) {
+            return res.json({ allowed: false, message: 'Bu cihazdan zaten deneme kullanılmış.' });
+        }
+        if (getTrialsByIP(ip).length >= MAX_TRIAL_PER_IP) {
+            return res.json({ allowed: false, message: 'Deneme süreniz dolmuştur.' });
+        }
+
+        trials[email] = { ip, email, start: Date.now(), createdAt: Date.now() };
+        saveData();
+        return res.json({ allowed: true, start: Date.now() });
+    }
+
+    // Süre kontrolü
+    const elapsed = Date.now() - trial.start;
+    if (elapsed >= TRIAL_MS) {
+        return res.json({ allowed: false, message: 'Deneme süreniz dolmuştur.' });
+    }
+
+    res.json({ allowed: true, start: trial.start });
 });
 
-app.get('/api/trial-status', async function(req, res) {
-    var ip = getIP(req);
-    try {
-        var data = await supabaseQuery('trial_users', 'GET', null, 'ip=eq.' + ip + '&select=*');
-        if (data && data.length > 0) {
-            var elapsed = Date.now() - data[0].start_time;
-            var remaining = Math.max(0, TRIAL_DURATION - elapsed);
-            res.json({ exists: true, remaining: remaining, start: data[0].start_time, expired: remaining <= 0 });
-        } else {
-            res.json({ exists: false, remaining: 0, expired: false });
-        }
-    } catch (e) {
-        res.json({ exists: false, remaining: 0, expired: false });
-    }
+// ===== API: DURUM SORGULAMA =====
+app.get('/api/trial-status', (req, res) => {
+    const ip = getIP(req);
+    const ipTrials = getTrialsByIP(ip);
+
+    if (ipTrials.length === 0) return res.json({ exists: false });
+
+    const latest = ipTrials[ipTrials.length - 1];
+    const user = users.find(u => u.email === latest.email);
+    const subscribed = user && user.sub && user.subEnd > Date.now();
+    const expired = !subscribed && (Date.now() - latest.start >= TRIAL_MS);
+
+    res.json({ exists: true, expired, start: latest.start, subscribed });
 });
 
-app.post('/webhook', function(req, res) {
-    console.log('Webhook alindi:', JSON.stringify(req.body));
-    var body = req.body;
-    var symbol = body.symbol || body.ticker || 'BILINMIYOR';
-    var action = body.action || body.signal || body.side || 'BILINMIYOR';
-    action = action.toString().toLowerCase();
-    if (action.includes('buy') || action.includes('long') || action === 'al') { action = 'buy'; }
-    else if (action.includes('sell') || action.includes('short') || action === 'sat') { action = 'sell'; }
-    var signal = { id: Date.now(), time: new Date().toISOString(), symbol: symbol.toUpperCase(), action: action, price: body.price || body.close || '', message: body.message || '' };
+// ===== SSE: GERÇEK ZAMANLI SİNYAL =====
+let sseClients = [];
+
+app.get('/events', (req, res) => {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
+    const initMsg = JSON.stringify({ type: 'init', signals: signals.slice(0, 20) });
+    res.write(`data: ${initMsg}\n\n`);
+
+    sseClients.push(res);
+    console.log(`SSE bağlandı. Aktif: ${sseClients.length}`);
+
+    req.on('close', () => {
+        sseClients = sseClients.filter(c => c !== res);
+        console.log(`SSE ayrıldı. Aktif: ${sseClients.length}`);
+    });
+});
+
+// ===== WEBHOOK: TRADINGVIEW =====
+app.post('/webhook', (req, res) => {
+    const { symbol, action } = req.body;
+
+    if (!symbol || !action) {
+        return res.status(400).json({ error: 'symbol ve action gerekli' });
+    }
+
+    const validActions = ['buy', 'sell', 'long', 'short'];
+    if (!validActions.includes(action.toLowerCase())) {
+        return res.status(400).json({ error: 'Geçersiz action. buy/sell/long/short olmalı.' });
+    }
+
+    const signal = {
+        symbol: symbol.toUpperCase(),
+        action: action.toLowerCase(),
+        time: new Date().toISOString()
+    };
+
     signals.unshift(signal);
     if (signals.length > 100) signals = signals.slice(0, 100);
-    sendToAllClients(signal);
-    console.log('Sinyal gonderildi:', signal.symbol, signal.action);
-    res.status(200).json({ success: true, signal: signal });
+    saveData();
+
+    // Tüm bağlı istemcilere gönder
+    const msg = JSON.stringify({ type: 'new_signal', signal });
+    sseClients.forEach(client => {
+        try { client.write(`data: ${msg}\n\n`); } catch (e) {}
+    });
+
+    console.log(`Sinyal alındı: ${signal.symbol} ${signal.action}`);
+    res.json({ success: true, signal });
 });
 
-app.get('/events', function(req, res) {
-    res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive', 'Access-Control-Allow-Origin': '*' });
-    clients.push(res);
-    res.write('data: ' + JSON.stringify({ type: 'init', signals: signals }) + '\n\n');
-    req.on('close', function() { clients = clients.filter(function(c) { return c !== res; }); });
+// ===== ANA SAYFA =====
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-function sendToAllClients(signal) {
-    var data = JSON.stringify({ type: 'new_signal', signal: signal });
-    clients.forEach(function(client) { client.write('data: ' + data + '\n\n'); });
-}
-
-app.get('/api/signals', function(req, res) { res.json({ signals: signals, count: signals.length }); });
-app.delete('/api/signals', function(req, res) { signals = []; res.json({ success: true }); });
-app.get('/api/test/:symbol/:action', function(req, res) {
-    var test = { id: Date.now(), time: new Date().toISOString(), symbol: req.params.symbol.toUpperCase(), action: req.params.action.toLowerCase(), price: '0', message: 'Test sinyali' };
-    signals.unshift(test); sendToAllClients(test); res.json({ success: true, signal: test });
+// ===== SUNUCUYU BAŞLAT =====
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`🐋 Balina Alarm sunucusu çalışıyor: port ${PORT}`);
+    console.log(`📡 Webhook: http://localhost:${PORT}/webhook`);
+    console.log(`📊 Dashboard: http://localhost:${PORT}`);
 });
-
-app.get('/', function(req, res) { res.sendFile(path.join(__dirname, 'public', 'index.html')); });
-app.listen(PORT, function() { console.log('Balina sunucu aktif! Port: ' + PORT); });
