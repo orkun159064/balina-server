@@ -439,7 +439,7 @@
 </div>
 
 <script>
-// ===== SABITLER =====
+// ===== SABİTLER =====
 var ADMIN_EMAIL = "orkun159064@outlook.com";
 var S = {
     user: null,
@@ -454,7 +454,7 @@ var S = {
     isAdmin: false
 };
 
-// ===== BALINA & ONLINE SAYACI =====
+// ===== BALINA & ONLINE =====
 function getDailyWhales() {
     var t = new Date();
     var s = t.getFullYear() * 10000 + (t.getMonth() + 1) * 100 + t.getDate();
@@ -488,7 +488,7 @@ function timeAgo(ds) {
     return h + ':' + m + ' de geldi';
 }
 
-// ===== HATA GOSTERME =====
+// ===== HATA GÖSTERME =====
 function showAuthError(msg) {
     var el = document.getElementById('authError');
     el.textContent = msg;
@@ -500,7 +500,7 @@ function hideAuthError() {
     document.getElementById('authError').classList.remove('show');
 }
 
-// ===== LANDING / AUTH GECISLERI =====
+// ===== LANDING / AUTH GEÇİŞLERİ =====
 function showAuth() {
     hideAuthError();
     document.getElementById('landingPage').style.display = 'none';
@@ -525,7 +525,7 @@ function switchTab(t) {
     }
 }
 
-// ⭐ GUVENLI GIRIS - Artık otomatik hesap olusturmuyor
+// ===== GİRİŞ =====
 function doLogin(e) {
     e.preventDefault();
     hideAuthError();
@@ -537,7 +537,6 @@ function doLogin(e) {
         return;
     }
 
-    // Sunucudan deneme durumunu kontrol et
     fetch('/api/check-trial', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -545,17 +544,14 @@ function doLogin(e) {
     })
     .then(function(r) { return r.json(); })
     .then(function(data) {
-        // Yerel kullanıcı kontrolü
         var users = JSON.parse(localStorage.getItem('ba_users') || '[]');
         var u = users.find(function(x) { return x.email === email && x.pass === pass; });
 
         if (!u) {
-            // ⭐ Artık otomatik hesap OLUSTURMAZ
-            showAuthError('E-posta veya sifre hatali! Kayit olmak icin "Kayit Ol" sekmesine gidin.');
+            showAuthError('E-posta veya sifre hatali!');
             return;
         }
 
-        // Sunucu deneme süresi dolmus mu?
         if (!data.allowed && !data.subscribed) {
             showAuthError('Deneme süreniz dolmustur. Lütfen abone olun.');
             return;
@@ -569,23 +565,11 @@ function doLogin(e) {
         goDash();
     })
     .catch(function() {
-        // Sunucu hatası - sadece yerel kontrol yap
-        var users = JSON.parse(localStorage.getItem('ba_users') || '[]');
-        var u = users.find(function(x) { return x.email === email && x.pass === pass; });
-        if (u) {
-            S.user = u;
-            S.subscribed = u.sub || false;
-            S.trialStart = u.trialStart || Date.now();
-            S.isAdmin = (u.email === ADMIN_EMAIL);
-            save();
-            goDash();
-        } else {
-            showAuthError('Sunucuya baglanilamiyor. Lütfen daha sonra tekrar deneyin.');
-        }
+        showAuthError('Sunucuya baglanilamiyor.');
     });
 }
 
-// ⭐ GUVENLI KAYIT - Sunucu onayli
+// ===== KAYIT =====
 function doRegister(e) {
     e.preventDefault();
     hideAuthError();
@@ -607,7 +591,6 @@ function doRegister(e) {
         return;
     }
 
-    // ⭐ Önce sunucu üzerinden IP + telefon kontrolü
     fetch('/api/check-phone', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -619,8 +602,6 @@ function doRegister(e) {
             showAuthError(data.message || 'Bu telefon numarasi zaten kayitli!');
             return;
         }
-
-        // Sunucuya kayıt isteği gönder
         return fetch('/api/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -632,25 +613,14 @@ function doRegister(e) {
                 showAuthError(regData.message || 'Kayit basarisiz!');
                 return;
             }
-
-            // Yerel kullanıcı oluştur
             var users = JSON.parse(localStorage.getItem('ba_users') || '[]');
             if (users.find(function(x) { return x.email === email; })) {
                 showAuthError('Bu e-posta zaten kayitli!');
                 return;
             }
-
-            var n = {
-                name: name,
-                email: email,
-                pass: pass,
-                phone: phone,
-                sub: false,
-                trialStart: Date.now()
-            };
+            var n = { name: name, email: email, pass: pass, phone: phone, sub: false, trialStart: Date.now() };
             users.push(n);
             localStorage.setItem('ba_users', JSON.stringify(users));
-
             S.user = n;
             S.trialStart = n.trialStart;
             S.isAdmin = (email === ADMIN_EMAIL);
@@ -659,7 +629,7 @@ function doRegister(e) {
         });
     })
     .catch(function() {
-        showAuthError('Baglanti hatasi. Sunucu calismıyor olabilir.');
+        showAuthError('Baglanti hatasi.');
     });
 }
 
@@ -670,13 +640,34 @@ function doLogout() {
 
 function save() {
     localStorage.setItem('ba_session', JSON.stringify({
-        user: S.user,
-        sub: S.subscribed,
-        trialStart: S.trialStart
+        user: S.user, sub: S.subscribed, trialStart: S.trialStart
     }));
 }
 
-// ⭐ SUNUCU ONAYLI DENEME KONTROLÜ
+// ⭐ ADMİN OTOMATİK GİRİŞ
+function adminAutoLogin() {
+    return fetch('/api/admin-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: ADMIN_EMAIL })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        if (data.success) {
+            S.user = data.user;
+            S.subscribed = true;
+            S.isAdmin = true;
+            S.trialStart = Date.now();
+            save();
+            return true;
+        }
+        return false;
+    })
+    .catch(function() {
+        return false;
+    });
+}
+
 function checkTrialAndGo() {
     fetch('/api/check-trial', {
         method: 'POST',
@@ -690,14 +681,12 @@ function checkTrialAndGo() {
             if (data.subscribed) S.subscribed = true;
             goDash();
         } else {
-            // ⭐ Artık goDash() cagrilmiyor!
-            showAuthError(data.message || 'Deneme süreniz dolmustur. Lütfen abone olun.');
+            showAuthError(data.message || 'Deneme süreniz dolmustur.');
             localStorage.removeItem('ba_session');
         }
     })
     .catch(function() {
-        // ⭐ Sunucu hatası - KULLANICI dashboard'a alinmaz
-        showAuthError('Sunucuya baglanilamiyor. Lütfen daha sonra tekrar deneyin.');
+        showAuthError('Sunucuya baglanilamiyor.');
     });
 }
 
@@ -709,15 +698,13 @@ function checkExistingTrial() {
                 if (data.expired && !data.subscribed) return false;
                 S.trialStart = data.start;
                 if (data.subscribed) S.subscribed = true;
+                if (data.isAdmin) S.isAdmin = true;
                 return true;
             }
             return true;
         })
         .catch(function() {
-            // Sunucu yoksa - yerel süre kontrolü yap
-            if (S.trialStart && (Date.now() - S.trialStart >= S.trialDur)) {
-                return false;
-            }
+            if (S.trialStart && (Date.now() - S.trialStart >= S.trialDur)) return false;
             return true;
         });
 }
@@ -736,13 +723,16 @@ function goDash() {
     updateUserUI();
     updateWhales();
     startTimer();
-    checkBlocked();
     restorePanels();
 
+    // ⭐ Admin section her zaman göster (admin ise)
     if (S.isAdmin) {
         document.getElementById('adminSection').style.display = 'block';
+        // Admin blocked ekranını kaldır
+        document.getElementById('blockedScreen').classList.remove('active');
     } else {
         document.getElementById('adminSection').style.display = 'none';
+        checkBlocked();
     }
 
     if ('Notification' in window && Notification.permission === 'default')
@@ -759,12 +749,12 @@ function updateUserUI() {
     document.getElementById('mAvatar').textContent = S.user.name[0].toUpperCase();
     document.getElementById('mAdminBadge').style.display = S.isAdmin ? 'block' : 'none';
 
-    if (S.subscribed) {
-        document.getElementById('subBadge').textContent = 'Aktif';
+    if (S.subscribed || S.isAdmin) {
+        document.getElementById('subBadge').textContent = S.isAdmin ? 'Admin' : 'Aktif';
         document.getElementById('subBadge').className = 'sub-badge active';
-        document.getElementById('mSub').textContent = 'Aktif Abonelik';
+        document.getElementById('mSub').textContent = S.isAdmin ? 'Admin Hesap' : 'Aktif Abonelik';
         document.getElementById('mSub').style.color = 'var(--green)';
-        document.getElementById('subLabel').textContent = 'Abonelik sureniz';
+        document.getElementById('subLabel').textContent = S.isAdmin ? 'Admin erişimi' : 'Abonelik sureniz';
         document.getElementById('subBtn').style.display = 'none';
         document.getElementById('upgradeBtn').style.display = 'none';
     } else {
@@ -780,6 +770,15 @@ function updateUserUI() {
 
 function startTimer() {
     setInterval(function() {
+        // ⭐ Admin için süre gösterme
+        if (S.isAdmin) {
+            document.getElementById('timerDisp').textContent = '♾️ Admin';
+            document.getElementById('subValue').textContent = 'Sınırsız Erişim';
+            document.getElementById('subBar').style.width = '100%';
+            document.getElementById('navTimer').className = 'nav-timer';
+            return;
+        }
+
         if (S.subscribed) {
             var end = S.user.subEnd || (Date.now() + 30 * 24 * 60 * 60 * 1000);
             var rem = Math.max(0, end - Date.now());
@@ -804,8 +803,9 @@ function startTimer() {
             var h = Math.floor(rem / 3600000);
             var m = Math.floor((rem % 3600000) / 60000);
             var s = Math.floor((rem % 60000) / 1000);
-            document.getElementById('timerDisp').textContent = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
-            document.getElementById('subValue').textContent = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+            var timeStr = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+            document.getElementById('timerDisp').textContent = timeStr;
+            document.getElementById('subValue').textContent = timeStr;
             document.getElementById('subBar').style.width = (rem / S.trialDur) * 100 + '%';
             document.getElementById('navTimer').className = h < 1 ? 'nav-timer urgent' : 'nav-timer';
         }
@@ -813,7 +813,7 @@ function startTimer() {
 }
 
 function checkBlocked() {
-    if (S.subscribed) return;
+    if (S.subscribed || S.isAdmin) return;
     if (Date.now() - S.trialStart >= S.trialDur) {
         document.getElementById('blockedScreen').classList.add('active');
     }
@@ -855,7 +855,7 @@ function playAlert(isBuy) {
 
 function testAlert() { playAlert(true); }
 
-// ===== FLASH EFEKTLERI =====
+// ===== FLASH =====
 var originalTitle = document.title;
 var titleBlink = null;
 
@@ -865,34 +865,16 @@ function flashScreen(type) {
     document.body.classList.remove('flash-border-green', 'flash-border-red');
     void document.body.offsetWidth;
     document.body.classList.add(type === 'al' ? 'flash-border-green' : 'flash-border-red');
-    if (nav) {
-        nav.classList.remove('flash-green', 'flash-red');
-        void nav.offsetWidth;
-        nav.classList.add(type === 'al' ? 'flash-green' : 'flash-red');
-    }
-    if (bar) {
-        bar.className = 'flash-bar';
-        void bar.offsetWidth;
-        bar.className = 'flash-bar ' + (type === 'al' ? 'al' : 'as');
-    }
+    if (nav) { nav.classList.remove('flash-green', 'flash-red'); void nav.offsetWidth; nav.classList.add(type === 'al' ? 'flash-green' : 'flash-red'); }
+    if (bar) { bar.className = 'flash-bar'; void bar.offsetWidth; bar.className = 'flash-bar ' + (type === 'al' ? 'al' : 'as'); }
     if (titleBlink) clearInterval(titleBlink);
     var msg = type === 'al' ? '🟢🟢🟢 LONG SINYALI!' : '🔴🔴🔴 SHORT SINYALI!';
     var isOn = true;
-    titleBlink = setInterval(function() {
-        document.title = isOn ? msg : originalTitle;
-        isOn = !isOn;
-    }, 800);
-    setTimeout(function() {
-        clearInterval(titleBlink);
-        titleBlink = null;
-        document.title = originalTitle;
-        document.body.classList.remove('flash-border-green', 'flash-border-red');
-        if (nav) nav.classList.remove('flash-green', 'flash-red');
-        if (bar) bar.className = 'flash-bar';
-    }, 15000);
+    titleBlink = setInterval(function() { document.title = isOn ? msg : originalTitle; isOn = !isOn; }, 800);
+    setTimeout(function() { clearInterval(titleBlink); titleBlink = null; document.title = originalTitle; document.body.classList.remove('flash-border-green', 'flash-border-red'); if (nav) nav.classList.remove('flash-green', 'flash-red'); if (bar) bar.className = 'flash-bar'; }, 15000);
 }
 
-// ===== PANEL GUNCELLEME =====
+// ===== PANEL =====
 function applyPanel(pair, action, timeStr) {
     var isXAU = pair === 'XAUUSD';
     var el = document.getElementById(isXAU ? 'statusXAU' : 'statusBTC');
@@ -923,49 +905,31 @@ function applyPanel(pair, action, timeStr) {
 
 function restorePanels() {
     ['XAUUSD', 'BTCUSDT'].forEach(function(pair) {
-        try {
-            var saved = JSON.parse(localStorage.getItem('ba_panel_' + pair));
-            if (saved) applyPanel(pair, saved.action, saved.time);
-        } catch (e) {}
+        try { var saved = JSON.parse(localStorage.getItem('ba_panel_' + pair)); if (saved) applyPanel(pair, saved.action, saved.time); } catch (e) {}
     });
 }
 
-// ===== SINYAL ISLEME =====
+// ===== SİNYAL İŞLEME =====
 function processSignal(symbol, type) {
     if (!S.active) return;
-    if (!S.subscribed && (Date.now() - S.trialStart) >= S.trialDur) return;
+    if (!S.isAdmin && !S.subscribed && (Date.now() - S.trialStart) >= S.trialDur) return;
 
     var now = new Date();
     var isXAU = symbol.toUpperCase().includes('XAU') || symbol.toUpperCase().includes('ALTIN');
     var pair = isXAU ? 'XAUUSD' : 'BTCUSDT';
 
     applyPanel(pair, type, now.toISOString());
-    showPopup(
-        type === 'buy' || type === 'long' ? 'al' : 'as',
-        '🐋 ' + pair + ' ' + (type === 'buy' || type === 'long' ? 'LONG' : 'SHORT'),
-        'Balinalar ' + pair + ' ' + (type === 'buy' || type === 'long' ? 'long' : 'short') + ' pozisyon acti!',
-        now
-    );
+    showPopup(type === 'buy' || type === 'long' ? 'al' : 'as', '🐋 ' + pair + ' ' + (type === 'buy' || type === 'long' ? 'LONG' : 'SHORT'), 'Balinalar ' + pair + ' ' + (type === 'buy' || type === 'long' ? 'long' : 'short') + ' pozisyon acti!', now);
     addLastSignal({ symbol: pair, action: type, time: now.toISOString() });
+    try { localStorage.setItem('ba_panel_' + pair, JSON.stringify({ action: type, time: now.toISOString() })); } catch (e) {}
 
-    try {
-        localStorage.setItem('ba_panel_' + pair, JSON.stringify({ action: type, time: now.toISOString() }));
-    } catch (e) {}
-
-    if (type === 'buy' || type === 'long') {
-        playAlert(true);
-        flashScreen('al');
-        browserNotif('🐋 ' + pair + ' LONG!', 'Balinalar ' + pair + ' long pozisyon acti!');
-    } else {
-        playAlert(false);
-        flashScreen('as');
-        browserNotif('🐋 ' + pair + ' SHORT!', 'Balinalar ' + pair + ' short pozisyon acti!');
-    }
+    if (type === 'buy' || type === 'long') { playAlert(true); flashScreen('al'); browserNotif('🐋 ' + pair + ' LONG!', 'Balinalar ' + pair + ' long pozisyon acti!'); }
+    else { playAlert(false); flashScreen('as'); browserNotif('🐋 ' + pair + ' SHORT!', 'Balinalar ' + pair + ' short pozisyon acti!'); }
     S.signalCount++;
     document.getElementById('statSignals').textContent = S.signalCount;
 }
 
-// ===== BILDIRIM LISTESI =====
+// ===== BİLDİRİMLER =====
 var lastSignals = [];
 
 function addLastSignal(s) {
@@ -981,15 +945,12 @@ function renderLastSignals() {
     list.innerHTML = lastSignals.map(function(s) {
         var cls = (s.action === 'buy' || s.action === 'long') ? 'al' : 'as';
         var label = (s.action === 'buy' || s.action === 'long') ? 'LONG' : 'SHORT';
-        var t = timeAgo(s.time);
-        return '<div class="notif-item ' + cls + '"><div><div class="notif-title">' + s.symbol + ' ' + label + '</div><div class="notif-time">' + t + '</div></div></div>';
+        return '<div class="notif-item ' + cls + '"><div><div class="notif-title">' + s.symbol + ' ' + label + '</div><div class="notif-time">' + timeAgo(s.time) + '</div></div></div>';
     }).join('');
     document.getElementById('notifCount').textContent = lastSignals.length;
 }
 
-// ===== POPUP =====
 var popT;
-
 function showPopup(cls, title, body, time) {
     var p = document.getElementById('alertPopup');
     p.className = 'alert-popup ' + cls;
@@ -1000,34 +961,18 @@ function showPopup(cls, title, body, time) {
     clearTimeout(popT);
     popT = setTimeout(function() { p.classList.remove('show'); }, 8000);
 }
+function closePopup() { document.getElementById('alertPopup').classList.remove('show'); clearTimeout(popT); }
 
-function closePopup() {
-    document.getElementById('alertPopup').classList.remove('show');
-    clearTimeout(popT);
-}
-
-// ===== TARAYICI BILDIRIMI =====
 function browserNotif(title, body) {
     if (!S.notifOn || !('Notification' in window) || Notification.permission !== 'granted') return;
     try { new Notification(title, { body: body, vibrate: [200, 100, 200] }); } catch (e) {}
 }
 
 function toggleSound() { S.soundOn = document.getElementById('soundToggle').checked; }
-function toggleNotif() {
-    S.notifOn = document.getElementById('notifToggle').checked;
-    if (S.notifOn && 'Notification' in window) Notification.requestPermission();
-}
-
+function toggleNotif() { S.notifOn = document.getElementById('notifToggle').checked; if (S.notifOn && 'Notification' in window) Notification.requestPermission(); }
 function openModal(id) { document.getElementById(id).classList.add('active'); }
-function closeModal(e, id) {
-    if (!e || e.target === document.getElementById(id))
-        document.getElementById(id).classList.remove('active');
-}
-
-function doPayment() {
-    window.open('https://www.shopier.com/balinaalarm/48434245', '_blank');
-    closeModal(null, 'payModal');
-}
+function closeModal(e, id) { if (!e || e.target === document.getElementById(id)) document.getElementById(id).classList.remove('active'); }
+function doPayment() { window.open('https://www.shopier.com/balinaalarm/48434245', '_blank'); closeModal(null, 'payModal'); }
 
 function copyWH(id) {
     var url = document.getElementById(id).textContent;
@@ -1039,38 +984,23 @@ function copyWH(id) {
     });
 }
 
-// ===== ZAMAN GUNCELLEME =====
+// ===== ZAMAN GÜNCELLEME =====
 setInterval(function() {
     ['XAUUSD', 'BTCUSDT'].forEach(function(pair) {
-        try {
-            var saved = JSON.parse(localStorage.getItem('ba_panel_' + pair));
-            if (saved) {
-                var tId = pair === 'XAUUSD' ? 'timeXAU' : 'timeBTC';
-                var el = document.getElementById(tId);
-                if (el) el.textContent = 'Son guncelleme: ' + timeAgo(saved.time);
-            }
-        } catch (e) {}
+        try { var saved = JSON.parse(localStorage.getItem('ba_panel_' + pair)); if (saved) { var el = document.getElementById(pair === 'XAUUSD' ? 'timeXAU' : 'timeBTC'); if (el) el.textContent = 'Son guncelleme: ' + timeAgo(saved.time); } } catch (e) {}
     });
     renderLastSignals();
 }, 30000);
 
-// ===== BILDIRIMLERI GERI YUKLE =====
 function restoreNotifs() {
-    try {
-        var saved = JSON.parse(localStorage.getItem('ba_notifs'));
-        if (saved && saved.length) lastSignals = saved;
-    } catch (e) {}
+    try { var saved = JSON.parse(localStorage.getItem('ba_notifs')); if (saved && saved.length) lastSignals = saved; } catch (e) {}
     ['XAUUSD', 'BTCUSDT'].forEach(function(pair) {
         try {
             var p = JSON.parse(localStorage.getItem('ba_panel_' + pair));
             if (p) {
                 var exists = lastSignals.find(function(s) { return s.symbol === pair; });
-                if (!exists) {
-                    lastSignals.unshift({ symbol: pair, action: p.action, time: p.time });
-                } else if (new Date(p.time) > new Date(exists.time)) {
-                    lastSignals = lastSignals.filter(function(s) { return s.symbol !== pair; });
-                    lastSignals.unshift({ symbol: pair, action: p.action, time: p.time });
-                }
+                if (!exists) { lastSignals.unshift({ symbol: pair, action: p.action, time: p.time }); }
+                else if (new Date(p.time) > new Date(exists.time)) { lastSignals = lastSignals.filter(function(s) { return s.symbol !== pair; }); lastSignals.unshift({ symbol: pair, action: p.action, time: p.time }); }
             }
         } catch (e) {}
     });
@@ -1079,7 +1009,7 @@ function restoreNotifs() {
     try { localStorage.setItem('ba_notifs', JSON.stringify(lastSignals)); } catch (e) {}
 }
 
-// ===== SSE BAGLANTISI =====
+// ===== SSE =====
 function connectToServer() {
     var evtSource = new EventSource("/events");
     evtSource.onopen = function() { console.log("Sunucuya baglanildi"); };
@@ -1090,52 +1020,47 @@ function connectToServer() {
             allSignals.forEach(function(s) { addLastSignal(s); });
             var latestXAU = null, latestBTC = null;
             for (var i = 0; i < allSignals.length; i++) {
-                var s = allSignals[i];
-                var sym = s.symbol.toUpperCase();
+                var s = allSignals[i]; var sym = s.symbol.toUpperCase();
                 if (sym.includes('XAU') && !latestXAU) latestXAU = s;
                 if (sym.includes('BTC') && !latestBTC) latestBTC = s;
             }
-            if (latestXAU) {
-                applyPanel('XAUUSD', latestXAU.action, latestXAU.time);
-                try { localStorage.setItem('ba_panel_XAUUSD', JSON.stringify({ action: latestXAU.action, time: latestXAU.time })); } catch (e) {}
-            }
-            if (latestBTC) {
-                applyPanel('BTCUSDT', latestBTC.action, latestBTC.time);
-                try { localStorage.setItem('ba_panel_BTCUSDT', JSON.stringify({ action: latestBTC.action, time: latestBTC.time })); } catch (e) {}
-            }
+            if (latestXAU) { applyPanel('XAUUSD', latestXAU.action, latestXAU.time); try { localStorage.setItem('ba_panel_XAUUSD', JSON.stringify({ action: latestXAU.action, time: latestXAU.time })); } catch (e) {} }
+            if (latestBTC) { applyPanel('BTCUSDT', latestBTC.action, latestBTC.time); try { localStorage.setItem('ba_panel_BTCUSDT', JSON.stringify({ action: latestBTC.action, time: latestBTC.time })); } catch (e) {} }
         }
-        if (data.type === "new_signal") {
-            processSignal(data.signal.symbol, data.signal.action);
-        }
+        if (data.type === "new_signal") { processSignal(data.signal.symbol, data.signal.action); }
     };
-    evtSource.onerror = function() {
-        console.log("Baglanti kesildi, yeniden deneniyor...");
-        evtSource.close();
-        setTimeout(connectToServer, 5000);
-    };
+    evtSource.onerror = function() { console.log("Baglanti kesildi"); evtSource.close(); setTimeout(connectToServer, 5000); };
 }
 
-// ===== SAYFA YUKLENDIGINDE =====
+// ===== SAYFA YÜKLENDİĞİNDE =====
 document.addEventListener('DOMContentLoaded', function() {
     var saved = localStorage.getItem('ba_session');
+
     if (saved) {
         try {
             var d = JSON.parse(saved);
             S.user = d.user;
             S.subscribed = d.sub;
             S.trialStart = d.trialStart;
-            S.isAdmin = (d.user.email === ADMIN_EMAIL);
+            S.isAdmin = (d.user && d.user.email === ADMIN_EMAIL);
 
-            checkExistingTrial().then(function(ok) {
-                if (ok) {
-                    goDash();
-                } else {
-                    // ⭐ Süre dolmus - oturumu temizle, landing'e yönlendir
-                    localStorage.removeItem('ba_session');
-                    document.getElementById('landingPage').style.display = 'block';
-                    alert('Deneme süreniz dolmustur. Lütfen abone olun.');
-                }
-            });
+            // ⭐ Admin ise direkt dashboard'a git
+            if (S.isAdmin) {
+                adminAutoLogin().then(function(ok) {
+                    if (ok) {
+                        goDash();
+                    } else {
+                        // Sunucu yoksa bile locale'den devam et
+                        S.subscribed = true;
+                        goDash();
+                    }
+                });
+            } else {
+                checkExistingTrial().then(function(ok) {
+                    if (ok) { goDash(); }
+                    else { localStorage.removeItem('ba_session'); }
+                });
+            }
         } catch (e) {
             localStorage.removeItem('ba_session');
         }
@@ -1144,7 +1069,4 @@ document.addEventListener('DOMContentLoaded', function() {
     updateWhales();
     restoreNotifs();
     connectToServer();
-});
-</script>
-</body>
-</html>
+});    
