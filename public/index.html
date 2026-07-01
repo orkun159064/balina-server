@@ -27,9 +27,7 @@
         .flash-bar{display:none;position:fixed;top:60px;left:0;right:0;height:6px;z-index:98}
         .flash-bar.al{display:block;background:linear-gradient(90deg,#00ff88,#10b981,#00ff88);animation:pulse .3s ease 10}
         .flash-bar.as{display:block;background:linear-gradient(90deg,#ff4444,#ef4444,#ff4444);animation:pulse .3s ease 10}
-        /* LOADING */
-    
-        /* LANDING */
+       
         .landing{min-height:100vh;background:linear-gradient(135deg,#0a0e17,#0d1b2a,#111827);position:relative;overflow:hidden}
         .landing::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 50% 50%,rgba(59,130,246,.03) 0%,transparent 50%);animation:rotate 30s linear infinite;pointer-events:none}
         @keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
@@ -282,8 +280,6 @@ var ADMIN_EMAIL = "orkun159064@outlook.com";
 var S = { user: null, subscribed: false, trialStart: null, trialDur: 8*60*60*1000, soundOn: true, notifOn: true, signalCount: 0, whaleBase: 0, active: false, isAdmin: false };
 var selectedStars = 5;
 var currentReplyEmail = '';
-
-// ===== LOADING =====
 
 // ===== BALINA & ONLINE =====
 function getDailyWhales() {
