@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Balina Alarm - Whale Trading Dashboard</title>
+    <meta name="description" content="Balina Alarm - XAUUSD ve BTCUSDT için gerçek zamanlı balina hareket takip ve alarm sistemi. Teyit amaçlı sinyal platformu.">
+    <meta name="keywords" content="forex, sinyal, balina, xauusd, btcusdt, trading, kripto, altın">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐋</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
@@ -24,6 +27,15 @@
         .flash-bar{display:none;position:fixed;top:60px;left:0;right:0;height:6px;z-index:98}
         .flash-bar.al{display:block;background:linear-gradient(90deg,#00ff88,#10b981,#00ff88);animation:pulse .3s ease 10}
         .flash-bar.as{display:block;background:linear-gradient(90deg,#ff4444,#ef4444,#ff4444);animation:pulse .3s ease 10}
+        /* LOADING */
+        .loading-screen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;transition:opacity .5s}
+        .loading-screen.hide{opacity:0;pointer-events:none}
+        .loading-whale{font-size:64px;animation:swim 2s ease infinite}
+        .loading-bar{width:200px;height:4px;background:var(--bg4);border-radius:2px;overflow:hidden}
+        .loading-bar-inner{width:0%;height:100%;background:var(--blue);border-radius:2px;animation:loadBar 2s ease forwards}
+        @keyframes loadBar{0%{width:0%}100%{width:100%}}
+        .loading-text{color:var(--text3);font-size:13px}
+        /* LANDING */
         .landing{min-height:100vh;background:linear-gradient(135deg,#0a0e17,#0d1b2a,#111827);position:relative;overflow:hidden}
         .landing::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 50% 50%,rgba(59,130,246,.03) 0%,transparent 50%);animation:rotate 30s linear infinite;pointer-events:none}
         @keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
@@ -62,6 +74,7 @@
         .landing-btn:hover{background:var(--blue-hover);transform:translateY(-2px)}
         .landing-price{margin-top:20px;font-size:14px;color:var(--text3)}
         .landing-price strong{color:var(--text);font-size:24px;font-weight:900}
+        /* AUTH */
         .auth{display:none;min-height:100vh;align-items:center;justify-content:center;background:linear-gradient(135deg,#0a0e17,#111827,#0d1b2a);padding:20px}
         .auth.active{display:flex}
         .auth-box{width:100%;max-width:440px}
@@ -71,7 +84,7 @@
         .auth-logo p{color:var(--text3);font-size:13px;margin-top:4px}
         .auth-card{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--rl);padding:32px;animation:fadeIn .5s ease}
         .auth-tabs{display:flex;gap:4px;background:var(--bg);border-radius:var(--rs);padding:4px;margin-bottom:24px}
-        .auth-tab{flex:1;padding:10px;text-align:center;border:none;background:0 0;color:var(--text3);font-weight:600;font-size:13px;cursor:pointer;border-radius:6px;transition:var(--t);font-family:inherit}
+        .auth-tab{flex:1;padding:10px;text-align:center;border:none;background:0 0;color:var(--text3);font-weight:600;font-size:12px;cursor:pointer;border-radius:6px;transition:var(--t);font-family:inherit}
         .auth-tab.active{background:var(--bg3);color:var(--text);box-shadow:var(--shadow)}
         .auth-form{display:none}.auth-form.active{display:block;animation:fadeIn .3s}
         .auth-back{display:block;text-align:center;margin-top:16px;font-size:13px;color:var(--text3);cursor:pointer;text-decoration:none}
@@ -95,6 +108,7 @@
         .free-badge{display:block;text-align:center;margin-top:14px;padding:8px;background:rgba(245,158,11,.15);border:1px solid var(--yellow-bdr);border-radius:var(--rs);color:var(--yellow);font-size:12px;font-weight:600}
         .shopier-badge{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:var(--rs);margin-top:12px;font-size:12px;font-weight:600;color:var(--green)}
         .shopier-badge span{font-size:16px}
+        /* DASHBOARD */
         .dash{display:none;min-height:100vh}.dash.active{display:block}
         .nav{background:var(--bg3);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--bg4)}
         .nav-left{display:flex;align-items:center;gap:10px}.nav-left span{font-size:22px}
@@ -194,638 +208,463 @@
         .legal-box{padding:10px;background:var(--bg);border-radius:8px;font-size:12px;color:var(--text3);text-align:center}
         .err-msg{background:var(--red-bg);border:1px solid rgba(239,68,68,.3);border-radius:var(--rs);padding:10px 14px;margin-bottom:16px;font-size:13px;color:var(--red);text-align:center;display:none}
         .err-msg.show{display:block;animation:fadeIn .3s}
-        @media(max-width:900px){.panels{grid-template-columns:1fr}.bottom{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}}
-        @media(max-width:600px){.nav-sub,.nav-status,.nav-timer{display:none}.main{padding:16px}.stats{grid-template-columns:1fr}.landing-title{font-size:28px}.landing-whale{font-size:60px}.landing-features{grid-template-columns:1fr}}
+        /* PLAN KARTLARI */
+        .plans-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+        .plan-card{background:var(--bg);border:2px solid var(--bg4);border-radius:var(--r);padding:16px;text-align:center;cursor:pointer;transition:var(--t);position:relative}
+        .plan-card:hover{border-color:var(--blue);transform:translateY(-2px)}
+        .plan-card.popular{border-color:var(--green)}
+        .plan-card.best{border-color:var(--yellow)}
+        .plan-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);padding:2px 10px;border-radius:10px;font-size:9px;font-weight:700;white-space:nowrap}
+        .plan-badge.popular{background:var(--green);color:#fff}
+        .plan-badge.best{background:var(--yellow);color:#000}
+        .plan-duration{font-size:12px;color:var(--text3);margin-bottom:4px}
+        .plan-price{font-size:24px;font-weight:900;color:#fff}
+        .plan-monthly{font-size:11px;color:var(--text3);margin-top:2px}
+        .plan-save{font-size:10px;color:var(--green);font-weight:600;margin-top:4px}
+        /* YORUMLAR */
+        .reviews-section{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--r);padding:24px;margin-bottom:24px;animation:fadeIn .4s}
+        .reviews-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+        .reviews-score{display:flex;align-items:center;gap:10px}
+        .reviews-stars{color:var(--yellow);font-size:18px}
+        .reviews-avg{font-size:22px;font-weight:800;color:#fff}
+        .reviews-total{font-size:12px;color:var(--text3)}
+        .review-item{padding:14px;background:var(--bg);border:1px solid var(--bg4);border-radius:var(--rs);margin-bottom:8px}
+        .review-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+        .review-name{font-size:13px;font-weight:700;color:#fff}
+        .review-stars{color:var(--yellow);font-size:12px}
+        .review-text{font-size:12px;color:var(--text2);line-height:1.6}
+        .review-time{font-size:10px;color:var(--text3);margin-top:4px}
+        .review-delete{background:0 0;border:none;color:var(--red);cursor:pointer;font-size:11px;padding:2px 6px}
+        .review-form{margin-top:16px;padding-top:16px;border-top:1px solid var(--bg4)}
+        .star-input{display:flex;gap:4px;margin-bottom:10px}
+        .star-input span{font-size:24px;cursor:pointer;color:var(--bg4);transition:var(--t)}
+        .star-input span.active{color:var(--yellow)}
+        .review-submit{margin-top:10px}
+        /* CHAT */
+        .chat-toggle{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:var(--blue);color:#fff;border:none;font-size:24px;cursor:pointer;z-index:900;box-shadow:0 4px 12px rgba(59,130,246,.4);transition:var(--t)}
+        .chat-toggle:hover{background:var(--blue-hover);transform:scale(1.1)}
+        .chat-panel{position:fixed;bottom:90px;right:24px;width:350px;max-height:500px;background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--rl);z-index:900;display:none;flex-direction:column;box-shadow:0 8px 24px rgba(0,0,0,.4);animation:fadeIn .3s}
+        .chat-panel.open{display:flex}
+        .chat-header{padding:16px;border-bottom:1px solid var(--bg4);display:flex;align-items:center;justify-content:space-between}
+        .chat-header-title{font-size:14px;font-weight:700;color:#fff;display:flex;align-items:center;gap:6px}
+        .chat-header-close{background:0 0;border:none;color:var(--text3);font-size:18px;cursor:pointer}
+        .chat-messages{flex:1;overflow-y:auto;padding:16px;max-height:350px}
+        .chat-msg{margin-bottom:10px;display:flex}
+        .chat-msg.user{justify-content:flex-end}
+        .chat-msg.admin{justify-content:flex-start}
+        .chat-bubble{max-width:80%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.5}
+        .chat-msg.user .chat-bubble{background:var(--blue);color:#fff;border-bottom-right-radius:4px}
+        .chat-msg.admin .chat-bubble{background:var(--bg4);color:var(--text);border-bottom-left-radius:4px}
+        .chat-msg-time{font-size:9px;color:var(--text3);margin-top:2px}
+        .chat-msg.user .chat-msg-time{text-align:right}
+        .chat-input-area{padding:12px;border-top:1px solid var(--bg4);display:flex;gap:8px}
+        .chat-input{flex:1;padding:10px;background:var(--bg);border:1px solid var(--bg4);border-radius:var(--rs);color:var(--text);font-size:13px;font-family:inherit;outline:0}
+        .chat-input:focus{border-color:var(--blue)}
+        .chat-send{padding:10px 16px;background:var(--blue);color:#fff;border:none;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer}
+        .chat-send:hover{background:var(--blue-hover)}
+        .chat-badge{position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;font-size:10px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+        /* SSS */
+        .faq-item{border:1px solid var(--bg4);border-radius:var(--rs);margin-bottom:8px;overflow:hidden}
+        .faq-question{padding:14px 16px;background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:600;color:var(--text)}
+        .faq-question:hover{background:var(--bg3)}
+        .faq-arrow{transition:var(--t);font-size:12px}
+        .faq-item.open .faq-arrow{transform:rotate(180deg)}
+        .faq-answer{padding:0 16px;max-height:0;overflow:hidden;transition:max-height .3s ease;font-size:12px;color:var(--text2);line-height:1.7}
+        .faq-item.open .faq-answer{max-height:300px;padding:0 16px 14px}
+        /* GİZLİLİK */
+        .privacy-text{font-size:13px;color:var(--text2);line-height:1.8}.privacy-text h3{color:#fff;font-size:15px;margin:16px 0 8px}.privacy-text p{margin-bottom:10px}
+        .privacy-text ul{padding-left:20px;margin-bottom:10px}
+        @media(max-width:900px){.panels{grid-template-columns:1fr}.bottom{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.plans-grid{grid-template-columns:1fr}}
+        @media(max-width:600px){.nav-sub,.nav-status,.nav-timer{display:none}.main{padding:16px}.stats{grid-template-columns:1fr}.landing-title{font-size:28px}.landing-whale{font-size:60px}.landing-features{grid-template-columns:1fr}.chat-panel{width:calc(100% - 48px);right:24px}}
     </style>
 </head>
 <body>
+
+<!-- LOADING -->
+<div class="loading-screen" id="loadingScreen">
+    <div class="loading-whale">🐋</div>
+    <div class="loading-bar"><div class="loading-bar-inner"></div></div>
+    <div class="loading-text">Balina Alarm yükleniyor...</div>
+</div>
+
 <div class="flash-bar" id="flashBar"></div>
-
-<!-- YASAL UYARI -->
-<div id="legalModal" class="modal-overlay active" style="z-index:2000;">
-    <div class="modal">
-        <div class="modal-head"><span class="modal-title">Yasal Uyari</span></div>
-        <div class="legal-text">
-            <p class="legal-warn">BU SITE YATIRIM TAVSIYESI VERMEZ</p>
-            <p><strong>1. Sorumluluk Reddi:</strong> Bu sitede paylasilan sinyaller yalnizca egitim amaclidir.</p>
-            <p><strong>2. Risk Bildirimi:</strong> Finansal piyasalarda islem yapmak yuksek risk icerir.</p>
-            <p><strong>3. Sorumsuzluk:</strong> Yapilan islemlerden dogan zarardan Balina Alarm sorumlu degildir.</p>
-            <p><strong>4. SPK Uyarisi:</strong> Burada yer alan bilgiler SPK tarafindan denetlenmemistir.</p>
-            <p class="legal-box">Bu siteyi kullanarak yukaridaki sartlari kabul etmis sayilirsiniz.</p>
-        </div>
-        <div class="modal-footer" style="margin-top:16px;">
-            <button class="btn btn-primary" onclick="localStorage.setItem('ba_legal','accepted');document.getElementById('legalModal').style.display='none';" style="flex:1;">Okudum, Kabul Ediyorum</button>
-        </div>
-    </div>
-</div>
-
-<!-- LANDING PAGE -->
-<div id="landingPage" class="landing">
-    <div class="landing-top">
-        <div class="landing-top-logo"><span>🐋</span> Balina Alarm</div>
-        <div class="landing-online"><span class="landing-online-dot"></span><span id="onlineCount">5.247</span> Aktif Kullanici</div>
-    </div>
-    <div class="landing-hero">
-        <span class="landing-whale">🐋</span>
-        <h1 class="landing-title">Balina Alarm</h1>
-        <p class="landing-sub">Piyasada buyuk oyuncular harekete gectiginde anlik bildirim al, harekete gec!</p>
-    </div>
-    <div class="landing-alert-banner">
-        <div class="landing-alert-box">
-            <div class="landing-alert-text">⚠️ Bu platformu stratejiniz ile beraber teyit amaciyla kullaniniz!</div>
-        </div>
-    </div>
-    <div class="landing-features">
-        <div class="landing-feature"><span>📊</span><p>XAUUSD & BTCUSDT takibi</p></div>
-        <div class="landing-feature"><span>🔔</span><p>Anlik sesli & gorsel alarm</p></div>
-        <div class="landing-feature"><span>🐋</span><p>9000+ balina takip agi</p></div>
-        <div class="landing-feature"><span>📱</span><p>Masaustu bildirim</p></div>
-        <div class="landing-feature"><span>⚡</span><p>7/24 aktif sistem</p></div>
-        <div class="landing-feature"><span>🛡️</span><p>Shopier ile guvenli odeme</p></div>
-    </div>
-    <div class="landing-about">
-        <div class="landing-about-card">
-            <div class="landing-about-title">🐋 Biz Kimiz?</div>
-            <p class="landing-about-text">BalinaAlarm, finansal piyasalardaki onemli hareketleri ve buyuk yatirimci islemlerini anlik olarak takip etmek isteyen yatirimcilar icin gelistirilmis bir alarm ve bildirim platformudur.</p>
-            <p class="landing-about-text">Piyasalarda buyuk oyuncularin yaptigi islemler cogun zaman fiyat hareketlerinin yonunu belirler. Ancak bu hareketleri manuel olarak takip etmek hem zaman alici hem de zordur. BalinaAlarm, gelismis analiz sistemleri sayesinde onemli alim-satim sinyallerini tespit ederek kullanicilarina aninda bildirim gonderir.</p>
-            <p class="landing-about-text">Misyonumuz, profesyonel yatirim araclarini herkes icin erisilebilir hale getirmek ve yatirimcilarin piyasadaaki firsatlari daha hizli yakalamasina yardimci olmaktir.</p>
-            <ul class="landing-about-list">
-                <li><span>✅</span> Anlik alim-satim sinyalleri alin</li>
-                <li><span>✅</span> Onemli piyasa hareketlerini kacirmayin</li>
-                <li><span>✅</span> Buyuk yatirimci aktivitelerini takip edin</li>
-                <li><span>✅</span> Mobil ve web uzerinden bildirimlere ulasin</li>
-                <li><span>✅</span> Zamaninda bilgiyle daha bilincli kararlar verin</li>
-            </ul>
-            <p class="landing-about-mission">Amacimiz, yatirimcilarin piyasalari 7/24 takip etmek zorunda kalmadan onemli gelismelerden haberdar olmasini saglayan guvenilir bir alarm sistemi sunmaktir.</p>
-            <div class="landing-about-slogan">BalinaAlarm – Buyuk Hareketleri Ilk Sen Fark Et.</div>
-        </div>
-    </div>
-    <div class="landing-cta">
-        <div class="landing-free" style="cursor:pointer;" onclick="showAuth()"><div class="landing-free-text">⏰ Ilk 8 Saat UCRETSIZ Dene!</div></div>
-        <a href="https://www.shopier.com/balinaalarm/48434245" target="_blank" style="text-decoration:none;display:block;max-width:300px;margin:0 auto 24px;"><div class="landing-shopier"><span>🛡️</span> Shopier ile Guvenli Odeme</div></a>
-        <button class="landing-btn" onclick="showAuth()">🚀 Hemen Basla</button>
-        <div class="landing-price">Sadece <strong>999 TL</strong> / ay</div>
-    </div>
-</div>
-
-<!-- AUTH -->
-<div id="authScreen" class="auth">
-    <div class="auth-box">
-        <div class="auth-logo"><span class="whale">🐋</span><h1>Balina Alarm</h1><p>Whale Trading Intelligence Platform</p></div>
-        <div class="auth-card">
-            <div id="authError" class="err-msg"></div>
-            <div class="auth-tabs">
-                <button class="auth-tab active" onclick="switchTab('login')">Giris Yap</button>
-                <button class="auth-tab" onclick="switchTab('register')">Kayit Ol</button>
-                <button class="auth-tab" onclick="switchTab('reset')">Sifremi Unuttum</button>
-            </div>
-            <form id="loginForm" class="auth-form active" onsubmit="doLogin(event)">
-                <div class="fg"><label>E-posta</label><input type="email" id="lEmail" placeholder="ornek@email.com" required></div>
-                <div class="fg"><label>Sifre</label><input type="password" id="lPass" placeholder="********" required></div>
-                <button type="submit" class="btn btn-primary" style="height:46px;">Giris Yap</button>
-            </form>
-            <form id="registerForm" class="auth-form" onsubmit="doRegister(event)">
-                <div class="fg"><label>Ad Soyad</label><input type="text" id="rName" placeholder="Adiniz Soyadiniz" required></div>
-                <div class="fg"><label>E-posta</label><input type="email" id="rEmail" placeholder="ornek@email.com" required></div>
-                <div class="fg"><label>Sifre</label><input type="password" id="rPass" placeholder="En az 6 karakter" required minlength="6"></div>
-                <div class="fg"><label>Telefon Numarasi</label><input type="tel" id="rPhone" placeholder="5XXXXXXXXX" required></div>
-                <button type="submit" class="btn btn-primary" style="height:46px;">Kayit Ol</button>
-                <div class="pricing-box">
-                    <div class="pricing-card">
-                        <span class="pricing-badge">Profesyonel Plan</span>
-                        <div class="pricing-price">999 TL <span>/ ay</span></div>
-                        <ul class="pricing-list">
-                            <li>XAUUSD & BTCUSDT takibi</li>
-                            <li>Gercek zamanli balina alarmi</li>
-                            <li>Sesli & masaustu bildirim</li>
-                            <li>9000+ balina takip agi</li>
-                        </ul>
-                        <div class="free-badge">Ilk 8 Saat UCRETSIZ!</div>
-                        <a href="https://www.shopier.com/balinaalarm/48434245" target="_blank" style="text-decoration:none;"><div class="shopier-badge"><span>🛡️</span> Shopier ile Guvenli Odeme</div></a>
-                    </div>
-                </div>
-            </form>
-            <form id="resetForm" class="auth-form" onsubmit="doReset(event)">
-                <div class="fg"><label>E-posta</label><input type="email" id="resetEmail" placeholder="ornek@email.com" required></div>
-                <div class="fg"><label>Telefon Numarasi</label><input type="tel" id="resetPhone" placeholder="5XXXXXXXXX" required></div>
-                <div class="fg"><label>Yeni Sifre</label><input type="password" id="resetPass" placeholder="En az 6 karakter" required minlength="6"></div>
-                <button type="submit" class="btn btn-success" style="height:46px;">🔄 Sifreyi Sifirla</button>
-            </form>
-            <span class="auth-back" onclick="showLanding()">← Ana Sayfaya Don</span>
-        </div>
-    </div>
-</div>
-
-<!-- DASHBOARD -->
-<div id="dashboard" class="dash">
-    <nav class="nav">
-        <div class="nav-left"><span>🐋</span><div><div class="nav-title">Balina Alarm</div><div class="nav-sub">Whale Trading Dashboard</div></div></div>
-        <div class="nav-right">
-            <div class="nav-status"><span class="dot"></span><span>Bagli</span></div>
-            <div class="nav-timer" id="navTimer"><span id="timerDisp">08:00:00</span></div>
-            <div class="nav-user" onclick="openModal('userModal')">
-                <div class="avatar" id="navAvatar">A</div>
-                <div><div class="u-name" id="navName">Kullanici</div><div class="u-email" id="navEmail">user@email.com</div></div>
-            </div>
-        </div>
-    </nav>
-    <div class="main">
-        <div id="alertPopup" class="alert-popup">
-            <div class="ap-head"><span class="ap-title" id="apTitle"></span><button class="ap-close" onclick="closePopup()">X</button></div>
-            <div class="ap-body" id="apBody"></div>
-            <div class="ap-time" id="apTime"></div>
-        </div>
-        <div class="alert-banner"><div class="alert-banner-text">⚠️ Bu platformu stratejiniz ile beraber teyit amaciyla kullaniniz!</div></div>
-        <div id="audioHint" class="audio-hint" onclick="loadMp3();this.style.display='none';">🔊 Alarm sesini aktif etmek icin bu yaziya tikla!</div>
-        <div class="test-btn"><button onclick="testAlert()">🔊 Test Alarm</button></div>
-        <div class="notif-section">
-            <div class="notif-head"><span class="notif-title-main">🔔 Son Bildirimler</span><span class="cb-blue" id="notifCount">0</span></div>
-            <div class="notif-list" id="notifList"><div class="no-notif">Henuz bildirim yok</div></div>
-        </div>
-        <div class="panels">
-            <div class="panel">
-                <div class="panel-head"><span class="panel-title">🥇 XAUUSD <span style="font-size:12px;font-weight:400;color:var(--text3)">Altin</span></span><span class="panel-badge badge-wait" id="badgeXAU"></span></div>
-                <div class="panel-status waiting" id="statusXAU"><span class="panel-emoji">🐋</span><div class="panel-signal" id="signalXAU"></div><div class="panel-desc" id="descXAU"></div></div>
-                <div class="panel-footer"><span class="panel-time" id="timeXAU">Son guncelleme: --</span><span class="panel-whales" id="whalesXAU">🐋 -- balina izleniyor</span></div>
-                <div class="legend"><div class="leg"><div class="leg-dot" style="background:var(--yellow)"></div>Beklemede</div><div class="leg"><div class="leg-dot" style="background:var(--green)"></div>LONG</div><div class="leg"><div class="leg-dot" style="background:var(--red)"></div>SHORT</div></div>
-            </div>
-            <div class="panel">
-                <div class="panel-head"><span class="panel-title">₿ BTCUSDT <span style="font-size:12px;font-weight:400;color:var(--text3)">Bitcoin</span></span><span class="panel-badge badge-wait" id="badgeBTC"></span></div>
-                <div class="panel-status waiting" id="statusBTC"><span class="panel-emoji">🐋</span><div class="panel-signal" id="signalBTC"></div><div class="panel-desc" id="descBTC"></div></div>
-                <div class="panel-footer"><span class="panel-time" id="timeBTC">Son guncelleme: --</span><span class="panel-whales" id="whalesBTC">🐋 -- balina izleniyor</span></div>
-                <div class="legend"><div class="leg"><div class="leg-dot" style="background:var(--yellow)"></div>Beklemede</div><div class="leg"><div class="leg-dot" style="background:var(--green)"></div>LONG</div><div class="leg"><div class="leg-dot" style="background:var(--red)"></div>SHORT</div></div>
-            </div>
-        </div>
-        <div class="stats">
-            <div class="stat"><div class="stat-icon">📡</div><div class="stat-val" id="statSignals">0</div><div class="stat-label">Toplam Sinyal</div></div>
-            <div class="stat"><div class="stat-icon">🐋</div><div class="stat-val" id="statWhales">--</div><div class="stat-label">Takip Edilen Balina</div></div>
-            <div class="stat"><div class="stat-icon">📊</div><div class="stat-val">2</div><div class="stat-label">Aktif Cift</div></div>
-        </div>
-        <div class="bottom">
-            <div class="card" id="adminSection" style="display:none;">
-                <div class="card-head"><span class="card-title">🔗 Webhook Entegrasyonu</span><span class="card-badge cb-green">Admin Panel</span></div>
-                <span class="admin-badge">🔑 Sadece Admin</span>
-                <label style="font-size:12px;font-weight:600;display:block;margin-bottom:4px;color:var(--text2);">Webhook URL:</label>
-                <div class="webhook-box"><code id="whURL" style="flex:1;">https://balina-server-2.onrender.com/webhook</code><button class="copy-btn" onclick="copyWH('whURL')">Kopyala</button></div>
-                <div style="font-size:12px;font-weight:600;margin:14px 0 6px;color:var(--text2);">📋 Kurulum:</div>
-                <ol class="steps"><li>TradingView'da Alert olustur</li><li>Webhook URL'yi yapistir</li><li>JSON mesaj gonder</li></ol>
-                <div class="code">{"symbol":"BTCUSDT","action":"buy"}</div>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:24px;">
-                <div class="card">
-                    <div class="card-head"><span class="card-title">💳 Abonelik</span><button class="btn btn-sm btn-success" onclick="openModal('payModal')" id="subBtn">Abone Ol</button></div>
-                    <div class="sub-card">
-                        <div class="sub-head"><span style="font-weight:700;font-size:13px;">Profesyonel Plan</span><span class="sub-badge trial" id="subBadge">Deneme</span></div>
-                        <div class="sub-timer">
-                            <div class="sub-timer-label" id="subLabel">Ucretsiz deneme suresi</div>
-                            <div class="sub-timer-value" id="subValue">08:00:00</div>
-                            <div class="sub-progress"><div class="sub-progress-bar" id="subBar" style="width:100%"></div></div>
-                        </div>
-                        <a href="https://www.shopier.com/balinaalarm/48434245" target="_blank" style="text-decoration:none;"><div class="shopier-badge"><span>🛡️</span> Shopier ile Guvenli Odeme</div></a>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-head"><span class="card-title">⚙️ Ayarlar</span></div>
-                    <div class="sg">
-                        <div class="sg-title">Bildirimler</div>
-                        <div class="toggle-row"><div><div class="toggle-label">🔊 Sesli Alarm</div><div class="toggle-desc">Sinyal geldiginde ses cal</div></div><label class="toggle-switch"><input type="checkbox" id="soundToggle" checked onchange="toggleSound()"><span class="toggle-slider"></span></label></div>
-                        <div class="toggle-row"><div><div class="toggle-label">📱 Tarayici Bildirimi</div><div class="toggle-desc">Masaustu bildirim goster</div></div><label class="toggle-switch"><input type="checkbox" id="notifToggle" checked onchange="toggleNotif()"><span class="toggle-slider"></span></label></div>
-                    </div>
-                    <div class="sg">
-                        <div class="sg-title">Hesap</div>
-                        <div style="display:flex;gap:8px;"><button class="btn btn-sm btn-outline" onclick="doLogout()" style="flex:1;">🚪 Cikis Yap</button><button class="btn btn-sm btn-danger" onclick="openModal('payModal')" style="flex:1;" id="upgradeBtn">⭐ Abone Ol</button></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- PAYMENT MODAL -->
-<div id="payModal" class="modal-overlay" onclick="closeModal(event,'payModal')">
-    <div class="modal" onclick="event.stopPropagation()">
-        <div class="modal-head"><span class="modal-title">💳 Abonelik Satin Al</span><button class="modal-close" onclick="closeModal(null,'payModal')">X</button></div>
-        <div>
-            <div class="pricing-card" style="margin-bottom:16px;">
-                <span class="pricing-badge">Profesyonel Plan</span>
-                <div class="pricing-price">999 TL <span>/ ay</span></div>
-                <ul class="pricing-list"><li>XAUUSD & BTCUSDT takibi</li><li>Gercek zamanli balina alarmi</li><li>Sesli & masaustu bildirim</li><li>9000+ balina takip agi</li></ul>
-            </div>
-            <a href="https://www.shopier.com/balinaalarm/48434245" target="_blank" style="text-decoration:none;"><div class="shopier-badge" style="margin-bottom:16px;font-size:14px;padding:14px;"><span>🛡️</span> Shopier ile Guvenli Odeme</div></a>
-            <p style="text-align:center;color:var(--text2);font-size:12px;">Odeme Shopier altyapisi ile guvenle gerceklestirilir.<br>Kredi karti, banka karti ve havale ile odeme yapabilirsiniz.</p>
-        </div>
-        <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal(null,'payModal')">Iptal</button><button class="btn btn-success" onclick="doPayment()">🛒 Shopier ile Ode</button></div>
-    </div>
-</div>
-
-<!-- USER MODAL -->
-<div id="userModal" class="modal-overlay" onclick="closeModal(event,'userModal')">
-    <div class="modal" onclick="event.stopPropagation()">
-        <div class="modal-head"><span class="modal-title">👤 Hesap Bilgileri</span><button class="modal-close" onclick="closeModal(null,'userModal')">X</button></div>
-        <div style="text-align:center;margin-bottom:16px;">
-            <div style="width:56px;height:56px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;color:#fff;font-size:20px;font-weight:700;" id="mAvatar">A</div>
-            <div style="font-size:16px;font-weight:700;color:#fff;" id="mName">Kullanici</div>
-            <div style="font-size:13px;color:var(--text3);" id="mEmail">user@email.com</div>
-            <div id="mAdminBadge" style="display:none;margin-top:8px;"><span class="admin-badge">🔑 Admin</span></div>
-        </div>
-        <div style="background:var(--bg);border:1px solid var(--bg4);border-radius:var(--rs);padding:14px;text-align:center;">
-            <div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Abonelik Durumu</div>
-            <div style="font-size:14px;font-weight:700;color:var(--yellow);" id="mSub">Ucretsiz Deneme</div>
-        </div>
-        <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal(null,'userModal')">Kapat</button><button class="btn btn-danger" onclick="doLogout()">🚪 Cikis</button></div>
-    </div>
-</div>
-
-<!-- BLOCKED SCREEN -->
-<div id="blockedScreen" class="blocked">
-    <div class="blocked-card">
-        <div class="blocked-icon">🔒</div>
-        <div class="blocked-title">Hizmet Askida Alindi</div>
-        <div class="blocked-text">Ucretsiz deneme sureniz dolmustur.<br><br><strong>999 TL/ay</strong> ile sinirsiz erisim.</div>
-        <button class="btn btn-primary" onclick="openModal('payModal')">💳 Abone Ol</button>
-        <button class="btn btn-outline" style="margin-top:8px;" onclick="doLogout()">🚪 Cikis Yap</button>
-    </div>
-</div>
-
 <script>
 var ADMIN_EMAIL = "orkun159064@outlook.com";
 var S = { user: null, subscribed: false, trialStart: null, trialDur: 8*60*60*1000, soundOn: true, notifOn: true, signalCount: 0, whaleBase: 0, active: false, isAdmin: false };
+var selectedStars = 5;
+var currentReplyEmail = '';
 
-function getDailyWhales() {
-    var t = new Date();
-    var s = t.getFullYear() * 10000 + (t.getMonth() + 1) * 100 + t.getDate();
-    var h = 0;
-    for (var i = 0; i < String(s).length; i++) { h = ((h << 5) - h) + String(s).charCodeAt(i); h |= 0; }
-    return 9000 + Math.abs(h) % 801;
-}
+// ===== LOADING =====
+window.addEventListener('load', function() {
+    setTimeout(function() {
+        document.getElementById('loadingScreen').classList.add('hide');
+    }, 2000);
+});
 
-function updateWhales() {
-    if (S.whaleBase === 0) S.whaleBase = getDailyWhales();
-    document.getElementById('statWhales').textContent = S.whaleBase.toLocaleString('tr-TR');
-    document.getElementById('whalesXAU').textContent = '🐋 ' + S.whaleBase.toLocaleString('tr-TR') + ' balina izleniyor';
-    document.getElementById('whalesBTC').textContent = '🐋 ' + S.whaleBase.toLocaleString('tr-TR') + ' balina izleniyor';
-}
+// ===== BALINA & ONLINE =====
+function getDailyWhales() { var t=new Date();var s=t.getFullYear()*10000+(t.getMonth()+1)*100+t.getDate();var h=0;for(var i=0;i<String(s).length;i++){h=((h<<5)-h)+String(s).charCodeAt(i);h|=0;}return 9000+Math.abs(h)%801; }
+function updateWhales() { if(S.whaleBase===0)S.whaleBase=getDailyWhales();document.getElementById('statWhales').textContent=S.whaleBase.toLocaleString('tr-TR');document.getElementById('whalesXAU').textContent='🐋 '+S.whaleBase.toLocaleString('tr-TR')+' balina izleniyor';document.getElementById('whalesBTC').textContent='🐋 '+S.whaleBase.toLocaleString('tr-TR')+' balina izleniyor'; }
+function updateOnlineCount() { var base=4000+Math.floor(Math.random()*3001);var el=document.getElementById('onlineCount');if(el)el.textContent=base.toLocaleString('tr-TR'); }
+updateOnlineCount();setInterval(updateOnlineCount,15*60*1000);
 
-function updateOnlineCount() {
-    var base = 4000 + Math.floor(Math.random() * 3001);
-    var el = document.getElementById('onlineCount');
-    if (el) el.textContent = base.toLocaleString('tr-TR');
-}
-updateOnlineCount();
-setInterval(updateOnlineCount, 15 * 60 * 1000);
+function timeAgo(ds) { var d=new Date(ds);var h=String(d.getHours()).padStart(2,'0');var m=String(d.getMinutes()).padStart(2,'0');return h+':'+m+' de geldi'; }
 
-function timeAgo(ds) {
-    var d = new Date(ds);
-    var h = String(d.getHours()).padStart(2, '0');
-    var m = String(d.getMinutes()).padStart(2, '0');
-    return h + ':' + m + ' de geldi';
-}
-
-function showAuthError(msg) {
-    var el = document.getElementById('authError');
-    el.textContent = msg;
-    el.classList.add('show');
-    setTimeout(function() { el.classList.remove('show'); }, 5000);
-}
-
+// ===== HATA GÖSTERME =====
+function showAuthError(msg) { var el=document.getElementById('authError');el.textContent=msg;el.classList.add('show');setTimeout(function(){el.classList.remove('show');},5000); }
 function hideAuthError() { document.getElementById('authError').classList.remove('show'); }
 
-function showAuth() { hideAuthError(); document.getElementById('landingPage').style.display = 'none'; document.getElementById('authScreen').classList.add('active'); }
-function showLanding() { document.getElementById('authScreen').classList.remove('active'); document.getElementById('landingPage').style.display = 'block'; }
+// ===== LANDING / AUTH =====
+function showAuth() { hideAuthError();document.getElementById('landingPage').style.display='none';document.getElementById('authScreen').classList.add('active'); }
+function showLanding() { document.getElementById('authScreen').classList.remove('active');document.getElementById('landingPage').style.display='block'; }
 
 function switchTab(t) {
     hideAuthError();
-    document.querySelectorAll('.auth-tab').forEach(function(b) { b.classList.remove('active'); });
-    document.querySelectorAll('.auth-form').forEach(function(f) { f.classList.remove('active'); });
-    if (t === 'login') { document.querySelectorAll('.auth-tab')[0].classList.add('active'); document.getElementById('loginForm').classList.add('active'); }
-    else if (t === 'register') { document.querySelectorAll('.auth-tab')[1].classList.add('active'); document.getElementById('registerForm').classList.add('active'); }
-    else { document.querySelectorAll('.auth-tab')[2].classList.add('active'); document.getElementById('resetForm').classList.add('active'); }
+    document.querySelectorAll('.auth-tab').forEach(function(b){b.classList.remove('active');});
+    document.querySelectorAll('.auth-form').forEach(function(f){f.classList.remove('active');});
+    if(t==='login'){document.querySelectorAll('.auth-tab')[0].classList.add('active');document.getElementById('loginForm').classList.add('active');}
+    else if(t==='register'){document.querySelectorAll('.auth-tab')[1].classList.add('active');document.getElementById('registerForm').classList.add('active');}
+    else{document.querySelectorAll('.auth-tab')[2].classList.add('active');document.getElementById('resetForm').classList.add('active');}
 }
 
+// ===== GİRİŞ =====
 function doLogin(e) {
-    e.preventDefault();
-    hideAuthError();
-    var email = document.getElementById('lEmail').value.trim();
-    var pass = document.getElementById('lPass').value;
-    if (!email || !pass) { showAuthError('E-posta ve sifre gerekli!'); return; }
-
-    fetch('/api/check-trial', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: email }) })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-        var users = JSON.parse(localStorage.getItem('ba_users') || '[]');
-        var u = users.find(function(x) { return x.email === email && x.pass === pass; });
-        if (!u) { showAuthError('E-posta veya sifre hatali!'); return; }
-        if (!data.allowed && !data.subscribed) { showAuthError('Deneme süreniz dolmustur. Lütfen abone olun.'); return; }
-        S.user = u; S.subscribed = u.sub || data.subscribed || false; S.trialStart = data.start || u.trialStart || Date.now(); S.isAdmin = (u.email === ADMIN_EMAIL);
-        save(); goDash();
-    })
-    .catch(function() { showAuthError('Sunucuya baglanilamiyor.'); });
+    e.preventDefault();hideAuthError();
+    var email=document.getElementById('lEmail').value.trim();var pass=document.getElementById('lPass').value;
+    if(!email||!pass){showAuthError('E-posta ve şifre gerekli!');return;}
+    fetch('/api/check-trial',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email})})
+    .then(function(r){return r.json();})
+    .then(function(data){
+        var users=JSON.parse(localStorage.getItem('ba_users')||'[]');
+        var u=users.find(function(x){return x.email===email&&x.pass===pass;});
+        if(!u){showAuthError('E-posta veya şifre hatalı!');return;}
+        if(!data.allowed&&!data.subscribed){showAuthError('Deneme süreniz dolmuştur.');return;}
+        S.user=u;S.subscribed=u.sub||data.subscribed||false;S.trialStart=data.start||u.trialStart||Date.now();S.isAdmin=(u.email===ADMIN_EMAIL);
+        save();goDash();
+    }).catch(function(){showAuthError('Sunucuya bağlanılamıyor.');});
 }
 
+// ===== KAYIT =====
 function doRegister(e) {
-    e.preventDefault();
-    hideAuthError();
-    var name = document.getElementById('rName').value.trim();
-    var email = document.getElementById('rEmail').value.trim();
-    var pass = document.getElementById('rPass').value;
-    var phone = document.getElementById('rPhone').value.replace(/\s/g, '');
-    if (!name || !email || !pass || !phone) { showAuthError('Tüm alanlari doldurun!'); return; }
-    if (phone.length < 10) { showAuthError('Gecerli bir telefon numarasi girin!'); return; }
-    if (pass.length < 6) { showAuthError('Sifre en az 6 karakter olmali!'); return; }
+    e.preventDefault();hideAuthError();
+    var name=document.getElementById('rName').value.trim();var email=document.getElementById('rEmail').value.trim();var pass=document.getElementById('rPass').value;var phone=document.getElementById('rPhone').value.replace(/\s/g,'');
+    if(!name||!email||!pass||!phone){showAuthError('Tüm alanları doldurun!');return;}
+    if(phone.length<10){showAuthError('Geçerli bir telefon numarası girin!');return;}
+    if(pass.length<6){showAuthError('Şifre en az 6 karakter olmalı!');return;}
+    if(!document.getElementById('kvkkCheck').checked){showAuthError('Gizlilik sözleşmesini kabul etmelisiniz!');return;}
 
-    fetch('/api/check-phone', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone: phone }) })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-        if (!data.available) { showAuthError(data.message || 'Bu telefon numarasi zaten kayitli!'); return; }
-        return fetch('/api/register', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone: phone, email: email, name: name, pass: pass }) })
-        .then(function(r) { return r.json(); })
-        .then(function(regData) {
-            if (!regData.success) { showAuthError(regData.message || 'Kayit basarisiz!'); return; }
-            var users = JSON.parse(localStorage.getItem('ba_users') || '[]');
-            if (users.find(function(x) { return x.email === email; })) { showAuthError('Bu e-posta zaten kayitli!'); return; }
-            var n = { name: name, email: email, pass: pass, phone: phone, sub: false, trialStart: Date.now() };
-            users.push(n); localStorage.setItem('ba_users', JSON.stringify(users));
-            S.user = n; S.trialStart = n.trialStart; S.isAdmin = (email === ADMIN_EMAIL);
-            save(); goDash();
+    fetch('/api/check-phone',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:phone})})
+    .then(function(r){return r.json();})
+    .then(function(data){
+        if(!data.available){showAuthError(data.message||'Bu telefon numarası zaten kayıtlı!');return;}
+        return fetch('/api/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:phone,email:email,name:name,pass:pass})})
+        .then(function(r){return r.json();})
+        .then(function(regData){
+            if(!regData.success){showAuthError(regData.message||'Kayıt başarısız!');return;}
+            var users=JSON.parse(localStorage.getItem('ba_users')||'[]');
+            var n={name:name,email:email,pass:pass,phone:phone,sub:false,trialStart:Date.now()};
+            users.push(n);localStorage.setItem('ba_users',JSON.stringify(users));
+            S.user=n;S.trialStart=n.trialStart;S.isAdmin=(email===ADMIN_EMAIL);
+            save();goDash();
         });
-    })
-    .catch(function() { showAuthError('Baglanti hatasi.'); });
+    }).catch(function(){showAuthError('Bağlantı hatası.');});
 }
 
+// ===== ŞİFRE SIFIRLAMA =====
 function doReset(e) {
-    e.preventDefault();
-    hideAuthError();
-    var email = document.getElementById('resetEmail').value.trim();
-    var phone = document.getElementById('resetPhone').value.replace(/\s/g, '');
-    var newPass = document.getElementById('resetPass').value;
-    if (!email || !phone || !newPass) { showAuthError('Tüm alanlari doldurun!'); return; }
-
-    fetch('/api/reset-password', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: email, phone: phone, newPass: newPass }) })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-        if (data.success) {
-            var users = JSON.parse(localStorage.getItem('ba_users') || '[]');
-            var u = users.find(function(x) { return x.email === email; });
-            if (u) { u.pass = newPass; localStorage.setItem('ba_users', JSON.stringify(users)); }
-            alert('✅ Sifreniz sifirlandi! Simdi giris yapabilirsiniz.');
-            switchTab('login');
-        } else { showAuthError(data.message || 'Sifirlama basarisiz!'); }
-    })
-    .catch(function() { showAuthError('Baglanti hatasi.'); });
+    e.preventDefault();hideAuthError();
+    var email=document.getElementById('resetEmail').value.trim();var phone=document.getElementById('resetPhone').value.replace(/\s/g,'');var newPass=document.getElementById('resetPass').value;
+    if(!email||!phone||!newPass){showAuthError('Tüm alanları doldurun!');return;}
+    fetch('/api/reset-password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email,phone:phone,newPass:newPass})})
+    .then(function(r){return r.json();})
+    .then(function(data){
+        if(data.success){
+            var users=JSON.parse(localStorage.getItem('ba_users')||'[]');var u=users.find(function(x){return x.email===email;});
+            if(u){u.pass=newPass;localStorage.setItem('ba_users',JSON.stringify(users));}
+            alert('✅ Şifreniz sıfırlandı! Şimdi giriş yapabilirsiniz.');switchTab('login');
+        }else{showAuthError(data.message||'Sıfırlama başarısız!');}
+    }).catch(function(){showAuthError('Bağlantı hatası.');});
 }
 
-function doLogout() { localStorage.removeItem('ba_session'); location.reload(); }
-function save() { localStorage.setItem('ba_session', JSON.stringify({ user: S.user, sub: S.subscribed, trialStart: S.trialStart })); }
+function doLogout(){localStorage.removeItem('ba_session');location.reload();}
+function save(){localStorage.setItem('ba_session',JSON.stringify({user:S.user,sub:S.subscribed,trialStart:S.trialStart}));}
 
-function adminAutoLogin() {
-    return fetch('/api/admin-login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: ADMIN_EMAIL }) })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-        if (data.success) { S.user = data.user; S.subscribed = true; S.isAdmin = true; S.trialStart = Date.now(); save(); return true; }
-        return false;
-    })
-    .catch(function() { return false; });
+// ===== ADMIN OTO GİRİŞ =====
+function adminAutoLogin(){
+    return fetch('/api/admin-login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:ADMIN_EMAIL})})
+    .then(function(r){return r.json();})
+    .then(function(data){if(data.success){S.user=data.user;S.subscribed=true;S.isAdmin=true;S.trialStart=Date.now();save();return true;}return false;})
+    .catch(function(){return false;});
 }
 
-function checkTrialAndGo() {
-    fetch('/api/check-trial', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: S.user ? S.user.email : '' }) })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-        if (data.allowed) { S.trialStart = data.start; if (data.subscribed) S.subscribed = true; goDash(); }
-        else { showAuthError(data.message || 'Deneme süreniz dolmustur.'); localStorage.removeItem('ba_session'); }
-    })
-    .catch(function() { showAuthError('Sunucuya baglanilamiyor.'); });
+function checkTrialAndGo(){
+    fetch('/api/check-trial',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:S.user?S.user.email:''})})
+    .then(function(r){return r.json();})
+    .then(function(data){if(data.allowed){S.trialStart=data.start;if(data.subscribed)S.subscribed=true;goDash();}else{showAuthError(data.message||'Deneme süreniz dolmuştur.');localStorage.removeItem('ba_session');}})
+    .catch(function(){showAuthError('Sunucuya bağlanılamıyor.');});
 }
 
-function checkExistingTrial() {
-    return fetch('/api/trial-status').then(function(r) { return r.json(); }).then(function(data) {
-        if (data.exists) { if (data.expired && !data.subscribed) return false; S.trialStart = data.start; if (data.subscribed) S.subscribed = true; if (data.isAdmin) S.isAdmin = true; return true; }
+function checkExistingTrial(){
+    return fetch('/api/trial-status').then(function(r){return r.json();}).then(function(data){
+        if(data.exists){if(data.expired&&!data.subscribed)return false;S.trialStart=data.start;if(data.subscribed)S.subscribed=true;if(data.isAdmin)S.isAdmin=true;return true;}
         return true;
-    }).catch(function() { if (S.trialStart && (Date.now() - S.trialStart >= S.trialDur)) return false; return true; });
+    }).catch(function(){if(S.trialStart&&(Date.now()-S.trialStart>=S.trialDur))return false;return true;});
 }
 
-function goDash() {
-    S.active = true;
-    document.getElementById('landingPage').style.display = 'none';
+// ===== GO DASHBOARD =====
+function goDash(){
+    S.active=true;
+    document.getElementById('landingPage').style.display='none';
     document.getElementById('authScreen').classList.remove('active');
     document.getElementById('dashboard').classList.add('active');
-    if (localStorage.getItem('ba_legal') === 'accepted') { var lm = document.getElementById('legalModal'); if (lm) lm.style.display = 'none'; }
-    updateUserUI(); updateWhales(); startTimer(); restorePanels();
-    if (S.isAdmin) { document.getElementById('adminSection').style.display = 'block'; document.getElementById('blockedScreen').classList.remove('active'); }
-    else { document.getElementById('adminSection').style.display = 'none'; checkBlocked(); }
-    if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
+    document.getElementById('chatToggle').style.display='flex';
+    if(localStorage.getItem('ba_legal')==='accepted'){var lm=document.getElementById('legalModal');if(lm)lm.style.display='none';}
+    updateUserUI();updateWhales();startTimer();restorePanels();loadReviews();loadChat();
+    if(S.isAdmin){document.getElementById('adminSection').style.display='block';document.getElementById('blockedScreen').classList.remove('active');loadAdminChat();}
+    else{document.getElementById('adminSection').style.display='none';checkBlocked();}
+    if('Notification' in window&&Notification.permission==='default')Notification.requestPermission();
 }
 
-function updateUserUI() {
-    if (!S.user) return;
-    document.getElementById('navName').textContent = S.user.name;
-    document.getElementById('navEmail').textContent = S.user.email;
-    document.getElementById('navAvatar').textContent = S.user.name[0].toUpperCase();
-    document.getElementById('mName').textContent = S.user.name;
-    document.getElementById('mEmail').textContent = S.user.email;
-    document.getElementById('mAvatar').textContent = S.user.name[0].toUpperCase();
-    document.getElementById('mAdminBadge').style.display = S.isAdmin ? 'block' : 'none';
-    if (S.subscribed || S.isAdmin) {
-        document.getElementById('subBadge').textContent = S.isAdmin ? 'Admin' : 'Aktif';
-        document.getElementById('subBadge').className = 'sub-badge active';
-        document.getElementById('mSub').textContent = S.isAdmin ? 'Admin Hesap' : 'Aktif Abonelik';
-        document.getElementById('mSub').style.color = 'var(--green)';
-        document.getElementById('subLabel').textContent = S.isAdmin ? 'Admin erisimi' : 'Abonelik sureniz';
-        document.getElementById('subBtn').style.display = 'none';
-        document.getElementById('upgradeBtn').style.display = 'none';
-    } else {
-        document.getElementById('subBadge').textContent = 'Deneme';
-        document.getElementById('subBadge').className = 'sub-badge trial';
-        document.getElementById('mSub').textContent = 'Ucretsiz Deneme';
-        document.getElementById('mSub').style.color = 'var(--yellow)';
-        document.getElementById('subLabel').textContent = 'Ucretsiz deneme suresi';
-        document.getElementById('subBtn').style.display = 'block';
-        document.getElementById('upgradeBtn').style.display = 'block';
+function updateUserUI(){
+    if(!S.user)return;
+    document.getElementById('navName').textContent=S.user.name;document.getElementById('navEmail').textContent=S.user.email;
+    document.getElementById('navAvatar').textContent=S.user.name[0].toUpperCase();
+    document.getElementById('mName').textContent=S.user.name;document.getElementById('mEmail').textContent=S.user.email;
+    document.getElementById('mAvatar').textContent=S.user.name[0].toUpperCase();
+    document.getElementById('mAdminBadge').style.display=S.isAdmin?'block':'none';
+    if(S.subscribed||S.isAdmin){
+        document.getElementById('subBadge').textContent=S.isAdmin?'Admin':'Aktif';document.getElementById('subBadge').className='sub-badge active';
+        document.getElementById('mSub').textContent=S.isAdmin?'Admin Hesap':'Aktif Abonelik';document.getElementById('mSub').style.color='var(--green)';
+        document.getElementById('subLabel').textContent=S.isAdmin?'Admin erişimi':'Abonelik süreniz';
+        document.getElementById('subBtn').style.display='none';document.getElementById('upgradeBtn').style.display='none';
+        document.getElementById('reviewForm').style.display='block';
+    }else{
+        document.getElementById('subBadge').textContent='Deneme';document.getElementById('subBadge').className='sub-badge trial';
+        document.getElementById('mSub').textContent='Ücretsiz Deneme';document.getElementById('mSub').style.color='var(--yellow)';
+        document.getElementById('subLabel').textContent='Ücretsiz deneme süresi';
+        document.getElementById('subBtn').style.display='block';document.getElementById('upgradeBtn').style.display='block';
     }
 }
 
-function startTimer() {
-    setInterval(function() {
-        if (S.isAdmin) { document.getElementById('timerDisp').textContent = '♾️ Admin'; document.getElementById('subValue').textContent = 'Sinirsiz Erisim'; document.getElementById('subBar').style.width = '100%'; document.getElementById('navTimer').className = 'nav-timer'; return; }
-        if (S.subscribed) {
-            var end = S.user.subEnd || (Date.now() + 30*24*60*60*1000);
-            var rem = Math.max(0, end - Date.now());
-            var d = Math.floor(rem / (24*60*60*1000)), h = Math.floor((rem % (24*60*60*1000)) / (60*60*1000));
-            document.getElementById('timerDisp').textContent = d + 'g ' + h + 'sa';
-            document.getElementById('subValue').textContent = d + ' Gun ' + h + ' Saat';
-            document.getElementById('subBar').style.width = (rem / (30*24*60*60*1000)) * 100 + '%';
-            document.getElementById('navTimer').className = 'nav-timer';
-        } else {
-            var rem = Math.max(0, S.trialDur - (Date.now() - S.trialStart));
-            if (rem <= 0) { document.getElementById('timerDisp').textContent = 'Sure doldu'; document.getElementById('subValue').textContent = 'Sure Doldu'; document.getElementById('subBar').style.width = '0%'; document.getElementById('navTimer').className = 'nav-timer expired'; if (!document.getElementById('blockedScreen').classList.contains('active')) document.getElementById('blockedScreen').classList.add('active'); return; }
-            var h = Math.floor(rem/3600000), m = Math.floor((rem%3600000)/60000), s = Math.floor((rem%60000)/1000);
-            var ts = String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-            document.getElementById('timerDisp').textContent = ts;
-            document.getElementById('subValue').textContent = ts;
-            document.getElementById('subBar').style.width = (rem / S.trialDur) * 100 + '%';
-            document.getElementById('navTimer').className = h < 1 ? 'nav-timer urgent' : 'nav-timer';
-        }
-    }, 1000);
+function startTimer(){
+    setInterval(function(){
+        if(S.isAdmin){document.getElementById('timerDisp').textContent='♾️ Admin';document.getElementById('subValue').textContent='Sınırsız Erişim';document.getElementById('subBar').style.width='100%';document.getElementById('navTimer').className='nav-timer';return;}
+        if(S.subscribed){var end=S.user.subEnd||(Date.now()+30*24*60*60*1000);var rem=Math.max(0,end-Date.now());var d=Math.floor(rem/(24*60*60*1000)),h=Math.floor((rem%(24*60*60*1000))/(60*60*1000));document.getElementById('timerDisp').textContent=d+'g '+h+'sa';document.getElementById('subValue').textContent=d+' Gün '+h+' Saat';document.getElementById('subBar').style.width=(rem/(30*24*60*60*1000))*100+'%';document.getElementById('navTimer').className='nav-timer';}
+        else{var rem=Math.max(0,S.trialDur-(Date.now()-S.trialStart));if(rem<=0){document.getElementById('timerDisp').textContent='Süre doldu';document.getElementById('subValue').textContent='Süre Doldu';document.getElementById('subBar').style.width='0%';document.getElementById('navTimer').className='nav-timer expired';if(!document.getElementById('blockedScreen').classList.contains('active')){document.getElementById('blockedScreen').classList.add('active');checkSpecialOffer();}return;}
+        var h=Math.floor(rem/3600000),m=Math.floor((rem%3600000)/60000),s=Math.floor((rem%60000)/1000);var ts=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');document.getElementById('timerDisp').textContent=ts;document.getElementById('subValue').textContent=ts;document.getElementById('subBar').style.width=(rem/S.trialDur)*100+'%';document.getElementById('navTimer').className=h<1?'nav-timer urgent':'nav-timer';}
+    },1000);
 }
 
-function checkBlocked() { if (S.subscribed || S.isAdmin) return; if (Date.now() - S.trialStart >= S.trialDur) document.getElementById('blockedScreen').classList.add('active'); }
+function checkBlocked(){if(S.subscribed||S.isAdmin)return;if(Date.now()-S.trialStart>=S.trialDur){document.getElementById('blockedScreen').classList.add('active');checkSpecialOffer();}}
 
-var _baBuf = null, _baCtx = null;
-function loadMp3() {
-    if (_baBuf) return;
-    try { _baCtx = new (window.AudioContext || window.webkitAudioContext)(); var r = new XMLHttpRequest(); r.open('GET', '/u_jlnmxtfupk-notice-313085.mp3', true); r.responseType = 'arraybuffer'; r.onload = function() { _baCtx.decodeAudioData(r.response, function(b) { _baBuf = b; }); }; r.send(); } catch (e) {}
-}
-function playAlert() {
-    if (!S.soundOn) return;
-    if (_baBuf && _baCtx) { try { if (_baCtx.state === 'suspended') _baCtx.resume(); var src = _baCtx.createBufferSource(); src.buffer = _baBuf; var g = _baCtx.createGain(); g.gain.value = 1.0; src.connect(g); g.connect(_baCtx.destination); src.start(0); } catch (e) {} }
-}
-function testAlert() { playAlert(); }
-
-var originalTitle = document.title, titleBlink = null;
-function flashScreen(type) {
-    var nav = document.querySelector('.nav'), bar = document.getElementById('flashBar');
-    document.body.classList.remove('flash-border-green','flash-border-red'); void document.body.offsetWidth;
-    document.body.classList.add(type==='al' ? 'flash-border-green' : 'flash-border-red');
-    if (nav) { nav.classList.remove('flash-green','flash-red'); void nav.offsetWidth; nav.classList.add(type==='al' ? 'flash-green' : 'flash-red'); }
-    if (bar) { bar.className = 'flash-bar'; void bar.offsetWidth; bar.className = 'flash-bar ' + (type==='al' ? 'al' : 'as'); }
-    if (titleBlink) clearInterval(titleBlink);
-    var msg = type==='al' ? '🟢🟢🟢 LONG SINYALI!' : '🔴🔴🔴 SHORT SINYALI!';
-    var isOn = true;
-    titleBlink = setInterval(function() { document.title = isOn ? msg : originalTitle; isOn = !isOn; }, 800);
-    setTimeout(function() { clearInterval(titleBlink); titleBlink = null; document.title = originalTitle; document.body.classList.remove('flash-border-green','flash-border-red'); if (nav) nav.classList.remove('flash-green','flash-red'); if (bar) bar.className = 'flash-bar'; }, 15000);
+// ===== 99 TL KAMPANYA =====
+function checkSpecialOffer(){
+    var email=S.user?S.user.email:'';if(!email)return;
+    fetch('/api/check-special-offer',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email})})
+    .then(function(r){return r.json();})
+    .then(function(data){
+        var sp=document.getElementById('specialOffer');var nm=document.getElementById('normalOffer');
+        if(data.eligible){sp.style.display='block';nm.style.display='none';if(data.spotsLeft!==undefined)document.getElementById('offerSpots').textContent=data.spotsLeft;startOfferTimer(data.remaining);}
+        else{sp.style.display='none';nm.style.display='block';}
+    }).catch(function(){document.getElementById('specialOffer').style.display='none';document.getElementById('normalOffer').style.display='block';});
 }
 
-function applyPanel(pair, action, timeStr) {
-    var isXAU = pair === 'XAUUSD';
-    var el = document.getElementById(isXAU ? 'statusXAU' : 'statusBTC');
-    var sig = document.getElementById(isXAU ? 'signalXAU' : 'signalBTC');
-    var desc = document.getElementById(isXAU ? 'descXAU' : 'descBTC');
-    var badge = document.getElementById(isXAU ? 'badgeXAU' : 'badgeBTC');
-    var tId = isXAU ? 'timeXAU' : 'timeBTC';
-    if (action === 'buy' || action === 'long') {
-        el.className = 'panel-status long'; sig.textContent = 'Balinalar LONG Giriyor';
-        desc.textContent = '🐋 ' + pair + ' alim sinyali tespit edildi!';
-        badge.textContent = 'LONG'; badge.className = 'panel-badge badge-live';
-        badge.style.background = 'var(--green-bg)'; badge.style.color = 'var(--green)';
-    } else {
-        el.className = 'panel-status short'; sig.textContent = 'Balinalar SHORT Aciyor';
-        desc.textContent = '🐋 ' + pair + ' satis sinyali tespit edildi!';
-        badge.textContent = 'SHORT'; badge.className = 'panel-badge badge-live';
-        badge.style.background = 'var(--red-bg)'; badge.style.color = 'var(--red)';
-    }
-    document.getElementById(tId).textContent = 'Son guncelleme: ' + timeAgo(timeStr);
+var offerTimerInterval=null;
+function startOfferTimer(remaining){
+    if(offerTimerInterval)clearInterval(offerTimerInterval);
+    var endTime=Date.now()+remaining;var td=document.getElementById('offerTimer');
+    offerTimerInterval=setInterval(function(){
+        var rem=Math.max(0,endTime-Date.now());
+        if(rem<=0){clearInterval(offerTimerInterval);document.getElementById('specialOffer').style.display='none';document.getElementById('normalOffer').style.display='block';return;}
+        var h=Math.floor(rem/3600000),m=Math.floor((rem%3600000)/60000),s=Math.floor((rem%60000)/1000);
+        if(td)td.textContent='⏰ Kalan süre: '+String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+    },1000);
 }
 
-function restorePanels() {
-    ['XAUUSD','BTCUSDT'].forEach(function(pair) {
-        try { var saved = JSON.parse(localStorage.getItem('ba_panel_'+pair)); if (saved) applyPanel(pair, saved.action, saved.time); } catch (e) {}
-    });
+function buySpecial(){
+    window.open('https://www.shopier.com/balinaalarm/48434245','_blank');
+    setTimeout(function(){
+        fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:S.user.email,plan:'special',months:0.5})})
+        .then(function(r){return r.json();})
+        .then(function(data){if(data.success){S.subscribed=true;save();goDash();}});
+    },3000);
 }
 
-function processSignal(symbol, type) {
-    if (!S.active) return;
-    if (!S.isAdmin && !S.subscribed && (Date.now() - S.trialStart) >= S.trialDur) return;
-    var now = new Date();
-    var isXAU = symbol.toUpperCase().includes('XAU') || symbol.toUpperCase().includes('ALTIN');
-    var pair = isXAU ? 'XAUUSD' : 'BTCUSDT';
-    applyPanel(pair, type, now.toISOString());
-    showPopup(type==='buy'||type==='long' ? 'al' : 'as', '🐋 '+pair+' '+(type==='buy'||type==='long' ? 'LONG' : 'SHORT'), 'Balinalar '+pair+' '+(type==='buy'||type==='long' ? 'long' : 'short')+' pozisyon acti!', now);
-    addLastSignal({ symbol: pair, action: type, time: now.toISOString() });
-    try { localStorage.setItem('ba_panel_'+pair, JSON.stringify({ action: type, time: now.toISOString() })); } catch (e) {}
-    if (type==='buy'||type==='long') { playAlert(); flashScreen('al'); browserNotif('🐋 '+pair+' LONG!', 'Balinalar '+pair+' long pozisyon acti!'); }
-    else { playAlert(); flashScreen('as'); browserNotif('🐋 '+pair+' SHORT!', 'Balinalar '+pair+' short pozisyon acti!'); }
-    S.signalCount++; document.getElementById('statSignals').textContent = S.signalCount;
+function buyPlan(months,price){
+    window.open('https://www.shopier.com/balinaalarm/48434245','_blank');
+    setTimeout(function(){
+        fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:S.user.email,plan:'normal',months:months})})
+        .then(function(r){return r.json();})
+        .then(function(data){if(data.success){S.subscribed=true;save();goDash();}});
+    },3000);
 }
 
-var lastSignals = [];
-function addLastSignal(s) {
-    for (var i = lastSignals.length - 1; i >= 0; i--) {
-        if (lastSignals[i].symbol === s.symbol) {
-            lastSignals.splice(i, 1);
-        }
-    }
-    lastSignals.unshift(s);
-    if (lastSignals.length > 5) lastSignals = lastSignals.slice(0, 5);
-    renderLastSignals();
-    try { localStorage.setItem('ba_notifs', JSON.stringify(lastSignals)); } catch (e) {}
+// ===== SES =====
+var _baBuf=null,_baCtx=null;
+function loadMp3(){if(_baBuf)return;try{_baCtx=new(window.AudioContext||window.webkitAudioContext)();var r=new XMLHttpRequest();r.open('GET','/u_jlnmxtfupk-notice-313085.mp3',true);r.responseType='arraybuffer';r.onload=function(){_baCtx.decodeAudioData(r.response,function(b){_baBuf=b;});};r.send();}catch(e){}}
+function playAlert(){if(!S.soundOn)return;if(_baBuf&&_baCtx){try{if(_baCtx.state==='suspended')_baCtx.resume();var src=_baCtx.createBufferSource();src.buffer=_baBuf;var g=_baCtx.createGain();g.gain.value=1.0;src.connect(g);g.connect(_baCtx.destination);src.start(0);}catch(e){}}}
+function testAlert(){playAlert();}
+
+// ===== FLASH =====
+var originalTitle=document.title,titleBlink=null;
+function flashScreen(type){var nav=document.querySelector('.nav'),bar=document.getElementById('flashBar');document.body.classList.remove('flash-border-green','flash-border-red');void document.body.offsetWidth;document.body.classList.add(type==='al'?'flash-border-green':'flash-border-red');if(nav){nav.classList.remove('flash-green','flash-red');void nav.offsetWidth;nav.classList.add(type==='al'?'flash-green':'flash-red');}if(bar){bar.className='flash-bar';void bar.offsetWidth;bar.className='flash-bar '+(type==='al'?'al':'as');}if(titleBlink)clearInterval(titleBlink);var msg=type==='al'?'🟢🟢🟢 LONG SİNYALI!':'🔴🔴🔴 SHORT SİNYALI!';var isOn=true;titleBlink=setInterval(function(){document.title=isOn?msg:originalTitle;isOn=!isOn;},800);setTimeout(function(){clearInterval(titleBlink);titleBlink=null;document.title=originalTitle;document.body.classList.remove('flash-border-green','flash-border-red');if(nav)nav.classList.remove('flash-green','flash-red');if(bar)bar.className='flash-bar';},15000);}
+
+// ===== PANEL =====
+function applyPanel(pair,action,timeStr){var isXAU=pair==='XAUUSD';var el=document.getElementById(isXAU?'statusXAU':'statusBTC');var sig=document.getElementById(isXAU?'signalXAU':'signalBTC');var desc=document.getElementById(isXAU?'descXAU':'descBTC');var badge=document.getElementById(isXAU?'badgeXAU':'badgeBTC');var tId=isXAU?'timeXAU':'timeBTC';if(action==='buy'||action==='long'){el.className='panel-status long';sig.textContent='Balinalar LONG Giriyor';desc.textContent='🐋 '+pair+' alım sinyali tespit edildi!';badge.textContent='LONG';badge.className='panel-badge badge-live';badge.style.background='var(--green-bg)';badge.style.color='var(--green)';}else{el.className='panel-status short';sig.textContent='Balinalar SHORT Açıyor';desc.textContent='🐋 '+pair+' satış sinyali tespit edildi!';badge.textContent='SHORT';badge.className='panel-badge badge-live';badge.style.background='var(--red-bg)';badge.style.color='var(--red)';}document.getElementById(tId).textContent='Son güncelleme: '+timeAgo(timeStr);}
+
+function restorePanels(){['XAUUSD','BTCUSDT'].forEach(function(pair){try{var saved=JSON.parse(localStorage.getItem('ba_panel_'+pair));if(saved)applyPanel(pair,saved.action,saved.time);}catch(e){}});}
+
+// ===== SİNYAL İŞLEME =====
+function processSignal(symbol,type){
+    if(!S.active)return;if(!S.isAdmin&&!S.subscribed&&(Date.now()-S.trialStart)>=S.trialDur)return;
+    var now=new Date();var isXAU=symbol.toUpperCase().includes('XAU')||symbol.toUpperCase().includes('ALTIN');var pair=isXAU?'XAUUSD':'BTCUSDT';var isBuy=(type==='buy'||type==='long');
+    addLastSignal({symbol:pair,action:type,time:now.toISOString()});
+    applyPanel(pair,type,now.toISOString());
+    try{localStorage.setItem('ba_panel_'+pair,JSON.stringify({action:type,time:now.toISOString()}));}catch(e){}
+    var label=isBuy?'LONG':'SHORT';
+    showPopup(isBuy?'al':'as','🐋 '+pair+' '+label,'Balinalar '+pair+' '+(isBuy?'long':'short')+' pozisyon açtı!',now);
+    playAlert();flashScreen(isBuy?'al':'as');browserNotif('🐋 '+pair+' '+label+'!','Balinalar '+pair+' '+(isBuy?'long':'short')+' pozisyon açtı!');
+    S.signalCount++;document.getElementById('statSignals').textContent=S.signalCount;
 }
 
-var popT;
-function showPopup(cls, title, body, time) {
-    var p = document.getElementById('alertPopup');
-    p.className = 'alert-popup ' + cls;
-    document.getElementById('apTitle').textContent = title;
-    document.getElementById('apBody').textContent = body;
-    document.getElementById('apTime').textContent = timeAgo(time.toISOString());
-    p.classList.add('show'); clearTimeout(popT);
-    popT = setTimeout(function() { p.classList.remove('show'); }, 8000);
-}
-function closePopup() { document.getElementById('alertPopup').classList.remove('show'); clearTimeout(popT); }
+// ===== BİLDİRİMLER =====
+var lastSignals=[];
+function addLastSignal(s){for(var i=lastSignals.length-1;i>=0;i--){if(lastSignals[i].symbol===s.symbol){lastSignals.splice(i,1);}}lastSignals.unshift(s);if(lastSignals.length>5)lastSignals=lastSignals.slice(0,5);renderLastSignals();try{localStorage.setItem('ba_notifs',JSON.stringify(lastSignals));}catch(e){}}
 
-function browserNotif(title, body) { if (!S.notifOn || !('Notification' in window) || Notification.permission !== 'granted') return; try { new Notification(title, { body: body, vibrate: [200,100,200] }); } catch (e) {} }
-function toggleSound() { S.soundOn = document.getElementById('soundToggle').checked; }
-function toggleNotif() { S.notifOn = document.getElementById('notifToggle').checked; if (S.notifOn && 'Notification' in window) Notification.requestPermission(); }
-function openModal(id) { document.getElementById(id).classList.add('active'); }
-function closeModal(e, id) { if (!e || e.target === document.getElementById(id)) document.getElementById(id).classList.remove('active'); }
-function doPayment() { window.open('https://www.shopier.com/balinaalarm/48434245', '_blank'); closeModal(null, 'payModal'); }
-function copyWH(id) { var url = document.getElementById(id).textContent; navigator.clipboard.writeText(url).then(function() { var btn = document.getElementById(id).nextElementSibling; btn.textContent = 'Kopyalandi!'; btn.classList.add('copied'); setTimeout(function() { btn.textContent = 'Kopyala'; btn.classList.remove('copied'); }, 2000); }); }
+function renderLastSignals(){var list=document.getElementById('notifList');var count=document.getElementById('notifCount');if(!lastSignals.length){list.innerHTML='<div class="no-notif">Henüz bildirim yok</div>';count.textContent='0';return;}var html='';for(var i=0;i<lastSignals.length;i++){var s=lastSignals[i];var isBuy=(s.action==='buy'||s.action==='long');var cls=isBuy?'al':'as';var label=isBuy?'LONG':'SHORT';html+='<div class="notif-item '+cls+'"><div><div class="notif-title">'+s.symbol+' '+label+'</div><div class="notif-time">'+timeAgo(s.time)+'</div></div></div>';}list.innerHTML=html;count.textContent=lastSignals.length;}
 
-setInterval(function() {
-    ['XAUUSD','BTCUSDT'].forEach(function(pair) {
-        try { var saved = JSON.parse(localStorage.getItem('ba_panel_'+pair)); if (saved) { var el = document.getElementById(pair==='XAUUSD' ? 'timeXAU' : 'timeBTC'); if (el) el.textContent = 'Son guncelleme: ' + timeAgo(saved.time); } } catch (e) {}
-    });
-    renderLastSignals();
-}, 30000);
+var popT;function showPopup(cls,title,body,time){var p=document.getElementById('alertPopup');p.className='alert-popup '+cls;document.getElementById('apTitle').textContent=title;document.getElementById('apBody').textContent=body;document.getElementById('apTime').textContent=timeAgo(time.toISOString());p.classList.add('show');clearTimeout(popT);popT=setTimeout(function(){p.classList.remove('show');},8000);}
+function closePopup(){document.getElementById('alertPopup').classList.remove('show');clearTimeout(popT);}
 
-function restoreNotifs() {
-    try { var saved = JSON.parse(localStorage.getItem('ba_notifs')); if (saved && saved.length) lastSignals = saved; } catch (e) {}
-    ['XAUUSD','BTCUSDT'].forEach(function(pair) {
-        try {
-            var p = JSON.parse(localStorage.getItem('ba_panel_'+pair));
-            if (p) { var exists = lastSignals.find(function(s) { return s.symbol === pair; });
-                if (!exists) { lastSignals.unshift({ symbol: pair, action: p.action, time: p.time }); }
-                else if (new Date(p.time) > new Date(exists.time)) { lastSignals = lastSignals.filter(function(s) { return s.symbol !== pair; }); lastSignals.unshift({ symbol: pair, action: p.action, time: p.time }); }
-            }
-        } catch (e) {}
-    });
-    if (lastSignals.length > 5) lastSignals = lastSignals.slice(0,5);
-    renderLastSignals();
-    try { localStorage.setItem('ba_notifs', JSON.stringify(lastSignals)); } catch (e) {}
+function browserNotif(title,body){if(!S.notifOn||!('Notification' in window)||Notification.permission!=='granted')return;try{new Notification(title,{body:body,vibrate:[200,100,200]});}catch(e){}}
+function toggleSound(){S.soundOn=document.getElementById('soundToggle').checked;}
+function toggleNotif(){S.notifOn=document.getElementById('notifToggle').checked;if(S.notifOn&&'Notification' in window)Notification.requestPermission();}
+function openModal(id){document.getElementById(id).classList.add('active');}
+function closeModal(e,id){if(!e||e.target===document.getElementById(id))document.getElementById(id).classList.remove('active');}
+function doPayment(){window.open('https://www.shopier.com/balinaalarm/48434245','_blank');closeModal(null,'payModal');}
+function copyWH(id){var url=document.getElementById(id).textContent;navigator.clipboard.writeText(url).then(function(){var btn=document.getElementById(id).nextElementSibling;btn.textContent='Kopyalandı!';btn.classList.add('copied');setTimeout(function(){btn.textContent='Kopyala';btn.classList.remove('copied');},2000);});}
+
+// ===== YORUMLAR =====
+function loadReviews(){
+    fetch('/api/reviews').then(function(r){return r.json();}).then(function(data){
+        renderReviews(data.reviews);document.getElementById('reviewTotal').textContent=data.total.toLocaleString('tr-TR');
+    }).catch(function(){});
 }
 
-function connectToServer() {
-    var evtSource = new EventSource("/events");
-    evtSource.onopen = function() { console.log("Sunucuya baglanildi"); };
-    evtSource.onmessage = function(event) {
-        var data = JSON.parse(event.data);
-        if (data.type === "init" && data.signals && data.signals.length) {
-            var allSignals = data.signals.slice(0, 20);
-            allSignals.forEach(function(s) { addLastSignal(s); });
-            var latestXAU = null, latestBTC = null;
-            for (var i = 0; i < allSignals.length; i++) { var s = allSignals[i]; var sym = s.symbol.toUpperCase(); if (sym.includes('XAU') && !latestXAU) latestXAU = s; if (sym.includes('BTC') && !latestBTC) latestBTC = s; }
-            if (latestXAU) { applyPanel('XAUUSD', latestXAU.action, latestXAU.time); try { localStorage.setItem('ba_panel_XAUUSD', JSON.stringify({ action: latestXAU.action, time: latestXAU.time })); } catch (e) {} }
-            if (latestBTC) { applyPanel('BTCUSDT', latestBTC.action, latestBTC.time); try { localStorage.setItem('ba_panel_BTCUSDT', JSON.stringify({ action: latestBTC.action, time: latestBTC.time })); } catch (e) {} }
-        }
-        if (data.type === "new_signal") { processSignal(data.signal.symbol, data.signal.action); }
+function renderReviews(revs){
+    var list=document.getElementById('reviewsList');if(!revs||!revs.length)return;
+    var html='';
+    for(var i=0;i<revs.length;i++){var r=revs[i];var stars='';for(var j=0;j<5;j++){stars+=j<r.stars?'★':'☆';}var delBtn=S.isAdmin?'<button class="review-delete" onclick="deleteReview(\''+r.id+'\')">🗑️ Sil</button>':'';
+    html+='<div class="review-item"><div class="review-top"><span class="review-name">'+r.name+'</span><div><span class="review-stars">'+stars+'</span>'+delBtn+'</div></div><div class="review-text">"'+r.text+'"</div><div class="review-time">'+timeAgo(r.time)+'</div></div>';}
+    list.innerHTML=html;
+}
+
+function setStars(n){selectedStars=n;var stars=document.querySelectorAll('#starInput span');stars.forEach(function(s,i){s.className=i<n?'active':'';});}
+
+function toggleReviewForm(){var f=document.getElementById('reviewForm');var t=document.getElementById('reviewFormToggle');if(f.style.display==='none'){f.style.display='block';t.textContent='Formu kapat';}else{f.style.display='none';t.textContent='Yorum yazmak için tıklayın';}}
+
+function submitReview(){
+    var name=document.getElementById('reviewName').value.trim();var text=document.getElementById('reviewText').value.trim();
+    if(!name||!text){alert('Lütfen tüm alanları doldurun.');return;}
+    fetch('/api/reviews',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:name,text:text,stars:selectedStars})})
+    .then(function(r){return r.json();}).then(function(data){
+        if(data.success){document.getElementById('reviewName').value='';document.getElementById('reviewText').value='';loadReviews();}else{alert(data.message);}
+    }).catch(function(){alert('Bağlantı hatası.');});
+}
+
+function deleteReview(id){if(!confirm('Bu yorumu silmek istediğinize emin misiniz?'))return;fetch('/api/reviews/'+id,{method:'DELETE'}).then(function(r){return r.json();}).then(function(){loadReviews();}).catch(function(){});}
+
+// ===== SSS =====
+var faqs=[
+    {q:'Balina Alarm nedir?',a:'Balina Alarm, XAUUSD ve BTCUSDT piyasalarındaki büyük yatırımcı (balina) hareketlerini takip eden bir sinyal platformudur. Teyit amaçlıdır, kendi stratejiniz ile birlikte kullanmanız önerilir.'},
+    {q:'Sinyaller ne kadar doğru?',a:'Sinyallerimiz %50 doğruluk oranına sahiptir. Bu platform teyit amaçlıdır ve yatırım tavsiyesi niteliği taşımaz. Stop-loss kullanmanızı ve kendi analizlerinizle birlikte değerlendirmenizi öneririz.'},
+    {q:'Ücretsiz deneme nasıl çalışır?',a:'Kayıt olduktan sonra 8 saat boyunca tüm özellikleri ücretsiz kullanabilirsiniz. Deneme süresi sonunda abonelik satın almanız gerekir.'},
+    {q:'İlk 100 kişi kampanyası nedir?',a:'İlk 100 kullanıcıya özel 12 saat full erişim sadece 99 TL! Kampanya bitince normal fiyat olan 999 TL/ay üzerinden devam edersiniz.'},
+    {q:'İade var mı?',a:'Dijital hizmet olduğu için iade yapılmamaktadır. Deneme süresini kullanarak sistemi test edebilirsiniz.'},
+    {q:'Nasıl ödeme yapabilirim?',a:'Shopier altyapısı ile kredi kartı, banka kartı ve havale ile ödeme yapabilirsiniz.'},
+    {q:'Telefonuma bildirim gelir mi?',a:'Evet, tarayıcı bildirimleri aktif edildiğinde sinyal geldiğinde anında bildirim alırsınız.'},
+    {q:'Hangi piyasaları takip ediyorsunuz?',a:'Şu an XAUUSD (Altın) ve BTCUSDT (Bitcoin) piyasalarını takip ediyoruz.'}
+];
+
+function loadFaqs(){var list=document.getElementById('faqList');var html='';faqs.forEach(function(f,i){html+='<div class="faq-item" onclick="toggleFaq(this)"><div class="faq-question"><span>'+f.q+'</span><span class="faq-arrow">▼</span></div><div class="faq-answer">'+f.a+'</div></div>';});list.innerHTML=html;}
+function toggleFaq(el){el.classList.toggle('open');}
+
+// ===== CHAT =====
+function toggleChat(){var p=document.getElementById('chatPanel');p.classList.toggle('open');}
+
+function loadChat(){
+    if(!S.user)return;
+    fetch('/api/chat/'+S.user.email).then(function(r){return r.json();}).then(function(data){
+        renderChat(data.messages);
+    }).catch(function(){});
+}
+
+function renderChat(msgs){
+    var c=document.getElementById('chatMessages');if(!msgs||!msgs.length)return;
+    var html='<div class="chat-msg admin"><div class="chat-bubble">Merhaba! 👋 Balina Alarm destek ekibine hoş geldiniz. Size nasıl yardımcı olabiliriz?</div></div>';
+    msgs.forEach(function(m){var cls=m.from==='admin'?'admin':'user';var name=m.from==='admin'?'Destek':m.name;html+='<div class="chat-msg '+cls+'"><div class="chat-bubble">'+m.text+'</div><div class="chat-msg-time">'+timeAgo(m.time)+'</div></div>';});
+    c.innerHTML=html;c.scrollTop=c.scrollHeight;
+}
+
+function sendChat(){
+    var inp=document.getElementById('chatInput');var text=inp.value.trim();if(!text)return;if(!S.user)return;
+    fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:S.user.email,name:S.user.name,text:text})})
+    .then(function(r){return r.json();}).then(function(data){if(data.success){inp.value='';loadChat();}});
+}
+
+// ===== ADMIN CHAT =====
+function loadAdminChat(){
+    fetch('/api/chat/admin/all').then(function(r){return r.json();}).then(function(data){
+        var list=document.getElementById('adminChatList');if(!data.conversations||!data.conversations.length){list.innerHTML='<div style="font-size:12px;color:var(--text3);text-align:center;padding:20px;">Henüz destek mesajı yok</div>';return;}
+        var html='';
+        data.conversations.forEach(function(c){
+            var badge=c.unread>0?'<span style="background:var(--red);color:#fff;font-size:9px;padding:2px 6px;border-radius:8px;margin-left:4px;">'+c.unread+'</span>':'';
+            html+='<div style="padding:10px;background:var(--bg);border:1px solid var(--bg4);border-radius:var(--rs);margin-bottom:6px;cursor:pointer;" onclick="openAdminReply(\''+c.email+'\',\''+c.name+'\')"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:12px;font-weight:700;color:#fff;">'+c.name+badge+'</span><span style="font-size:10px;color:var(--text3);">'+timeAgo(c.lastTime)+'</span></div><div style="font-size:11px;color:var(--text2);margin-top:4px;">'+c.lastMessage+'</div></div>';
+        });
+        list.innerHTML=html;
+    }).catch(function(){});
+}
+
+function openAdminReply(email,name){currentReplyEmail=email;document.getElementById('replyTo').textContent=name||email;document.getElementById('adminChatReply').style.display='block';document.getElementById('replyText').focus();}
+
+function sendAdminReply(){
+    var text=document.getElementById('replyText').value.trim();if(!text||!currentReplyEmail)return;
+    fetch('/api/chat/reply',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:currentReplyEmail,text:text})})
+    .then(function(r){return r.json();}).then(function(data){if(data.success){document.getElementById('replyText').value='';document.getElementById('adminChatReply').style.display='none';loadAdminChat();}});
+}
+
+setInterval(function(){if(S.isAdmin)loadAdminChat();},10000);
+
+// ===== ZAMAN GÜNCELLEME =====
+setInterval(function(){['XAUUSD','BTCUSDT'].forEach(function(pair){try{var saved=JSON.parse(localStorage.getItem('ba_panel_'+pair));if(saved){var el=document.getElementById(pair==='XAUUSD'?'timeXAU':'timeBTC');if(el)el.textContent='Son güncelleme: '+timeAgo(saved.time);}}catch(e){}});renderLastSignals();},30000);
+
+function restoreNotifs(){try{var saved=JSON.parse(localStorage.getItem('ba_notifs'));if(saved&&saved.length)lastSignals=saved;}catch(e){}['XAUUSD','BTCUSDT'].forEach(function(pair){try{var p=JSON.parse(localStorage.getItem('ba_panel_'+pair));if(p){var exists=lastSignals.find(function(s){return s.symbol===pair;});if(!exists){lastSignals.unshift({symbol:pair,action:p.action,time:p.time});}else if(new Date(p.time)>new Date(exists.time)){lastSignals=lastSignals.filter(function(s){return s.symbol!==pair;});lastSignals.unshift({symbol:pair,action:p.action,time:p.time});}}}catch(e){}});if(lastSignals.length>5)lastSignals=lastSignals.slice(0,5);renderLastSignals();try{localStorage.setItem('ba_notifs',JSON.stringify(lastSignals));}catch(e){}}
+
+// ===== SSE =====
+function connectToServer(){
+    var evtSource=new EventSource("/events");
+    evtSource.onopen=function(){console.log("✅ Sunucuya bağlanıldı");};
+    evtSource.onmessage=function(event){
+        try{var data=JSON.parse(event.data);
+            if(data.type==="init"&&data.signals&&data.signals.length){var allSignals=data.signals.slice(0,10);for(var i=0;i<allSignals.length;i++){addLastSignal(allSignals[i]);}var latestXAU=null,latestBTC=null;for(var i=0;i<allSignals.length;i++){var sym=allSignals[i].symbol.toUpperCase();if(sym.includes('XAU')&&!latestXAU)latestXAU=allSignals[i];if(sym.includes('BTC')&&!latestBTC)latestBTC=allSignals[i];}if(latestXAU){applyPanel('XAUUSD',latestXAU.action,latestXAU.time);try{localStorage.setItem('ba_panel_XAUUSD',JSON.stringify({action:latestXAU.action,time:latestXAU.time}));}catch(e){}}if(latestBTC){applyPanel('BTCUSDT',latestBTC.action,latestBTC.time);try{localStorage.setItem('ba_panel_BTCUSDT',JSON.stringify({action:latestBTC.action,time:latestBTC.time}));}catch(e){}}}
+            if(data.type==="new_signal"&&data.signal){console.log("🔔 Yeni sinyal:",data.signal.symbol,data.signal.action);processSignal(data.signal.symbol,data.signal.action);}
+        }catch(e){console.log("SSE parse hatası:",e);}
     };
-    evtSource.onerror = function() { console.log("Baglanti kesildi"); evtSource.close(); setTimeout(connectToServer, 5000); };
+    evtSource.onerror=function(){console.log("❌ Bağlantı kesildi");evtSource.close();setTimeout(connectToServer,5000);};
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    var saved = localStorage.getItem('ba_session');
-    if (saved) {
-        try {
-            var d = JSON.parse(saved);
-            S.user = d.user; S.subscribed = d.sub; S.trialStart = d.trialStart;
-            S.isAdmin = (d.user && d.user.email === ADMIN_EMAIL);
-            if (S.isAdmin) {
-                adminAutoLogin().then(function(ok) { if (ok) goDash(); else { S.subscribed = true; goDash(); } });
-            } else {
-                checkExistingTrial().then(function(ok) { if (ok) goDash(); else { localStorage.removeItem('ba_session'); } });
-            }
-        } catch (e) { localStorage.removeItem('ba_session'); }
+// ===== KAMPANYA DURUMU =====
+function loadCampaignStatus(){fetch('/api/campaign-status').then(function(r){return r.json();}).then(function(data){var el=document.getElementById('campaignLeft');if(el)el.textContent=data.left;}).catch(function(){});}
+
+// ===== SAYFA YÜKLENDİĞİNDE =====
+document.addEventListener('DOMContentLoaded',function(){
+    var saved=localStorage.getItem('ba_session');
+    if(saved){
+        try{var d=JSON.parse(saved);S.user=d.user;S.subscribed=d.sub;S.trialStart=d.trialStart;S.isAdmin=(d.user&&d.user.email===ADMIN_EMAIL);
+            if(S.isAdmin){adminAutoLogin().then(function(ok){if(ok)goDash();else{S.subscribed=true;goDash();}});}
+            else{checkExistingTrial().then(function(ok){if(ok)goDash();else{localStorage.removeItem('ba_session');}});}
+        }catch(e){localStorage.removeItem('ba_session');}
     }
-    updateWhales(); restoreNotifs(); connectToServer();
+    updateWhales();restoreNotifs();connectToServer();loadFaqs();loadCampaignStatus();
 });
 </script>
 </body>
