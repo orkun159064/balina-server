@@ -411,17 +411,35 @@ function checkExistingTrial(){
 }
 
 // ===== GO DASHBOARD =====
-function goDash(){
-    S.active=true;
-    document.getElementById('landingPage').style.display='none';
-    document.getElementById('authScreen').classList.remove('active');
-    document.getElementById('dashboard').classList.add('active');
-    document.getElementById('chatToggle').style.display='flex';
-    if(localStorage.getItem('ba_legal')==='accepted'){var lm=document.getElementById('legalModal');if(lm)lm.style.display='none';}
-    updateUserUI();updateWhales();startTimer();restorePanels();loadReviews();loadChat();
-    if(S.isAdmin){document.getElementById('adminSection').style.display='block';document.getElementById('blockedScreen').classList.remove('active');loadAdminChat();}
-    else{document.getElementById('adminSection').style.display='none';checkBlocked();}
-    if('Notification' in window&&Notification.permission==='default')Notification.requestPermission();
+function updateUserUI(){
+    if(!S.user)return;
+    var navName=document.getElementById('navName');if(navName)navName.textContent=S.user.name;
+    var navEmail=document.getElementById('navEmail');if(navEmail)navEmail.textContent=S.user.email;
+    var navAvatar=document.getElementById('navAvatar');if(navAvatar)navAvatar.textContent=S.user.name[0].toUpperCase();
+    var mName=document.getElementById('mName');if(mName)mName.textContent=S.user.name;
+    var mEmail=document.getElementById('mEmail');if(mEmail)mEmail.textContent=S.user.email;
+    var mAvatar=document.getElementById('mAvatar');if(mAvatar)mAvatar.textContent=S.user.name[0].toUpperCase();
+    var mAdmin=document.getElementById('mAdminBadge');if(mAdmin)mAdmin.style.display=S.isAdmin?'block':'none';
+    var subBadge=document.getElementById('subBadge');
+    var mSub=document.getElementById('mSub');
+    var subLabel=document.getElementById('subLabel');
+    var subBtn=document.getElementById('subBtn');
+    var upgradeBtn=document.getElementById('upgradeBtn');
+    var reviewForm=document.getElementById('reviewForm');
+    if(S.subscribed||S.isAdmin){
+        if(subBadge){subBadge.textContent=S.isAdmin?'Admin':'Aktif';subBadge.className='sub-badge active';}
+        if(mSub){mSub.textContent=S.isAdmin?'Admin Hesap':'Aktif Abonelik';mSub.style.color='var(--green)';}
+        if(subLabel)subLabel.textContent=S.isAdmin?'Admin erişimi':'Abonelik süreniz';
+        if(subBtn)subBtn.style.display='none';
+        if(upgradeBtn)upgradeBtn.style.display='none';
+        if(reviewForm)reviewForm.style.display='block';
+    }else{
+        if(subBadge){subBadge.textContent='Deneme';subBadge.className='sub-badge trial';}
+        if(mSub){mSub.textContent='Ücretsiz Deneme';mSub.style.color='var(--yellow)';}
+        if(subLabel)subLabel.textContent='Ücretsiz deneme süresi';
+        if(subBtn)subBtn.style.display='block';
+        if(upgradeBtn)upgradeBtn.style.display='block';
+    }
 }
 
 function updateUserUI(){
