@@ -28,13 +28,7 @@
         .flash-bar.al{display:block;background:linear-gradient(90deg,#00ff88,#10b981,#00ff88);animation:pulse .3s ease 10}
         .flash-bar.as{display:block;background:linear-gradient(90deg,#ff4444,#ef4444,#ff4444);animation:pulse .3s ease 10}
         /* LOADING */
-        .loading-screen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;transition:opacity .5s}
-        .loading-screen.hide{opacity:0;pointer-events:none}
-        .loading-whale{font-size:64px;animation:swim 2s ease infinite}
-        .loading-bar{width:200px;height:4px;background:var(--bg4);border-radius:2px;overflow:hidden}
-        .loading-bar-inner{width:0%;height:100%;background:var(--blue);border-radius:2px;animation:loadBar 2s ease forwards}
-        @keyframes loadBar{0%{width:0%}100%{width:100%}}
-        .loading-text{color:var(--text3);font-size:13px}
+    
         /* LANDING */
         .landing{min-height:100vh;background:linear-gradient(135deg,#0a0e17,#0d1b2a,#111827);position:relative;overflow:hidden}
         .landing::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 50% 50%,rgba(59,130,246,.03) 0%,transparent 50%);animation:rotate 30s linear infinite;pointer-events:none}
@@ -281,13 +275,8 @@
 <body>
 
 <!-- LOADING -->
-<div class="loading-screen" id="loadingScreen">
-    <div class="loading-whale">🐋</div>
-    <div class="loading-bar"><div class="loading-bar-inner"></div></div>
-    <div class="loading-text">Balina Alarm yükleniyor...</div>
-</div>
 
-<div class="flash-bar" id="flashBar"></div>
+ <div class="flash-bar" id="flashBar"></div>
 <script>
 var ADMIN_EMAIL = "orkun159064@outlook.com";
 var S = { user: null, subscribed: false, trialStart: null, trialDur: 8*60*60*1000, soundOn: true, notifOn: true, signalCount: 0, whaleBase: 0, active: false, isAdmin: false };
@@ -295,12 +284,6 @@ var selectedStars = 5;
 var currentReplyEmail = '';
 
 // ===== LOADING =====
-window.addEventListener('load', function() {
-    setTimeout(function() {
-        var ls = document.getElementById('loadingScreen');
-        if (ls) ls.classList.add('hide');
-    }, 2000);
-});
 
 // ===== BALINA & ONLINE =====
 function getDailyWhales() {
