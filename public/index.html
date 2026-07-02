@@ -708,7 +708,7 @@ function sendChat() {
     fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: S.user.email, name: S.user.name, text: text }) })
     .then(function(r) { return r.json(); }).then(function(data) { if (data.success) { if (inp) inp.value = ''; loadChat(); } });
 }
-setInterval(function() { if (S.user && !S.isAdmin) loadChat(); }, 5000);
+
 function loadAdminChat() {
     fetch('/api/chat/admin/all').then(function(r) { return r.json(); }).then(function(data) {
         var list = document.getElementById('adminChatList'); if (!list) return;
