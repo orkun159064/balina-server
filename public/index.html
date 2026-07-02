@@ -546,14 +546,6 @@ function buyPlan(months, price) {
     }, 3000);
 }
 
-function buyPlan(months, price) {
-    window.open('https://www.shopier.com/balinaalarm/48434245', '_blank');
-    setTimeout(function() {
-        fetch('/api/subscribe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: S.user.email, plan: 'normal', months: months }) })
-        .then(function(r) { return r.json(); }).then(function(data) { if (data.success) { S.subscribed = true; save(); goDash(); } });
-    }, 3000);
-}
-
 var _baBuf = null, _baCtx = null;
 function loadMp3() { if (_baBuf) return; try { _baCtx = new (window.AudioContext || window.webkitAudioContext)(); var r = new XMLHttpRequest(); r.open('GET', '/u_jlnmxtfupk-notice-313085.mp3', true); r.responseType = 'arraybuffer'; r.onload = function() { _baCtx.decodeAudioData(r.response, function(b) { _baBuf = b; }); }; r.send(); } catch (e) {} }
 function playAlert() { if (!S.soundOn) return; if (_baBuf && _baCtx) { try { if (_baCtx.state === 'suspended') _baCtx.resume(); var src = _baCtx.createBufferSource(); src.buffer = _baBuf; var g = _baCtx.createGain(); g.gain.value = 1.0; src.connect(g); g.connect(_baCtx.destination); src.start(0); } catch (e) {} } }
