@@ -268,7 +268,7 @@
     <div class="landing-features"><div class="landing-feature"><span>📊</span><p>XAUUSD & BTCUSDT takibi</p></div><div class="landing-feature"><span>🔔</span><p>Anlık sesli & görsel alarm</p></div><div class="landing-feature"><span>🐋</span><p>9000+ balina takip ağı</p></div><div class="landing-feature"><span>📱</span><p>Masaüstü bildirim</p></div><div class="landing-feature"><span>⚡</span><p>7/24 aktif sistem</p></div><div class="landing-feature"><span>🛡️</span><p>Shopier ile güvenli ödeme</p></div></div>
     <div class="landing-cta">
         <div class="landing-free" onclick="showAuth()"><div class="landing-free-text">⏰ İlk 8 Saat ÜCRETSİZ Dene!</div></div>
-        <div class="landing-shopier"><span>🛡️</span> Shopier ile Güvenli Ödeme</div>
+        <a href="https://www.shopier.com/balinaalarm/48434245" target="_blank" style="text-decoration:none;"><div class="landing-shopier"><span>🛡️</span> Shopier ile Güvenli Ödeme</div></a>
         <br><br>
         <button class="landing-btn" onclick="showAuth()">🚀 Hemen Başla</button>
         <div class="landing-price">Sadece <strong>999 TL</strong> / ay</div>
@@ -537,10 +537,11 @@ function startOfferTimer(remaining) {
     }, 1000);
 }
 
-function buySpecial() {
-    window.open('https://www.shopier.com/balinaalarm/48434245', '_blank');
+function buyPlan(months, price) {
+    var links = {1: 'https://www.shopier.com/balinaalarm/48434245', 2: 'https://www.shopier.com/balinaalarm/48633605', 3: 'https://www.shopier.com/balinaalarm/48633639', 6: 'https://www.shopier.com/balinaalarm/48633704'};
+    window.open(links[months] || links[1], '_blank');
     setTimeout(function() {
-        fetch('/api/subscribe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: S.user.email, plan: 'special', months: 0.5 }) })
+        fetch('/api/subscribe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: S.user.email, plan: 'normal', months: months }) })
         .then(function(r) { return r.json(); }).then(function(data) { if (data.success) { S.subscribed = true; save(); goDash(); } });
     }, 3000);
 }
