@@ -779,20 +779,49 @@ function connectToServer() {
     evtSource.onerror = function() { console.log("❌ Bağlantı kesildi"); evtSource.close(); setTimeout(connectToServer, 5000); };
 }
 
-function loadCampaignStatus() { fetch('/api/campaign-status').then(function(r) { return r.json(); }).then(function(data) { var el = document.getElementById('campaignLeft'); if (el) el.textContent = data.left; }).catch(function() {}); }
+function loadCampaignStatus() {
+    fetch('/api/campaign-status').then(function(r) {
+        return r.json();
+    }).then(function(data) {
+        var el = document.getElementById('campaignLeft');
+        if (el) el.textContent = data.left;
+    }).catch(function() {});
+}
 
 document.addEventListener('DOMContentLoaded', function() {
     var saved = localStorage.getItem('ba_session');
     if (saved) {
         try {
-            var d = JSON.parse(saved); S.user = d.user; S.subscribed = d.sub; S.trialStart = d.trialStart;
+            var d = JSON.parse(saved);
+            S.user = d.user;
+            S.subscribed = d.sub;
+            S.trialStart = d.trialStart;
             S.isAdmin = (d.user && d.user.email === ADMIN_EMAIL);
-            if (S.isAdmin) { adminAutoLogin().then(function(ok) { if (ok) goDash(); else { S.subscribed = true; goDash(); } }); }
-            else { checkExistingTrial().then(function(ok) { if (ok) goDash(); else { localStorage.removeItem('ba_session'); } }); }
-        } catch (e) { localStorage.removeItem('ba_session'); }
+            if (S.isAdmin) {
+                adminAutoLogin().then(function(ok) {
+                    if (ok) { goDash(); }
+                    else { S.subscribed = true; goDash(); }
+                });
+            } else {
+                checkExistingTrial().then(function(ok) {
+                    if (ok) { goDash(); }
+                    else { localStorage.removeItem('ba_session'); }
+                });
+            }
+        } catch (e) {
+            localStorage.removeItem('ba_session');
+        }
     }
-    updateWhales(); restoreNotifs(); connectToServer(); loadFaqs(); loadCampaignStatus();
-    setInterval(function() { if (S.user && !S.isAdmin) loadChat(); }, 5000);
+    updateWhales();
+    restoreNotifs();
+    connectToServer();
+    loadFaqs();
+    loadCampaignStatus();
+    setInterval(function() {
+        if (S && S.user && S.active && !S.isAdmin) {
+            loadChat();
+        }
+    }, 5000);
 });
 </script>
 </body>
