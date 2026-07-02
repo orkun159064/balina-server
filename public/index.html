@@ -792,6 +792,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (e) { localStorage.removeItem('ba_session'); }
     }
     updateWhales(); restoreNotifs(); connectToServer(); loadFaqs(); loadCampaignStatus();
+    setInterval(function() { if (S.user && !S.isAdmin) loadChat(); }, 5000);
 });
 </script>
 </body>
