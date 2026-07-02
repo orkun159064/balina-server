@@ -122,15 +122,17 @@ app.post('/api/check-trial', (req, res) => {
 
 app.get('/api/trial-status', (req, res) => {
     const ip = getIP(req);
-    const adminUser = users.find(u => u.email === ADMIN_EMAIL);
-    if (adminUser && adminUser.sub) return res.json({ exists: true, expired: false, start: Date.now(), subscribed: true, isAdmin: true });
     const ipTrials = getTrialsByIP(ip);
+
     if (ipTrials.length === 0) return res.json({ exists: false });
+
     const latest = ipTrials[ipTrials.length - 1];
     const user = users.find(u => u.email === latest.email);
-    const subscribed = user && user.sub && user.subEnd > Date.now();
+    const isUserAdmin = latest.email === ADMIN_EMAIL;
+    const subscribed = isUserAdmin || (user && user.sub && user.subEnd > Date.now());
     const expired = !subscribed && (Date.now() - latest.start >= TRIAL_MS);
-    res.json({ exists: true, expired, start: latest.start, subscribed });
+
+    res.json({ exists: true, expired, start: latest.start, subscribed, isAdmin: isUserAdmin });
 });
 
 app.post('/api/reset-password', (req, res) => {
