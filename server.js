@@ -198,9 +198,19 @@ app.post('/api/approve-payment', (req, res) => {
     payment.status = 'approved';
     payment.approvedAt = Date.now();
     const user = users.find(u => u.email.toLowerCase() === payment.email.toLowerCase());
-    if (user) { user.sub = true; user.subEnd = Date.now() + ((payment.months || 1) * 30 * 24 * 60 * 60 * 1000); user.plan = payment.plan; if (payment.plan === 'special') campaignCount++; }
+    if (user) {
+        user.sub = true;
+        // 99 TL kampanya = 12 saat, diğerleri ay bazında
+        if (payment.plan === 'special') {
+            user.subEnd = Date.now() + (12 * 60 * 60 * 1000); // 12 saat
+            campaignCount++;
+        } else {
+            user.subEnd = Date.now() + ((payment.months || 1) * 30 * 24 * 60 * 60 * 1000);
+        }
+        user.plan = payment.plan;
+    }
     saveData();
-    console.log('Ödeme onaylandı:', payment.email);
+    console.log('Ödeme onaylandı:', payment.email, 'Plan:', payment.plan, 'Süre:', payment.plan === 'special' ? '12 saat' : payment.months + ' ay');
     res.json({ success: true });
 });
 
