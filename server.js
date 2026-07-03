@@ -1,16 +1,9 @@
-// ===== GEÇİCİ RESET - BİR KERE ÇALIŞTIR SONRA SİL =====
-if (fs.existsSync(DATA_FILE)) {
-    fs.unlinkSync(DATA_FILE);
-    console.log('data.json silindi!');
-}
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const app = express();
 
-// Render.com Proxy Desteği
 app.set('trust proxy', true);
-
 app.use(express.json());
 app.use(express.static('public'));
 
@@ -22,6 +15,13 @@ let reviews = [];
 let chats = [];
 let reviewCount = 1247;
 let campaignCount = 0;
+
+// ===== GEÇİCİ RESET - BİR KERE ÇALIŞTIR SONRA SİL =====
+if (fs.existsSync(DATA_FILE)) {
+    fs.unlinkSync(DATA_FILE);
+    console.log('data.json silindi!');
+}
+// ===== GEÇİCİ RESET SONU - BU 3 SATIRI SİL =====
 
 function loadData() {
     try {
@@ -65,9 +65,7 @@ const CAMPAIGN_TRIAL_MS = 12 * 60 * 60 * 1000;
 
 function getIP(req) {
     const forwarded = req.headers['x-forwarded-for'];
-    if (forwarded) {
-        return forwarded.split(',')[0].trim();
-    }
+    if (forwarded) return forwarded.split(',')[0].trim();
     return req.ip || req.socket.remoteAddress || 'unknown';
 }
 
@@ -83,10 +81,9 @@ function hasActiveTrialOnIP(ip) {
     return getTrialsByIP(ip).some(t => (Date.now() - t.start) < TRIAL_MS);
 }
 
-// ===== ADMIN GİRİŞ =====
 app.post('/api/admin-login', (req, res) => {
     const { email } = req.body;
-    if (!isEmailAdmin(email)) return res.json({ success: false, message: 'Yetkisiz erişim.' });
+    if (!isEmailAdmin(email)) return res.json({ success: false });
     let admin = users.find(u => isEmailAdmin(u.email));
     if (!admin) {
         admin = { name: 'Admin', email: ADMIN_EMAIL, phone: '0000000000', ip: 'admin', pass: '', sub: true, subEnd: Date.now() + (365 * 24 * 60 * 60 * 1000), createdAt: Date.now() };
@@ -98,7 +95,6 @@ app.post('/api/admin-login', (req, res) => {
     res.json({ success: true, user: { name: admin.name, email: admin.email, sub: true, subEnd: admin.subEnd } });
 });
 
-// ===== TELEFON KONTROL =====
 app.post('/api/check-phone', (req, res) => {
     const { phone } = req.body;
     if (!phone) return res.json({ available: false, message: 'Telefon numarası gerekli.' });
@@ -106,87 +102,54 @@ app.post('/api/check-phone', (req, res) => {
     res.json({ available: true });
 });
 
-// ===== KAYIT =====
 app.post('/api/register', (req, res) => {
     const { phone, email, name, pass } = req.body;
     const ip = getIP(req);
-    
-    if (users.find(u => u.email.toLowerCase() === email.toLowerCase())) {
-        return res.json({ success: false, message: 'Bu e-posta zaten kayıtlı!' });
-    }
-    if (users.find(u => u.phone === phone)) {
-        return res.json({ success: false, message: 'Bu telefon numarası zaten kayıtlı!' });
-    }
-
+    if (users.find(u => u.email.toLowerCase() === email.toLowerCase())) return res.json({ success: false, message: 'Bu e-posta zaten kayıtlı!' });
+    if (users.find(u => u.phone === phone)) return res.json({ success: false, message: 'Bu telefon numarası zaten kayıtlı!' });
     if (!isEmailAdmin(email)) {
         if (hasActiveTrialOnIP(ip)) return res.json({ success: false, message: 'Bu cihazdan zaten bir deneme hesabı oluşturulmuş.' });
-        const ipTrials = getTrialsByIP(ip);
-        if (ipTrials.length >= MAX_TRIAL_PER_IP) return res.json({ success: false, message: 'Bu cihazdan deneme hakkı daha önce kullanılmış.' });
+        if (getTrialsByIP(ip).length >= MAX_TRIAL_PER_IP) return res.json({ success: false, message: 'Bu cihazdan deneme hakkı daha önce kullanılmış.' });
     }
-
     const user = { name, email, phone, ip, pass: pass || '', sub: isEmailAdmin(email), subEnd: isEmailAdmin(email) ? Date.now() + (365 * 24 * 60 * 60 * 1000) : null, createdAt: Date.now() };
     users.push(user);
     trials[email] = { ip, email, start: Date.now(), createdAt: Date.now() };
     saveData();
-    console.log('Yeni kayıt yapıldı:', email);
+    console.log('Yeni kayıt:', email);
     res.json({ success: true, trialStart: trials[email].start });
 });
 
-// ===== DENEME KONTROLÜ =====
 app.post('/api/check-trial', (req, res) => {
     const { email } = req.body;
     const ip = getIP(req);
     if (!email) return res.json({ allowed: false });
-
-    if (isEmailAdmin(email)) {
-        return res.json({ allowed: true, start: Date.now(), subscribed: true, isAdmin: true, subEnd: Date.now() + (365 * 24 * 60 * 60 * 1000) });
-    }
-
+    if (isEmailAdmin(email)) return res.json({ allowed: true, start: Date.now(), subscribed: true, isAdmin: true, subEnd: Date.now() + (365 * 24 * 60 * 60 * 1000) });
     const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
-    if (user && user.sub && user.subEnd && user.subEnd > Date.now()) {
-        return res.json({ allowed: true, start: trials[email] ? trials[email].start : Date.now(), subscribed: true, isAdmin: false, subEnd: user.subEnd });
-    }
-
+    if (user && user.sub && user.subEnd && user.subEnd > Date.now()) return res.json({ allowed: true, start: trials[email] ? trials[email].start : Date.now(), subscribed: true, isAdmin: false, subEnd: user.subEnd });
     const trial = trials[email];
     if (trial) {
         if ((Date.now() - trial.start) >= TRIAL_MS) return res.json({ allowed: false, message: 'Deneme süreniz dolmuştur.' });
         return res.json({ allowed: true, start: trial.start, subscribed: false, isAdmin: false });
     }
-
     if (hasActiveTrialOnIP(ip)) return res.json({ allowed: false, message: 'Bu cihazdan zaten deneme kullanılmış.' });
-
     trials[email] = { ip, email, start: Date.now(), createdAt: Date.now() };
     saveData();
     return res.json({ allowed: true, start: trials[email].start, subscribed: false, isAdmin: false });
 });
 
-// ===== DURUM SORGULAMA =====
 app.get('/api/trial-status', (req, res) => {
     const email = req.query.email || '';
-    
-    if (isEmailAdmin(email)) {
-        return res.json({ exists: true, expired: false, start: Date.now(), subscribed: true, isAdmin: true, subEnd: Date.now() + (365 * 24 * 60 * 60 * 1000) });
-    }
-
-    if (!email) {
-        return res.json({ exists: false, expired: false, subscribed: false, isAdmin: false });
-    }
-
+    if (isEmailAdmin(email)) return res.json({ exists: true, expired: false, start: Date.now(), subscribed: true, isAdmin: true, subEnd: Date.now() + (365 * 24 * 60 * 60 * 1000) });
+    if (!email) return res.json({ exists: false });
     const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
     const trial = trials[email];
-
-    if (!user && !trial) {
-        return res.json({ exists: false, expired: false, subscribed: false, isAdmin: false });
-    }
-
+    if (!user && !trial) return res.json({ exists: false });
     const subscribed = !!(user && user.sub && user.subEnd && user.subEnd > Date.now());
     const start = trial ? trial.start : Date.now();
     const expired = !subscribed && (Date.now() - start >= TRIAL_MS);
-
     res.json({ exists: true, expired, start, subscribed, isAdmin: false, subEnd: user ? user.subEnd : null });
 });
 
-// ===== ŞİFRE SIFIRLAMA =====
 app.post('/api/reset-password', (req, res) => {
     const { email, phone, newPass } = req.body;
     if (!email || !phone || !newPass) return res.json({ success: false, message: 'Tüm alanları doldurun.' });
@@ -198,7 +161,6 @@ app.post('/api/reset-password', (req, res) => {
     res.json({ success: true, message: 'Şifreniz başarıyla sıfırlandı!' });
 });
 
-// ===== 99 TL KAMPANYA KONTROLÜ =====
 app.post('/api/check-special-offer', (req, res) => {
     const { email } = req.body;
     if (!email) return res.json({ eligible: false });
@@ -216,7 +178,6 @@ app.post('/api/check-special-offer', (req, res) => {
     return res.json({ eligible: false, price: 999 });
 });
 
-// ===== ABONELİK =====
 app.post('/api/subscribe', (req, res) => {
     const { email, plan, months } = req.body;
     const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
