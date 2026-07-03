@@ -1,3 +1,8 @@
+// ===== GEÇİCİ RESET - BİR KERE ÇALIŞTIR SONRA SİL =====
+if (fs.existsSync(DATA_FILE)) {
+    fs.unlinkSync(DATA_FILE);
+    console.log('data.json silindi!');
+}
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
