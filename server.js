@@ -16,13 +16,6 @@ let chats = [];
 let reviewCount = 1247;
 let campaignCount = 0;
 
-// ===== GEÇİCİ RESET - BİR KERE ÇALIŞTIR SONRA SİL =====
-if (fs.existsSync(DATA_FILE)) {
-    fs.unlinkSync(DATA_FILE);
-    console.log('data.json silindi!');
-}
-// ===== GEÇİCİ RESET SONU - BU 3 SATIRI SİL =====
-
 function loadData() {
     try {
         if (fs.existsSync(DATA_FILE)) {
