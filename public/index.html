@@ -13,29 +13,18 @@
 </head>
 <body>
 <div class="flash-bar" id="flashBar"></div>
-
 <div id="legalModal" class="modal-overlay active" style="z-index:2000;"><div class="modal"><div class="modal-head"><span class="modal-title">Yasal Uyarı</span></div><div class="legal-text"><p class="legal-warn">BU SİTE YATIRIM TAVSİYESİ VERMEZ</p><p><strong>1.</strong> Bu sitede paylaşılan sinyaller yalnızca eğitim amaçlıdır.</p><p><strong>2.</strong> Finansal piyasalarda işlem yapmak yüksek risk içerir.</p><p><strong>3.</strong> Yapılan işlemlerden doğan zarardan Balina Alarm sorumlu değildir.</p><p><strong>4.</strong> Burada yer alan bilgiler SPK tarafından denetlenmemiştir.</p><p><strong>5. İade Politikası:</strong> Dijital ortamda anında sunulan bir hizmet olduğu için, abonelik başladıktan sonra iptal ve iade hakkı bulunmamaktadır.</p><p class="legal-box">Bu siteyi kullanarak yukarıdaki şartları kabul etmiş sayılırsınız.</p></div><div class="modal-footer" style="margin-top:16px;"><button class="btn btn-primary" onclick="localStorage.setItem('ba_legal','accepted');document.getElementById('legalModal').style.display='none';" style="flex:1;">Okudum, Kabul Ediyorum</button></div></div></div>
-
 <div id="privacyModal" class="modal-overlay" onclick="closeModal(event,'privacyModal')"><div class="modal" onclick="event.stopPropagation()" style="max-width:650px;"><div class="modal-head"><span class="modal-title">📜 Gizlilik ve Kullanım Şartları</span><button class="modal-close" onclick="closeModal(null,'privacyModal')">X</button></div><div class="privacy-text"><h3>1. KVKK</h3><p>Ad Soyad, E-posta, Telefon ve IP adresi topluyoruz. Üçüncü taraflarla paylaşılmaz.</p><h3>2. Kullanıcı Sözleşmesi</h3><p>Bu platform teyit amaçlı sinyal platformudur. Yatırım tavsiyesi niteliği taşımaz.</p><h3>3. Çerez Politikası</h3><p>Çerezler kullanıcı deneyimini iyileştirmek için kullanılır.</p><h3>4. İade Politikası</h3><p>Dijital hizmet olduğu için iade yapılmamaktadır.</p><h3>5. Kullanıcı Hakları</h3><p>Verilerinizin silinmesini talep edebilirsiniz.</p></div></div></div>
-
 <div id="landingPage" class="landing">
     <div class="landing-top"><div class="landing-top-logo"><span>🐋</span> Balina Alarm</div><div class="landing-online"><span class="landing-online-dot"></span><span id="onlineCount">5.247</span> Aktif Kullanıcı</div></div>
     <div class="landing-hero"><span class="landing-whale">🐋</span><h1 class="landing-title">Balina Alarm</h1><p class="landing-sub">Piyasada büyük oyuncular harekete geçtiğinde anlık bildirim al, harekete geç!</p></div>
     <div class="landing-alert-banner"><div class="landing-alert-box"><div class="landing-alert-text">⚠️ İşlem açmadan önce kendi analiziniz ve risk yönetiminiz ile birlikte kullanınız.</div></div></div>
     <div class="landing-features"><div class="landing-feature"><span>📊</span><p>XAUUSD & BTCUSDT takibi</p></div><div class="landing-feature"><span>🔔</span><p>Anlık sesli & görsel alarm</p></div><div class="landing-feature"><span>🐋</span><p>9000+ balina takip ağı</p></div><div class="landing-feature"><span>📱</span><p>Masaüstü bildirim</p></div><div class="landing-feature"><span>⚡</span><p>7/24 aktif sistem</p></div><div class="landing-feature"><span>🛡️</span><p>Shopier ile güvenli ödeme</p></div></div>
-    <div class="landing-cta">
-        <div class="landing-free" onclick="showAuth()"><div class="landing-free-text">⏰ İlk 8 Saat ÜCRETSİZ Dene!</div></div>
-        <a href="https://www.shopier.com/balinaalarm/48434245" target="_blank" style="text-decoration:none;"><div class="landing-shopier"><span>🛡️</span> Shopier ile Güvenli Ödeme</div></a>
-        <br><br>
-        <button class="landing-btn" onclick="showAuth()">🚀 Hemen Başla</button>
-        <div class="landing-price">Sadece <strong>999 TL</strong> / ay</div>
-    </div>
+    <div class="landing-cta"><div class="landing-free" onclick="showAuth()"><div class="landing-free-text">⏰ İlk 8 Saat ÜCRETSİZ Dene!</div></div><a href="https://www.shopier.com/balinaalarm/48434245" target="_blank" style="text-decoration:none;"><div class="landing-shopier"><span>🛡️</span> Shopier ile Güvenli Ödeme</div></a><br><br><button class="landing-btn" onclick="showAuth()">🚀 Hemen Başla</button><div class="landing-price">Sadece <strong>999 TL</strong> / ay</div></div>
     <div class="landing-about"><div class="landing-about-card"><div class="landing-about-title">🐋 Biz Kimiz?</div><p class="landing-about-text">BalinaAlarm, finansal piyasalardaki önemli hareketleri ve büyük yatırımcı işlemlerini anlık olarak takip eden bir alarm platformudur.</p><ul class="landing-about-list"><li><span>✅</span> Anlık alım-satım sinyalleri alın</li><li><span>✅</span> Önemli piyasa hareketlerini kaçırmayın</li><li><span>✅</span> Büyük yatırımcı aktivitelerini takip edin</li></ul><div class="landing-about-slogan">BalinaAlarm – Büyük Hareketleri İlk Sen Fark Et.</div></div></div>
     <div style="max-width:700px;margin:0 auto 32px;padding:0 24px;text-align:center;"><div style="padding:14px;background:var(--yellow-bg);border:1px solid var(--yellow-bdr);border-radius:var(--r);display:inline-block;cursor:pointer;" onclick="openModal('privacyModal')"><span style="font-size:12px;color:var(--yellow);">📜 Gizlilik ve Kullanım Şartları</span></div></div>
 </div>
-
 <div id="authScreen" class="auth"><div class="auth-box"><div class="auth-logo"><span class="whale">🐋</span><h1>Balina Alarm</h1><p>Whale Trading Intelligence Platform</p></div><div class="auth-card"><div id="authError" class="err-msg"></div><div class="auth-tabs"><button class="auth-tab active" onclick="switchTab('login')">Giriş Yap</button><button class="auth-tab" onclick="switchTab('register')">Kayıt Ol</button><button class="auth-tab" onclick="switchTab('reset')">Şifremi Unuttum</button></div><form id="loginForm" class="auth-form active" onsubmit="doLogin(event)"><div class="fg"><label>E-posta</label><input type="email" id="lEmail" placeholder="ornek@email.com" required></div><div class="fg"><label>Şifre</label><input type="password" id="lPass" placeholder="********" required></div><button type="submit" class="btn btn-primary" style="height:46px;">Giriş Yap</button></form><form id="registerForm" class="auth-form" onsubmit="doRegister(event)"><div class="fg"><label>Ad Soyad</label><input type="text" id="rName" placeholder="Adınız Soyadınız" required></div><div class="fg"><label>E-posta</label><input type="email" id="rEmail" placeholder="ornek@email.com" required></div><div class="fg"><label>Şifre</label><input type="password" id="rPass" placeholder="En az 6 karakter" required minlength="6"></div><div class="fg"><label>Telefon</label><input type="tel" id="rPhone" placeholder="5XXXXXXXXX" required></div><div style="margin-bottom:16px;"><label style="display:flex;align-items:flex-start;gap:8px;font-size:11px;color:var(--text2);cursor:pointer;"><input type="checkbox" id="kvkkCheck" required style="margin-top:2px;"><span><a href="#" onclick="event.preventDefault();openModal('privacyModal');" style="color:var(--blue);text-decoration:underline;">Gizlilik sözleşmesini</a> okudum, kabul ediyorum.</span></label></div><button type="submit" class="btn btn-primary" style="height:46px;">Kayıt Ol</button></form><form id="resetForm" class="auth-form" onsubmit="doReset(event)"><div class="fg"><label>E-posta</label><input type="email" id="resetEmail" placeholder="ornek@email.com" required></div><div class="fg"><label>Telefon</label><input type="tel" id="resetPhone" placeholder="5XXXXXXXXX" required></div><div class="fg"><label>Yeni Şifre</label><input type="password" id="resetPass" placeholder="En az 6 karakter" required minlength="6"></div><button type="submit" class="btn btn-success" style="height:46px;">🔄 Şifreyi Sıfırla</button></form><span class="auth-back" onclick="showLanding()">← Ana Sayfaya Dön</span></div></div></div>
-
 <div id="dashboard" class="dash">
     <nav class="nav"><div class="nav-left"><span>🐋</span><div><div class="nav-title">Balina Alarm</div><div class="nav-sub">Whale Trading Dashboard</div></div></div><div class="nav-right"><div class="nav-status"><span class="dot"></span><span>Bağlı</span></div><div class="nav-timer" id="navTimer"><span id="timerDisp">08:00:00</span></div><div class="nav-user" onclick="openModal('userModal')"><div class="avatar" id="navAvatar">A</div><div><div class="u-name" id="navName">Kullanıcı</div><div class="u-email" id="navEmail">user@email.com</div></div></div></div></nav>
     <div class="main">
@@ -48,20 +37,15 @@
         <div class="stats"><div class="stat"><div class="stat-icon">📡</div><div class="stat-val" id="statSignals">0</div><div class="stat-label">Toplam Sinyal</div></div><div class="stat"><div class="stat-icon">🐋</div><div class="stat-val" id="statWhales">--</div><div class="stat-label">Takip Edilen Balina</div></div><div class="stat"><div class="stat-icon">📊</div><div class="stat-val">2</div><div class="stat-label">Aktif Çift</div></div></div>
         <div class="reviews-section"><div class="reviews-header"><span style="font-size:14px;font-weight:800;color:#fff;">💬 Kullanıcı Yorumları</span><div class="reviews-score"><span class="reviews-stars">★★★★★</span><span class="reviews-avg" id="reviewAvg">4.9</span><span class="reviews-total">/5 - <span id="reviewTotal">1.247</span> değerlendirme</span></div></div><div id="reviewsList"></div><button class="show-more-btn" id="showMoreBtn" onclick="toggleReviews()">Tüm yorumları göster ▼</button><div class="review-form" id="reviewForm" style="display:none;"><div style="font-size:12px;font-weight:600;color:#fff;margin-bottom:8px;">Yorum Yap</div><div class="star-input" id="starInput"><span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span></div><div class="fg" style="margin-bottom:8px;"><input type="text" id="reviewName" placeholder="Adınız" style="font-size:12px;padding:8px 10px;"></div><div class="fg" style="margin-bottom:8px;"><textarea id="reviewText" placeholder="Yorumunuz..." style="width:100%;padding:8px 10px;background:var(--bg);border:2px solid var(--bg4);border-radius:var(--rs);color:var(--text);font-size:12px;font-family:inherit;resize:vertical;min-height:50px;outline:0;"></textarea></div><div><button class="btn btn-primary btn-sm" onclick="submitReview()" style="width:auto;padding:6px 16px;font-size:11px;">Gönder</button></div></div><div style="text-align:center;margin-top:10px;cursor:pointer;" onclick="toggleReviewForm()"><span style="font-size:11px;color:var(--blue);text-decoration:underline;" id="reviewFormToggle">Yorum yazmak için tıklayın</span></div></div>
         <div class="bottom">
-            <div class="card" id="adminSection" style="display:none;"><div class="card-head"><span class="card-title">🔗 Webhook Entegrasyonu</span><span class="card-badge cb-green">Admin Panel</span></div><span class="admin-badge">🔑 Sadece Admin</span><label style="font-size:12px;font-weight:600;display:block;margin-bottom:4px;color:var(--text2);">Webhook URL:</label><div class="webhook-box"><code id="whURL" style="flex:1;">https://balina-server-2.onrender.com/webhook</code><button class="copy-btn" onclick="copyWH('whURL')">Kopyala</button></div><ol class="steps"><li>TradingView'da Alert oluştur</li><li>Webhook URL'yi yapıştır</li><li>JSON mesaj gönder</li></ol><div class="code">{"symbol":"BTCUSDT","action":"buy"}</div><div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--bg4);"><div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:12px;">💬 Destek Mesajları</div><div id="adminChatList" style="max-height:300px;overflow-y:auto;"></div><div id="adminChatReply" style="display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--bg4);"><div style="font-size:11px;color:var(--text3);margin-bottom:6px;">Cevap: <strong id="replyTo"></strong></div><div style="display:flex;gap:8px;"><input type="text" id="replyText" placeholder="Cevabınız..." style="flex:1;padding:8px;background:var(--bg);border:1px solid var(--bg4);border-radius:var(--rs);color:var(--text);font-size:12px;font-family:inherit;outline:0;"><button class="btn btn-primary btn-sm" onclick="sendAdminReply()" style="width:auto;padding:8px 16px;">Gönder</button></div></div></div></div>
+            <div class="card" id="adminSection" style="display:none;"><div class="card-head"><span class="card-title">🔗 Webhook Entegrasyonu</span><span class="card-badge cb-green">Admin Panel</span></div><span class="admin-badge">🔑 Sadece Admin</span><label style="font-size:12px;font-weight:600;display:block;margin-bottom:4px;color:var(--text2);">Webhook URL:</label><div class="webhook-box"><code id="whURL" style="flex:1;">https://balina-server-2.onrender.com/webhook</code><button class="copy-btn" onclick="copyWH('whURL')">Kopyala</button></div><ol class="steps"><li>TradingView'da Alert oluştur</li><li>Webhook URL'yi yapıştır</li><li>JSON mesaj gönder</li></ol><div class="code">{"symbol":"BTCUSDT","action":"buy"}</div><div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--bg4);"><div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:12px;">💬 Destek Mesajları</div><div id="adminChatList" style="max-height:300px;overflow-y:auto;"></div><div id="adminChatReply" style="display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--bg4);"><div style="font-size:11px;color:var(--text3);margin-bottom:6px;">Cevap: <strong id="replyTo"></strong></div><div style="display:flex;gap:8px;"><input type="text" id="replyText" placeholder="Cevabınız..." style="flex:1;padding:8px;background:var(--bg);border:1px solid var(--bg4);border-radius:var(--rs);color:var(--text);font-size:12px;font-family:inherit;outline:0;"><button class="btn btn-primary btn-sm" onclick="sendAdminReply()" style="width:auto;padding:8px 16px;">Gönder</button></div></div></div><div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--bg4);"><div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:12px;">💳 Bekleyen Ödemeler</div><div id="pendingPaymentsList" style="max-height:300px;overflow-y:auto;"><div style="font-size:12px;color:var(--text3);text-align:center;padding:20px;">Bekleyen ödeme yok</div></div></div></div>
             <div style="display:flex;flex-direction:column;gap:24px;"><div class="card"><div class="card-head"><span class="card-title">💳 Abonelik</span><button class="btn btn-sm btn-success" onclick="openModal('payModal')" id="subBtn">Abone Ol</button></div><div class="sub-card"><div class="sub-head"><span style="font-weight:700;font-size:13px;">Profesyonel Plan</span><span class="sub-badge trial" id="subBadge">Deneme</span></div><div class="sub-timer"><div class="sub-timer-label" id="subLabel">Ücretsiz deneme süresi</div><div class="sub-timer-value" id="subValue">08:00:00</div><div class="sub-progress"><div class="sub-progress-bar" id="subBar" style="width:100%"></div></div></div><a href="https://www.shopier.com/balinaalarm/48434245" target="_blank" style="text-decoration:none;"><div class="shopier-badge"><span>🛡️</span> Shopier ile Güvenli Ödeme</div></a></div></div><div class="card"><div class="card-head"><span class="card-title">⚙️ Ayarlar</span></div><div class="sg"><div class="sg-title">Bildirimler</div><div class="toggle-row"><div><div class="toggle-label">🔊 Sesli Alarm</div><div class="toggle-desc">Sinyal geldiğinde ses çal</div></div><label class="toggle-switch"><input type="checkbox" id="soundToggle" checked onchange="toggleSound()"><span class="toggle-slider"></span></label></div><div class="toggle-row"><div><div class="toggle-label">📱 Tarayıcı Bildirimi</div><div class="toggle-desc">Masaüstü bildirim göster</div></div><label class="toggle-switch"><input type="checkbox" id="notifToggle" checked onchange="toggleNotif()"><span class="toggle-slider"></span></label></div></div><div class="sg"><div class="sg-title">Hesap</div><div style="display:flex;gap:8px;"><button class="btn btn-sm btn-outline" onclick="doLogout()" style="flex:1;">🚪 Çıkış</button><button class="btn btn-sm btn-danger" onclick="openModal('payModal')" style="flex:1;" id="upgradeBtn">⭐ Abone Ol</button></div></div></div></div>
         </div>
     </div>
 </div>
-
 <div id="payModal" class="modal-overlay" onclick="closeModal(event,'payModal')"><div class="modal" onclick="event.stopPropagation()" style="max-width:600px;"><div class="modal-head"><span class="modal-title">💳 Abonelik Satın Al</span><button class="modal-close" onclick="closeModal(null,'payModal')">X</button></div><div class="plans-grid"><div class="plan-card popular" onclick="buySpecial()"><div class="plan-badge popular">🎁 Kampanya</div><div class="plan-duration">12 Saat</div><div class="plan-price" style="color:var(--green);">99 TL</div><div class="plan-monthly">Özel deneme fiyatı</div><div class="plan-save">İlk 100 kişiye özel!</div></div><div class="plan-card" onclick="buyPlan(1,999)"><div class="plan-duration">1 Ay</div><div class="plan-price">999 TL</div><div class="plan-monthly">Aylık 999 TL</div></div><div class="plan-card" onclick="buyPlan(2,1799)"><div class="plan-duration">2 Ay</div><div class="plan-price">1.799 TL</div><div class="plan-monthly">Aylık 900 TL</div><div class="plan-save">%10 Tasarruf</div></div><div class="plan-card popular" onclick="buyPlan(3,2499)"><div class="plan-badge popular">⭐ En Çok Tercih Edilen</div><div class="plan-duration">3 Ay</div><div class="plan-price">2.499 TL</div><div class="plan-monthly">Aylık 833 TL</div><div class="plan-save">%17 Tasarruf</div></div><div class="plan-card best" onclick="buyPlan(6,4499)"><div class="plan-badge best">🏆 En İyi Değer</div><div class="plan-duration">6 Ay</div><div class="plan-price">4.499 TL</div><div class="plan-monthly">Aylık 750 TL</div><div class="plan-save">%25 Tasarruf</div></div></div><a href="https://www.shopier.com/balinaalarm/48434245" target="_blank" style="text-decoration:none;"><div class="shopier-badge" style="font-size:14px;padding:14px;"><span>🛡️</span> Shopier ile Güvenli Ödeme</div></a></div></div>
-
 <div id="userModal" class="modal-overlay" onclick="closeModal(event,'userModal')"><div class="modal" onclick="event.stopPropagation()"><div class="modal-head"><span class="modal-title">👤 Hesap Bilgileri</span><button class="modal-close" onclick="closeModal(null,'userModal')">X</button></div><div style="text-align:center;margin-bottom:16px;"><div style="width:56px;height:56px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;color:#fff;font-size:20px;font-weight:700;" id="mAvatar">A</div><div style="font-size:16px;font-weight:700;color:#fff;" id="mName">Kullanıcı</div><div style="font-size:13px;color:var(--text3);" id="mEmail">user@email.com</div><div id="mAdminBadge" style="display:none;margin-top:8px;"><span class="admin-badge">🔑 Admin</span></div></div><div style="background:var(--bg);border:1px solid var(--bg4);border-radius:var(--rs);padding:14px;text-align:center;"><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Abonelik Durumu</div><div style="font-size:14px;font-weight:700;color:var(--yellow);" id="mSub">Ücretsiz Deneme</div></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal(null,'userModal')">Kapat</button><button class="btn btn-danger" onclick="doLogout()">🚪 Çıkış</button></div></div></div>
-
 <div id="faqModal" class="modal-overlay" onclick="closeModal(event,'faqModal')"><div class="modal" onclick="event.stopPropagation()" style="max-width:600px;"><div class="modal-head"><span class="modal-title">❓ Sıkça Sorulan Sorular</span><button class="modal-close" onclick="closeModal(null,'faqModal')">X</button></div><div id="faqList"></div></div></div>
-
 <div id="blockedScreen" class="blocked"><div class="blocked-card"><div class="blocked-icon">🔒</div><div class="blocked-title">Süreniz Doldu</div><div class="blocked-text">Ücretsiz deneme süreniz dolmuştur.</div><div id="specialOffer" style="display:none;margin:20px 0;padding:20px;background:rgba(16,185,129,.15);border:2px solid rgba(16,185,129,.4);border-radius:12px;"><div style="font-size:24px;margin-bottom:8px;">🎁</div><div style="font-size:18px;font-weight:800;color:var(--green);margin-bottom:4px;">Özel Teklif!</div><div style="font-size:13px;color:var(--text2);margin-bottom:12px;">İlk 100 kişiye özel 12 saat full erişim</div><div style="font-size:36px;font-weight:900;color:#fff;margin-bottom:4px;">99 TL</div><div style="font-size:12px;color:var(--text3);text-decoration:line-through;">999 TL</div><div id="offerTimer" style="margin:12px 0;padding:8px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);border-radius:8px;font-size:13px;font-weight:700;color:var(--yellow);"></div><div style="font-size:11px;color:var(--text3);margin-bottom:12px;">Kalan kontenjan: <span id="offerSpots" style="color:var(--yellow);font-weight:700;">100</span>/100</div><button class="btn btn-success" onclick="buySpecial()" style="font-size:16px;height:50px;">🛒 99 TL ile Başla</button></div><div id="normalOffer" style="display:none;margin:20px 0;"><div style="font-size:13px;color:var(--text2);margin-bottom:12px;">Abonelik satın alarak devam edin.</div><div class="plans-grid"><div class="plan-card" style="border-color:var(--green);" onclick="buySpecial()"><div class="plan-badge popular">🎁 Kampanya</div><div class="plan-duration">12 Saat</div><div class="plan-price" style="color:var(--green);">99 TL</div><div class="plan-save">İlk 100 kişiye özel!</div></div><div class="plan-card" onclick="buyPlan(1,999)"><div class="plan-duration">1 Ay</div><div class="plan-price">999 TL</div></div><div class="plan-card" onclick="buyPlan(2,1799)"><div class="plan-duration">2 Ay</div><div class="plan-price">1.799 TL</div></div><div class="plan-card popular" onclick="buyPlan(3,2499)"><div class="plan-badge popular">⭐</div><div class="plan-duration">3 Ay</div><div class="plan-price">2.499 TL</div></div><div class="plan-card best" onclick="buyPlan(6,4499)"><div class="plan-badge best">🏆</div><div class="plan-duration">6 Ay</div><div class="plan-price">4.499 TL</div></div></div></div><button class="btn btn-outline" style="margin-top:8px;" onclick="doLogout()">🚪 Çıkış Yap</button></div></div>
-
 <button class="chat-toggle" id="chatToggle" onclick="toggleChat()">💬</button>
 <div class="chat-panel" id="chatPanel"><div class="chat-header"><div class="chat-header-title">💬 Destek</div><button class="chat-header-close" onclick="toggleChat()">✕</button></div><div class="chat-messages" id="chatMessages"><div class="chat-msg admin"><div class="chat-bubble">Merhaba! 👋 Size nasıl yardımcı olabiliriz?</div></div></div><div class="chat-input-area"><input type="text" class="chat-input" id="chatInput" placeholder="Mesajınızı yazın..." onkeypress="if(event.key==='Enter')sendChat()"><button class="chat-send" onclick="sendChat()">Gönder</button></div></div>
 <script>
@@ -175,8 +159,8 @@ function goDash() {
     var ct = document.getElementById('chatToggle'); if (ct) ct.style.display = 'flex';
     if (localStorage.getItem('ba_legal') === 'accepted') { var lm = document.getElementById('legalModal'); if (lm) lm.style.display = 'none'; }
     updateUserUI(); updateWhales(); startTimer(); restorePanels(); loadReviews(); loadChat();
-    if (S.isAdmin) { var as = document.getElementById('adminSection'); if (as) as.style.display = 'block'; var bs = document.getElementById('blockedScreen'); if (bs) bs.classList.remove('active'); loadAdminChat(); }
-    else { var as2 = document.getElementById('adminSection'); if (as2) as2.style.display = 'none'; checkBlocked(); }
+    if (S.isAdmin) { var as = document.getElementById('adminSection'); if (as) as.style.display = 'block'; var bs = document.getElementById('blockedScreen'); if (bs) bs.classList.remove('active'); loadAdminChat(); loadPendingPayments(); }
+    else { var as2 = document.getElementById('adminSection'); if (as2) as2.style.display = 'none'; checkBlocked(); checkPaymentStatus(); }
     if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
 }
 
@@ -264,49 +248,107 @@ function showNormalOffer() { var sp = document.getElementById('specialOffer'); v
 var offerTimerInterval = null;
 function startOfferTimer(remaining) { if (offerTimerInterval) clearInterval(offerTimerInterval); var endTime = Date.now() + remaining; var td = document.getElementById('offerTimer'); offerTimerInterval = setInterval(function() { var rem = Math.max(0, endTime - Date.now()); if (rem <= 0) { clearInterval(offerTimerInterval); showNormalOffer(); return; } var h = Math.floor(rem/3600000), m = Math.floor((rem%3600000)/60000), s = Math.floor((rem%60000)/1000); if (td) td.textContent = '⏰ Kalan süre: ' + String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0'); }, 1000); }
 
-// ⭐ GÜVENLİ ÖDEME: Shopier'e yönlendir ama abonelik açma
+// ⭐ 2 ADIMLI ÖDEME AKIŞI
+var pendingPlan = null;
+var pendingMonths = null;
+
 function buySpecial() {
+    pendingPlan = 'special';
+    pendingMonths = 0.5;
     window.open('https://www.shopier.com/balinaalarm/48633748', '_blank');
-    showPaymentConfirm('special', 0.5);
+    showOrderNumberModal(99);
 }
 
 function buyPlan(months, price) {
     var links = {1: 'https://www.shopier.com/balinaalarm/48434245', 2: 'https://www.shopier.com/balinaalarm/48633605', 3: 'https://www.shopier.com/balinaalarm/48633639', 6: 'https://www.shopier.com/balinaalarm/48633704'};
+    pendingPlan = 'normal';
+    pendingMonths = months;
     window.open(links[months] || links[1], '_blank');
-    showPaymentConfirm('normal', months);
+    showOrderNumberModal(price);
 }
 
-function showPaymentConfirm(plan, months) {
+function showOrderNumberModal(price) {
     closeModal(null, 'payModal');
-    var existing = document.getElementById('paymentConfirmModal');
+    var existing = document.getElementById('orderNumberModal');
     if (existing) existing.remove();
     var div = document.createElement('div');
-    div.id = 'paymentConfirmModal';
+    div.id = 'orderNumberModal';
     div.className = 'modal-overlay active';
     div.style.zIndex = '2000';
     div.onclick = function(e) { if (e.target === div) div.remove(); };
     div.innerHTML = '<div class="modal" onclick="event.stopPropagation()" style="text-align:center;">' +
-        '<div style="font-size:48px;margin-bottom:16px;">✅</div>' +
-        '<div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:8px;">Ödemeyi Tamamladınız mı?</div>' +
-        '<div style="font-size:13px;color:var(--text2);margin-bottom:24px;">Shopier üzerinden ödemenizi tamamladıysanız aşağıdaki butona tıklayın.</div>' +
-        '<button class="btn btn-success" onclick="confirmPayment(\'' + plan + '\',' + months + ')" style="height:50px;font-size:16px;margin-bottom:12px;">✅ Ödemeyi Tamamladım</button>' +
-        '<button class="btn btn-outline" onclick="document.getElementById(\'paymentConfirmModal\').remove()" style="height:40px;">İptal, Ödeme Yapmadım</button>' +
+        '<div style="font-size:48px;margin-bottom:16px;">🛍️</div>' +
+        '<div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:8px;">Ödeme Yaptınız mı?</div>' +
+        '<div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Shopier üzerinden ' + price + ' TL ödemenizi tamamladıysanız sipariş numaranızı girin.</div>' +
+        '<div class="fg" style="text-align:left;margin-bottom:16px;"><label>Sipariş Numarası</label><input type="text" id="orderNumberInput" placeholder="Örn: S12345678" required></div>' +
+        '<button class="btn btn-success" onclick="submitOrderNumber()" style="height:50px;font-size:16px;margin-bottom:12px;">✅ Ödemeyi Bildir</button>' +
+        '<button class="btn btn-outline" onclick="document.getElementById(\'orderNumberModal\').remove()" style="height:40px;">İptal, Ödeme Yapmadım</button>' +
         '</div>';
     document.body.appendChild(div);
 }
 
-function confirmPayment(plan, months) {
+function submitOrderNumber() {
+    var orderInput = document.getElementById('orderNumberInput');
+    var orderNumber = orderInput ? orderInput.value.trim() : '';
+    if (!orderNumber) { alert('Lütfen sipariş numarasını girin!'); return; }
     if (!S.user || !S.user.email) { alert('Lütfen giriş yapın.'); return; }
-    fetch('/api/subscribe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: S.user.email, plan: plan, months: months }) })
+
+    fetch('/api/request-subscription', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: S.user.email, plan: pendingPlan, months: pendingMonths, orderNumber: orderNumber })
+    })
     .then(function(r) { return r.json(); })
     .then(function(data) {
-        var modal = document.getElementById('paymentConfirmModal');
+        var modal = document.getElementById('orderNumberModal');
         if (modal) modal.remove();
-        if (data.success) { S.subscribed = true; S.user.subEnd = data.subEnd; save(); alert('✅ Aboneliğiniz aktif edildi!'); goDash(); }
-        else { alert('Bir hata oluştu.'); }
+        if (data.success) {
+            showPaymentPendingModal(orderNumber);
+        } else {
+            alert(data.message || 'Bir hata oluştu.');
+        }
     })
     .catch(function() { alert('Bağlantı hatası.'); });
 }
+
+function showPaymentPendingModal(orderNumber) {
+    var existing = document.getElementById('paymentPendingModal');
+    if (existing) existing.remove();
+    var div = document.createElement('div');
+    div.id = 'paymentPendingModal';
+    div.className = 'modal-overlay active';
+    div.style.zIndex = '2000';
+    div.onclick = function(e) { if (e.target === div) div.remove(); };
+    div.innerHTML = '<div class="modal" onclick="event.stopPropagation()" style="text-align:center;">' +
+        '<div style="font-size:48px;margin-bottom:16px;">⏳</div>' +
+        '<div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:8px;">Talebiniz Alındı!</div>' +
+        '<div style="font-size:13px;color:var(--text2);margin-bottom:16px;">🛍️ Sipariş numaranız: <strong style="color:var(--blue);">#' + orderNumber + '</strong></div>' +
+        '<div style="font-size:13px;color:var(--text2);margin-bottom:16px;">⏱️ Tahmini onay süresi: 5-15 dakika</div>' +
+        '<div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Ekibimiz ödemenizi kontrol ediyor.<br>Onaylandığında sayfayı yenileyerek erişiminizi aktif edebilirsiniz.</div>' +
+        '<div style="padding:14px;background:var(--green-bg);border:1px solid rgba(16,185,129,.3);border-radius:var(--rs);margin-bottom:20px;">' +
+        '<div style="font-size:14px;font-weight:700;color:var(--green);">Sabrınız için teşekkür ederiz! 💙🐋</div></div>' +
+        '<button class="btn btn-primary" onclick="document.getElementById(\'paymentPendingModal\').remove()" style="height:46px;">Tamam, Bekliyorum</button>' +
+        '</div>';
+    document.body.appendChild(div);
+}
+
+function checkPaymentStatus() {
+    if (!S.user || !S.user.email || S.subscribed) return;
+    fetch('/api/my-payment-status?email=' + encodeURIComponent(S.user.email))
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        if (data.status === 'approved') {
+            S.subscribed = true;
+            if (data.subEnd) S.user.subEnd = data.subEnd;
+            save();
+            updateUserUI();
+            alert('✅ Ödemeniz onaylandı! Aboneliğiniz aktif edildi.');
+            goDash();
+        }
+    }).catch(function() {});
+}
+// Her 30 saniyede ödeme durumunu kontrol et (admin onayını yakalamak için)
+setInterval(function() { if (S && S.user && S.active && !S.isAdmin) checkPaymentStatus(); }, 30000);
 
 var _baBuf = null, _baCtx = null;
 function loadMp3() { if (_baBuf) return; try { _baCtx = new (window.AudioContext || window.webkitAudioContext)(); var r = new XMLHttpRequest(); r.open('GET', '/u_jlnmxtfupk-notice-313085.mp3', true); r.responseType = 'arraybuffer'; r.onload = function() { _baCtx.decodeAudioData(r.response, function(b) { _baBuf = b; }); }; r.send(); } catch (e) {} }
@@ -317,7 +359,6 @@ var originalTitle = document.title, titleBlink = null;
 function flashScreen(type) { var nav = document.querySelector('.nav'), bar = document.getElementById('flashBar'); document.body.classList.remove('flash-border-green', 'flash-border-red'); void document.body.offsetWidth; document.body.classList.add(type === 'al' ? 'flash-border-green' : 'flash-border-red'); if (nav) { nav.classList.remove('flash-green', 'flash-red'); void nav.offsetWidth; nav.classList.add(type === 'al' ? 'flash-green' : 'flash-red'); } if (bar) { bar.className = 'flash-bar'; void bar.offsetWidth; bar.className = 'flash-bar ' + (type === 'al' ? 'al' : 'as'); } if (titleBlink) clearInterval(titleBlink); var msg = type === 'al' ? '🟢🟢🟢 LONG SİNYALI!' : '🔴🔴🔴 SHORT SİNYALI!'; var isOn = true; titleBlink = setInterval(function() { document.title = isOn ? msg : originalTitle; isOn = !isOn; }, 800); setTimeout(function() { clearInterval(titleBlink); titleBlink = null; document.title = originalTitle; document.body.classList.remove('flash-border-green', 'flash-border-red'); if (nav) nav.classList.remove('flash-green', 'flash-red'); if (bar) bar.className = 'flash-bar'; }, 15000); }
 
 function applyPanel(pair, action, timeStr) { var isXAU = pair === 'XAUUSD'; var el = document.getElementById(isXAU ? 'statusXAU' : 'statusBTC'); if (!el) return; var sig = document.getElementById(isXAU ? 'signalXAU' : 'signalBTC'); var desc = document.getElementById(isXAU ? 'descXAU' : 'descBTC'); var badge = document.getElementById(isXAU ? 'badgeXAU' : 'badgeBTC'); var te = document.getElementById(isXAU ? 'timeXAU' : 'timeBTC'); if (action === 'buy' || action === 'long') { el.className = 'panel-status long'; if (sig) sig.textContent = 'Balinalar LONG Giriyor'; if (desc) desc.textContent = '🐋 ' + pair + ' alım sinyali tespit edildi!'; if (badge) { badge.textContent = 'LONG'; badge.className = 'panel-badge badge-live'; badge.style.background = 'var(--green-bg)'; badge.style.color = 'var(--green)'; } } else { el.className = 'panel-status short'; if (sig) sig.textContent = 'Balinalar SHORT Açıyor'; if (desc) desc.textContent = '🐋 ' + pair + ' satış sinyali tespit edildi!'; if (badge) { badge.textContent = 'SHORT'; badge.className = 'panel-badge badge-live'; badge.style.background = 'var(--red-bg)'; badge.style.color = 'var(--red)'; } } if (te) te.textContent = 'Son güncelleme: ' + timeAgo(timeStr); }
-
 function restorePanels() { ['XAUUSD', 'BTCUSDT'].forEach(function(pair) { try { var saved = JSON.parse(localStorage.getItem('ba_panel_' + pair)); if (saved) applyPanel(pair, saved.action, saved.time); } catch (e) {} }); }
 
 function processSignal(symbol, type) {
@@ -336,7 +377,6 @@ function processSignal(symbol, type) {
 
 var lastSignals = [];
 function addLastSignal(s) { for (var i = lastSignals.length - 1; i >= 0; i--) { if (lastSignals[i].symbol === s.symbol) { lastSignals.splice(i, 1); } } lastSignals.unshift(s); if (lastSignals.length > 5) lastSignals = lastSignals.slice(0, 5); renderLastSignals(); try { localStorage.setItem('ba_notifs', JSON.stringify(lastSignals)); } catch (e) {} }
-
 function renderLastSignals() { var list = document.getElementById('notifList'); var count = document.getElementById('notifCount'); if (!list || !count) return; if (!lastSignals.length) { list.innerHTML = '<div class="no-notif">Henüz bildirim yok</div>'; count.textContent = '0'; return; } var html = ''; for (var i = 0; i < lastSignals.length; i++) { var s = lastSignals[i]; var isBuy = (s.action === 'buy' || s.action === 'long'); var cls = isBuy ? 'al' : 'as'; var label = isBuy ? 'LONG' : 'SHORT'; html += '<div class="notif-item ' + cls + '"><div><div class="notif-title">' + s.symbol + ' ' + label + '</div><div class="notif-time">' + timeAgo(s.time) + '</div></div></div>'; } list.innerHTML = html; count.textContent = lastSignals.length; }
 
 var popT;
@@ -371,7 +411,50 @@ function loadAdminChat() { fetch('/api/chat/admin/all').then(function(r) { retur
 function openAdminReply(email, name) { currentReplyEmail = email; var rt = document.getElementById('replyTo'); if (rt) rt.textContent = name || email; var ar = document.getElementById('adminChatReply'); if (ar) ar.style.display = 'block'; var rt2 = document.getElementById('replyText'); if (rt2) rt2.focus(); }
 function sendAdminReply() { var inp = document.getElementById('replyText'); var text = inp ? inp.value.trim() : ''; if (!text || !currentReplyEmail) return; fetch('/api/chat/reply', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: currentReplyEmail, text: text }) }).then(function(r) { return r.json(); }).then(function(data) { if (data.success) { if (inp) inp.value = ''; var ar = document.getElementById('adminChatReply'); if (ar) ar.style.display = 'none'; loadAdminChat(); } }); }
 
-setInterval(function() { if (S.isAdmin) loadAdminChat(); }, 10000);
+// ===== ADMIN: BEKLEYEN ÖDEMELER =====
+function loadPendingPayments() {
+    fetch('/api/pending-payments').then(function(r) { return r.json(); }).then(function(data) {
+        var list = document.getElementById('pendingPaymentsList');
+        if (!list) return;
+        if (!data.payments || !data.payments.length) {
+            list.innerHTML = '<div style="font-size:12px;color:var(--text3);text-align:center;padding:20px;">Bekleyen ödeme yok</div>';
+            return;
+        }
+        var html = '';
+        data.payments.forEach(function(p) {
+            html += '<div style="padding:12px;background:var(--bg);border:1px solid var(--bg4);border-radius:var(--rs);margin-bottom:8px;">' +
+                '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">' +
+                '<div><div style="font-size:12px;font-weight:700;color:#fff;">' + p.name + '</div>' +
+                '<div style="font-size:10px;color:var(--text3);">' + p.email + '</div>' +
+                '<div style="font-size:10px;color:var(--blue);margin-top:2px;">Sipariş: #' + (p.orderNumber || 'Yok') + '</div></div>' +
+                '<div style="text-align:right;"><div style="font-size:14px;font-weight:800;color:var(--green);">' + p.price + ' TL</div>' +
+                '<div style="font-size:10px;color:var(--text3);">' + (p.months === 0.5 ? '12 Saat Kampanya' : p.months + ' Ay') + '</div></div></div>' +
+                '<div style="display:flex;gap:8px;margin-top:8px;">' +
+                '<button class="btn btn-success btn-sm" onclick="approvePayment(\'' + p.id + '\')" style="flex:1;">✅ Onayla</button>' +
+                '<button class="btn btn-danger btn-sm" onclick="rejectPayment(\'' + p.id + '\')" style="flex:1;">❌ Reddet</button>' +
+                '</div></div>';
+        });
+        list.innerHTML = html;
+    }).catch(function() {});
+}
+
+function approvePayment(paymentId) {
+    if (!confirm('Bu ödemeyi onaylamak istediğinize emin misiniz?')) return;
+    fetch('/api/approve-payment', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ paymentId: paymentId }) })
+    .then(function(r) { return r.json(); })
+    .then(function(data) { if (data.success) { alert('✅ Ödeme onaylandı!'); loadPendingPayments(); } else { alert(data.message || 'Hata oluştu.'); } })
+    .catch(function() { alert('Bağlantı hatası.'); });
+}
+
+function rejectPayment(paymentId) {
+    if (!confirm('Bu ödemeyi reddetmek istediğinize emin misiniz?')) return;
+    fetch('/api/reject-payment', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ paymentId: paymentId }) })
+    .then(function(r) { return r.json(); })
+    .then(function(data) { if (data.success) { alert('❌ Ödeme reddedildi.'); loadPendingPayments(); } else { alert(data.message || 'Hata oluştu.'); } })
+    .catch(function() { alert('Bağlantı hatası.'); });
+}
+
+setInterval(function() { if (S.isAdmin) { loadAdminChat(); loadPendingPayments(); } }, 10000);
 setInterval(function() { ['XAUUSD', 'BTCUSDT'].forEach(function(pair) { try { var saved = JSON.parse(localStorage.getItem('ba_panel_' + pair)); if (saved) { var el = document.getElementById(pair === 'XAUUSD' ? 'timeXAU' : 'timeBTC'); if (el) el.textContent = 'Son güncelleme: ' + timeAgo(saved.time); } } catch (e) {} }); renderLastSignals(); }, 30000);
 
 function restoreNotifs() { try { var saved = JSON.parse(localStorage.getItem('ba_notifs')); if (saved && saved.length) lastSignals = saved; } catch (e) {} ['XAUUSD', 'BTCUSDT'].forEach(function(pair) { try { var p = JSON.parse(localStorage.getItem('ba_panel_' + pair)); if (p) { var exists = lastSignals.find(function(s) { return s.symbol === pair; }); if (!exists) { lastSignals.unshift({ symbol: pair, action: p.action, time: p.time }); } else if (new Date(p.time) > new Date(exists.time)) { lastSignals = lastSignals.filter(function(s) { return s.symbol !== pair; }); lastSignals.unshift({ symbol: pair, action: p.action, time: p.time }); } } } catch (e) {} }); if (lastSignals.length > 5) lastSignals = lastSignals.slice(0, 5); renderLastSignals(); try { localStorage.setItem('ba_notifs', JSON.stringify(lastSignals)); } catch (e) {} }
