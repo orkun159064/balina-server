@@ -170,17 +170,24 @@ function adminAutoLogin() {
 }
 
 function checkExistingTrial() {
-    return fetch('/api/trial-status').then(function(r) { return r.json(); }).then(function(data) {
-        if (data.exists) {
-            if (data.expired && !data.subscribed) return false;
-            S.trialStart = data.start;
-            if (data.subscribed) S.subscribed = true;
-            if (data.isAdmin) S.isAdmin = true;
-            if (data.subEnd && S.user) S.user.subEnd = data.subEnd;
+    var email = (S.user && S.user.email) ? S.user.email : '';
+    return fetch('/api/trial-status?email=' + encodeURIComponent(email))
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            if (data.exists) {
+                if (data.expired && !data.subscribed) return false;
+                S.trialStart = data.start;
+                if (data.subscribed) S.subscribed = true;
+                if (data.isAdmin) S.isAdmin = true;
+                if (data.subEnd && S.user) S.user.subEnd = data.subEnd;
+                return true;
+            }
             return true;
-        }
-        return true;
-    }).catch(function() { if (S.trialStart && (Date.now() - S.trialStart >= S.trialDur)) return false; return true; });
+        })
+        .catch(function() {
+            if (S.trialStart && (Date.now() - S.trialStart >= S.trialDur)) return false;
+            return true;
+        });
 }
 
 function goDash() {
