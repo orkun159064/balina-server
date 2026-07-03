@@ -191,6 +191,7 @@ app.get('/api/pending-payments', (req, res) => {
     res.json({ payments: pendingPayments.filter(p => p.status === 'pending') });
 });
 
+// ⭐ ÖDEME ONAYLA - 99 TL kampanya = 12 saat, diğerleri ay bazında
 app.post('/api/approve-payment', (req, res) => {
     const { paymentId } = req.body;
     const payment = pendingPayments.find(p => p.id === paymentId);
@@ -200,12 +201,11 @@ app.post('/api/approve-payment', (req, res) => {
     const user = users.find(u => u.email.toLowerCase() === payment.email.toLowerCase());
     if (user) {
         user.sub = true;
-        // 99 TL kampanya = 12 saat, diğerleri ay bazında
         if (payment.plan === 'special') {
             user.subEnd = Date.now() + (12 * 60 * 60 * 1000); // 12 saat
             campaignCount++;
         } else {
-            user.subEnd = Date.now() + ((payment.months || 1) * 30 * 24 * 60 * 60 * 1000);
+            user.subEnd = Date.now() + ((payment.months || 1) * 30 * 24 * 60 * 60 * 1000); // ay bazında
         }
         user.plan = payment.plan;
     }
@@ -214,6 +214,7 @@ app.post('/api/approve-payment', (req, res) => {
     res.json({ success: true });
 });
 
+// ===== ÖDEME REDDET =====
 app.post('/api/reject-payment', (req, res) => {
     const { paymentId } = req.body;
     const payment = pendingPayments.find(p => p.id === paymentId);
@@ -225,6 +226,7 @@ app.post('/api/reject-payment', (req, res) => {
     res.json({ success: true });
 });
 
+// ===== KULLANICI ÖDEME DURUMU =====
 app.get('/api/my-payment-status', (req, res) => {
     const email = req.query.email || '';
     if (!email) return res.json({ status: 'none' });
@@ -241,14 +243,21 @@ app.post('/api/subscribe', (req, res) => {
     const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
     if (!user) return res.json({ success: false });
     user.sub = true;
-    user.subEnd = Date.now() + ((months || 1) * 30 * 24 * 60 * 60 * 1000);
+    if (plan === 'special') {
+        user.subEnd = Date.now() + (12 * 60 * 60 * 1000); // 12 saat
+        campaignCount++;
+    } else {
+        user.subEnd = Date.now() + ((months || 1) * 30 * 24 * 60 * 60 * 1000);
+    }
     user.plan = plan || 'normal';
-    if (plan === 'special') campaignCount++;
     saveData();
     res.json({ success: true, subEnd: user.subEnd });
 });
 
+// ===== KAMPANYA DURUMU =====
 app.get('/api/campaign-status', (req, res) => { res.json({ total: CAMPAIGN_MAX, used: campaignCount, left: CAMPAIGN_MAX - campaignCount }); });
+
+// ===== YORUMLAR =====
 app.get('/api/reviews', (req, res) => { res.json({ reviews: reviews.slice(0, 5), total: reviewCount }); });
 app.post('/api/reviews', (req, res) => {
     const { name, text, stars } = req.body;
@@ -264,6 +273,7 @@ app.delete('/api/reviews/:id', (req, res) => {
     res.json({ success: true });
 });
 
+// ===== CHAT =====
 app.get('/api/chat/:email', (req, res) => { res.json({ messages: chats.filter(c => c.email.toLowerCase() === req.params.email.toLowerCase()).slice(-50) }); });
 app.get('/api/chat/admin/all', (req, res) => {
     const grouped = {};
@@ -289,6 +299,7 @@ app.post('/api/chat/reply', (req, res) => {
     res.json({ success: true, message: msg });
 });
 
+// ===== SSE =====
 let sseClients = [];
 app.get('/events', (req, res) => {
     res.setHeader('Content-Type', 'text/event-stream');
@@ -300,6 +311,7 @@ app.get('/events', (req, res) => {
     req.on('close', () => { sseClients = sseClients.filter(c => c !== res); });
 });
 
+// ===== WEBHOOK =====
 app.post('/webhook', (req, res) => {
     const { symbol, action } = req.body;
     if (!symbol || !action) return res.status(400).json({ error: 'symbol ve action gerekli' });
