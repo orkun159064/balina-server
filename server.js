@@ -58,7 +58,6 @@ const CAMPAIGN_TRIAL_MS = 12 * 60 * 60 * 1000;
 function getIP(req) {
     return (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.connection.remoteAddress || req.socket.remoteAddress || 'unknown';
 }
-
 function getTrialsByIP(ip) { return Object.values(trials).filter(t => t.ip === ip); }
 function hasActiveTrialOnIP(ip) { return getTrialsByIP(ip).some(t => (Date.now() - t.start) < TRIAL_MS); }
 
@@ -107,7 +106,7 @@ app.post('/api/check-trial', (req, res) => {
     if (email === ADMIN_EMAIL) return res.json({ allowed: true, start: Date.now(), subscribed: true });
     const user = users.find(u => u.email === email);
     if (user && user.sub && user.subEnd && user.subEnd > Date.now())
-        return res.json({ allowed: true, start: trials[email]?.start || Date.now(), subscribed: true });
+        return res.json({ allowed: true, start: trials[email]?.start || Date.now(), subscribed: true, subEnd: user.subEnd });
     const trial = trials[email];
     if (!trial) {
         if (hasActiveTrialOnIP(ip)) return res.json({ allowed: false, message: 'Bu cihazdan zaten deneme kullanılmış.' });
@@ -123,16 +122,13 @@ app.post('/api/check-trial', (req, res) => {
 app.get('/api/trial-status', (req, res) => {
     const ip = getIP(req);
     const ipTrials = getTrialsByIP(ip);
-
     if (ipTrials.length === 0) return res.json({ exists: false });
-
     const latest = ipTrials[ipTrials.length - 1];
     const user = users.find(u => u.email === latest.email);
     const isUserAdmin = latest.email === ADMIN_EMAIL;
     const subscribed = isUserAdmin || (user && user.sub && user.subEnd > Date.now());
     const expired = !subscribed && (Date.now() - latest.start >= TRIAL_MS);
-
-    res.json({ exists: true, expired, start: latest.start, subscribed, isAdmin: isUserAdmin });
+    res.json({ exists: true, expired, start: latest.start, subscribed, isAdmin: isUserAdmin, subEnd: user ? user.subEnd : null });
 });
 
 app.post('/api/reset-password', (req, res) => {
@@ -181,9 +177,7 @@ app.get('/api/campaign-status', (req, res) => {
     res.json({ total: CAMPAIGN_MAX, used: campaignCount, left: CAMPAIGN_MAX - campaignCount });
 });
 
-app.get('/api/reviews', (req, res) => {
-    res.json({ reviews: reviews.slice(0, 5), total: reviewCount });
-});
+app.get('/api/reviews', (req, res) => { res.json({ reviews: reviews.slice(0, 5), total: reviewCount }); });
 
 app.post('/api/reviews', (req, res) => {
     const { name, text, stars } = req.body;
@@ -193,7 +187,6 @@ app.post('/api/reviews', (req, res) => {
     if (reviews.length > 5) reviews = reviews.slice(0, 5);
     reviewCount++;
     saveData();
-    console.log('Yeni yorum:', name);
     res.json({ success: true, review, total: reviewCount });
 });
 
@@ -207,9 +200,7 @@ app.delete('/api/reviews/:id', (req, res) => {
     res.json({ success: true });
 });
 
-app.get('/api/chat/:email', (req, res) => {
-    res.json({ messages: chats.filter(c => c.email === req.params.email).slice(-50) });
-});
+app.get('/api/chat/:email', (req, res) => { res.json({ messages: chats.filter(c => c.email === req.params.email).slice(-50) }); });
 
 app.get('/api/chat/admin/all', (req, res) => {
     const grouped = {};
