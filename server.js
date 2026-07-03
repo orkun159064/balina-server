@@ -121,14 +121,22 @@ app.post('/api/check-trial', (req, res) => {
 
 app.get('/api/trial-status', (req, res) => {
     const ip = getIP(req);
+    const email = req.query.email || '';
     const ipTrials = getTrialsByIP(ip);
+
+    // Admin kontrolü sadece email ile yapılır
+    if (email === ADMIN_EMAIL) {
+        return res.json({ exists: true, expired: false, start: Date.now(), subscribed: true, isAdmin: true, subEnd: Date.now() + (365 * 24 * 60 * 60 * 1000) });
+    }
+
     if (ipTrials.length === 0) return res.json({ exists: false });
+
     const latest = ipTrials[ipTrials.length - 1];
     const user = users.find(u => u.email === latest.email);
-    const isUserAdmin = latest.email === ADMIN_EMAIL;
-    const subscribed = isUserAdmin || (user && user.sub && user.subEnd > Date.now());
+    const subscribed = user && user.sub && user.subEnd > Date.now();
     const expired = !subscribed && (Date.now() - latest.start >= TRIAL_MS);
-    res.json({ exists: true, expired, start: latest.start, subscribed, isAdmin: isUserAdmin, subEnd: user ? user.subEnd : null });
+
+    res.json({ exists: true, expired, start: latest.start, subscribed, isAdmin: false, subEnd: user ? user.subEnd : null });
 });
 
 app.post('/api/reset-password', (req, res) => {
