@@ -256,19 +256,17 @@ var pendingMonths = null;
 function buySpecial() {
     pendingPlan = 'special';
     pendingMonths = 0.5;
-    window.open('https://www.shopier.com/balinaalarm/48633748', '_blank');
-    showOrderNumberModal(99);
+    showOrderNumberModal(99, 'https://www.shopier.com/balinaalarm/48633748');
 }
 
 function buyPlan(months, price) {
     var links = {1: 'https://www.shopier.com/balinaalarm/48434245', 2: 'https://www.shopier.com/balinaalarm/48633605', 3: 'https://www.shopier.com/balinaalarm/48633639', 6: 'https://www.shopier.com/balinaalarm/48633704'};
     pendingPlan = 'normal';
     pendingMonths = months;
-    window.open(links[months] || links[1], '_blank');
-    showOrderNumberModal(price);
+    showOrderNumberModal(price, links[months] || links[1]);
 }
 
-function showOrderNumberModal(price) {
+function showOrderNumberModal(price, shopierUrl) {
     closeModal(null, 'payModal');
     var existing = document.getElementById('orderNumberModal');
     if (existing) existing.remove();
@@ -279,11 +277,16 @@ function showOrderNumberModal(price) {
     div.onclick = function(e) { if (e.target === div) div.remove(); };
     div.innerHTML = '<div class="modal" onclick="event.stopPropagation()" style="text-align:center;">' +
         '<div style="font-size:48px;margin-bottom:16px;">🛍️</div>' +
-        '<div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:8px;">Ödeme Yaptınız mı?</div>' +
-        '<div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Shopier üzerinden ' + price + ' TL ödemenizi tamamladıysanız sipariş numaranızı girin.</div>' +
+        '<div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:8px;">Ödeme Yap</div>' +
+        '<div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Aşağıdaki butona tıklayarak Shopier üzerinden ' + price + ' TL ödemenizi yapın.</div>' +
+        '<a href="' + shopierUrl + '" target="_blank" style="text-decoration:none;display:block;margin-bottom:20px;">' +
+        '<div style="padding:14px;background:rgba(16,185,129,.15);border:2px solid rgba(16,185,129,.3);border-radius:var(--rs);cursor:pointer;">' +
+        '<span style="font-size:16px;">🛡️</span> <span style="font-size:14px;font-weight:700;color:var(--green);">Shopier ile Öde (' + price + ' TL)</span>' +
+        '</div></a>' +
+        '<div style="font-size:13px;color:var(--text2);margin-bottom:16px;">Ödeme yaptıktan sonra sipariş numaranızı girin:</div>' +
         '<div class="fg" style="text-align:left;margin-bottom:16px;"><label>Sipariş Numarası</label><input type="text" id="orderNumberInput" placeholder="Örn: S12345678" required></div>' +
         '<button class="btn btn-success" onclick="submitOrderNumber()" style="height:50px;font-size:16px;margin-bottom:12px;">✅ Ödemeyi Bildir</button>' +
-        '<button class="btn btn-outline" onclick="document.getElementById(\'orderNumberModal\').remove()" style="height:40px;">İptal, Ödeme Yapmadım</button>' +
+        '<button class="btn btn-outline" onclick="document.getElementById(\'orderNumberModal\').remove()" style="height:40px;">İptal</button>' +
         '</div>';
     document.body.appendChild(div);
 }
