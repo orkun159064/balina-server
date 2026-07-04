@@ -171,7 +171,7 @@ app.post('/api/check-special-offer', (req, res) => {
     return res.json({ eligible: false, price: 999 });
 });
 
-// ===== ÖDEME TALEBİ =====
+// ===== ÖDEME TALEBİ (HEMEN AKTİF) =====
 app.post('/api/request-subscription', (req, res) => {
     const { email, plan, months, orderNumber } = req.body;
     if (!email) return res.json({ success: false, message: 'E-posta gerekli.' });
@@ -179,50 +179,60 @@ app.post('/api/request-subscription', (req, res) => {
     if (!user) return res.json({ success: false, message: 'Kullanıcı bulunamadı.' });
     const existing = pendingPayments.find(p => p.email.toLowerCase() === email.toLowerCase() && p.status === 'pending');
     if (existing) return res.json({ success: false, message: 'Zaten bekleyen bir ödeme talebiniz var.' });
+
     const prices = { 0.5: 99, 1: 999, 2: 1799, 3: 2499, 6: 4499 };
     const payment = { id: 'pay_' + Date.now(), email, name: user.name, plan: plan || 'normal', months: months || 1, price: prices[months] || 999, orderNumber: orderNumber || '', status: 'pending', createdAt: Date.now() };
+
+    // ⭐ HEMEN AKTİF ET
+    user.sub = true;
+    if (plan === 'special') {
+        user.subEnd = Date.now() + (12 * 60 * 60 * 1000);
+        campaignCount++;
+    } else {
+        user.subEnd = Date.now() + ((months || 1) * 30 * 24 * 60 * 60 * 1000);
+    }
+    user.plan = plan || 'normal';
+
     pendingPayments.push(payment);
     saveData();
-    console.log('Ödeme talebi:', email, 'Sipariş No:', orderNumber);
-    res.json({ success: true, message: 'Ödeme talebiniz alındı. Admin onayı bekleniyor.' });
+    console.log('Ödeme + hesap aktif:', email, 'Sipariş:', orderNumber);
+    res.json({ success: true, subEnd: user.subEnd, message: 'Hesabınız aktif edildi!' });
 });
 
+// ===== BEKLEYEN ÖDEMELER (ADMIN) =====
 app.get('/api/pending-payments', (req, res) => {
     res.json({ payments: pendingPayments.filter(p => p.status === 'pending') });
 });
 
-// ⭐ ÖDEME ONAYLA - 99 TL kampanya = 12 saat, diğerleri ay bazında
+// ===== ÖDEME ONAYLA (ADMIN) =====
 app.post('/api/approve-payment', (req, res) => {
     const { paymentId } = req.body;
     const payment = pendingPayments.find(p => p.id === paymentId);
     if (!payment) return res.json({ success: false });
     payment.status = 'approved';
     payment.approvedAt = Date.now();
-    const user = users.find(u => u.email.toLowerCase() === payment.email.toLowerCase());
-    if (user) {
-        user.sub = true;
-        if (payment.plan === 'special') {
-            user.subEnd = Date.now() + (12 * 60 * 60 * 1000); // 12 saat
-            campaignCount++;
-        } else {
-            user.subEnd = Date.now() + ((payment.months || 1) * 30 * 24 * 60 * 60 * 1000); // ay bazında
-        }
-        user.plan = payment.plan;
-    }
     saveData();
-    console.log('Ödeme onaylandı:', payment.email, 'Plan:', payment.plan, 'Süre:', payment.plan === 'special' ? '12 saat' : payment.months + ' ay');
+    console.log('Ödeme onaylandı:', payment.email);
     res.json({ success: true });
 });
 
-// ===== ÖDEME REDDET =====
+// ===== ÖDEME REDDET (ADMIN - HESAP KİLİTLE) =====
 app.post('/api/reject-payment', (req, res) => {
     const { paymentId } = req.body;
     const payment = pendingPayments.find(p => p.id === paymentId);
     if (!payment) return res.json({ success: false });
     payment.status = 'rejected';
     payment.rejectedAt = Date.now();
+
+    // ⭐ HESABI KİLİTLE
+    const user = users.find(u => u.email.toLowerCase() === payment.email.toLowerCase());
+    if (user) {
+        user.sub = false;
+        user.subEnd = null;
+        user.plan = null;
+    }
     saveData();
-    console.log('Ödeme reddedildi:', payment.email);
+    console.log('Ödeme reddedildi + hesap kilitlendi:', payment.email);
     res.json({ success: true });
 });
 
@@ -244,7 +254,7 @@ app.post('/api/subscribe', (req, res) => {
     if (!user) return res.json({ success: false });
     user.sub = true;
     if (plan === 'special') {
-        user.subEnd = Date.now() + (12 * 60 * 60 * 1000); // 12 saat
+        user.subEnd = Date.now() + (12 * 60 * 60 * 1000);
         campaignCount++;
     } else {
         user.subEnd = Date.now() + ((months || 1) * 30 * 24 * 60 * 60 * 1000);
@@ -254,10 +264,7 @@ app.post('/api/subscribe', (req, res) => {
     res.json({ success: true, subEnd: user.subEnd });
 });
 
-// ===== KAMPANYA DURUMU =====
 app.get('/api/campaign-status', (req, res) => { res.json({ total: CAMPAIGN_MAX, used: campaignCount, left: CAMPAIGN_MAX - campaignCount }); });
-
-// ===== YORUMLAR =====
 app.get('/api/reviews', (req, res) => { res.json({ reviews: reviews.slice(0, 5), total: reviewCount }); });
 app.post('/api/reviews', (req, res) => {
     const { name, text, stars } = req.body;
@@ -273,7 +280,6 @@ app.delete('/api/reviews/:id', (req, res) => {
     res.json({ success: true });
 });
 
-// ===== CHAT =====
 app.get('/api/chat/:email', (req, res) => { res.json({ messages: chats.filter(c => c.email.toLowerCase() === req.params.email.toLowerCase()).slice(-50) }); });
 app.get('/api/chat/admin/all', (req, res) => {
     const grouped = {};
@@ -299,7 +305,6 @@ app.post('/api/chat/reply', (req, res) => {
     res.json({ success: true, message: msg });
 });
 
-// ===== SSE =====
 let sseClients = [];
 app.get('/events', (req, res) => {
     res.setHeader('Content-Type', 'text/event-stream');
@@ -311,7 +316,6 @@ app.get('/events', (req, res) => {
     req.on('close', () => { sseClients = sseClients.filter(c => c !== res); });
 });
 
-// ===== WEBHOOK =====
 app.post('/webhook', (req, res) => {
     const { symbol, action } = req.body;
     if (!symbol || !action) return res.status(400).json({ error: 'symbol ve action gerekli' });
