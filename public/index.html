@@ -363,14 +363,16 @@ function checkPaymentStatus() {
                 save();
                 updateUserUI();
                 alert('✅ Ödemeniz onaylandı!');
-                goDash();
+                location.reload();
             }
         } else if (data.status === 'rejected') {
+            // ⭐ Oturumu temizle ve çıkış yap
             S.subscribed = false;
             S.user.subEnd = null;
+            S.active = false;
             save();
-            updateUserUI();
-            alert('❌ Ödemeniz reddedildi.');
+            localStorage.removeItem('ba_session');
+            alert('❌ Ödemeniz reddedildi. Lütfen destek ile iletişime geçin.');
             location.reload();
         }
     }).catch(function() {});
