@@ -142,9 +142,10 @@ function checkExistingTrial() {
             if (data.exists) {
                 if (data.expired && !data.subscribed) return false;
                 S.trialStart = data.start;
-                if (data.subscribed) S.subscribed = true;
+                S.subscribed = data.subscribed || false;
                 if (data.isAdmin) S.isAdmin = true;
                 if (data.subEnd && S.user) S.user.subEnd = data.subEnd;
+                save();
                 return true;
             }
             return true;
@@ -335,17 +336,26 @@ function showPaymentSuccessModal(orderNumber) {
 }
 
 function checkPaymentStatus() {
-    if (!S.user || !S.user.email || S.subscribed) return;
+    if (!S.user || !S.user.email) return;
     fetch('/api/my-payment-status?email=' + encodeURIComponent(S.user.email))
     .then(function(r) { return r.json(); })
     .then(function(data) {
         if (data.status === 'approved') {
-            S.subscribed = true;
-            if (data.subEnd) S.user.subEnd = data.subEnd;
+            if (!S.subscribed) {
+                S.subscribed = true;
+                if (data.subEnd) S.user.subEnd = data.subEnd;
+                save();
+                updateUserUI();
+                alert('✅ Ödemeniz onaylandı!');
+                goDash();
+            }
+        } else if (data.status === 'rejected') {
+            S.subscribed = false;
+            S.user.subEnd = null;
             save();
             updateUserUI();
-            alert('✅ Ödemeniz onaylandı! Aboneliğiniz aktif edildi.');
-            goDash();
+            alert('❌ Ödemeniz reddedildi.');
+            location.reload();
         }
     }).catch(function() {});
 }
