@@ -292,7 +292,6 @@ function submitOrderNumber() {
     var orderNumber = orderInput ? orderInput.value.trim() : '';
     if (!orderNumber) { alert('Lütfen sipariş numarasını girin!'); return; }
     if (!S.user || !S.user.email) { alert('Lütfen giriş yapın.'); return; }
-
     fetch('/api/request-subscription', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -303,7 +302,11 @@ function submitOrderNumber() {
         var modal = document.getElementById('orderNumberModal');
         if (modal) modal.remove();
         if (data.success) {
-            showPaymentPendingModal(orderNumber);
+            S.subscribed = true;
+            if (data.subEnd) S.user.subEnd = data.subEnd;
+            save();
+            showPaymentSuccessModal(orderNumber);
+            updateUserUI();
         } else {
             alert(data.message || 'Bir hata oluştu.');
         }
@@ -311,23 +314,22 @@ function submitOrderNumber() {
     .catch(function() { alert('Bağlantı hatası.'); });
 }
 
-function showPaymentPendingModal(orderNumber) {
-    var existing = document.getElementById('paymentPendingModal');
+function showPaymentSuccessModal(orderNumber) {
+    var existing = document.getElementById('paymentSuccessModal');
     if (existing) existing.remove();
     var div = document.createElement('div');
-    div.id = 'paymentPendingModal';
+    div.id = 'paymentSuccessModal';
     div.className = 'modal-overlay active';
     div.style.zIndex = '2000';
     div.onclick = function(e) { if (e.target === div) div.remove(); };
     div.innerHTML = '<div class="modal" onclick="event.stopPropagation()" style="text-align:center;">' +
-        '<div style="font-size:48px;margin-bottom:16px;">⏳</div>' +
-        '<div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:8px;">Talebiniz Alındı!</div>' +
+        '<div style="font-size:48px;margin-bottom:16px;">🎉</div>' +
+        '<div style="font-size:20px;font-weight:800;color:var(--green);margin-bottom:8px;">Hesabınız Aktif Edildi!</div>' +
         '<div style="font-size:13px;color:var(--text2);margin-bottom:16px;">🛍️ Sipariş numaranız: <strong style="color:var(--blue);">#' + orderNumber + '</strong></div>' +
-        '<div style="font-size:13px;color:var(--text2);margin-bottom:16px;">⏱️ Tahmini onay süresi: 5-15 dakika</div>' +
-        '<div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Ekibimiz ödemenizi kontrol ediyor.<br>Onaylandığında sayfayı yenileyerek erişiminizi aktif edebilirsiniz.</div>' +
+        '<div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Ekibimiz ödemenizi kontrol edecektir.<br>Herhangi bir sorun olursa sizinle iletişime geçilir.</div>' +
         '<div style="padding:14px;background:var(--green-bg);border:1px solid rgba(16,185,129,.3);border-radius:var(--rs);margin-bottom:20px;">' +
-        '<div style="font-size:14px;font-weight:700;color:var(--green);">Sabrınız için teşekkür ederiz! 💙🐋</div></div>' +
-        '<button class="btn btn-primary" onclick="document.getElementById(\'paymentPendingModal\').remove()" style="height:46px;">Tamam, Bekliyorum</button>' +
+        '<div style="font-size:14px;font-weight:700;color:var(--green);">Balina Alarm ailesine hoş geldiniz! 🐋💙</div></div>' +
+        '<button class="btn btn-primary" onclick="document.getElementById(\'paymentSuccessModal\').remove();goDash();" style="height:46px;">🚀 Devam Et</button>' +
         '</div>';
     document.body.appendChild(div);
 }
