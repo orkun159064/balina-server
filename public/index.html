@@ -126,7 +126,11 @@ function doReset(e) {
     }).catch(function() { showAuthError('Bağlantı hatası.'); });
 }
 
-function doLogout() { localStorage.removeItem('ba_session'); location.reload(); }
+function doLogout() {
+    localStorage.removeItem('ba_session');
+    localStorage.removeItem('ba_rejected');
+    location.reload();
+}
 function save() { localStorage.setItem('ba_session', JSON.stringify({ user: S.user, sub: S.subscribed, trialStart: S.trialStart })); }
 
 function adminAutoLogin() {
@@ -353,6 +357,10 @@ function closeSuccessAndDash() {
 
 function checkPaymentStatus() {
     if (!S.user || !S.user.email) return;
+
+    // Daha önce reddedildiyse tekrar gösterme
+    if (localStorage.getItem('ba_rejected') === 'true') return;
+
     fetch('/api/my-payment-status?email=' + encodeURIComponent(S.user.email))
     .then(function(r) { return r.json(); })
     .then(function(data) {
@@ -365,6 +373,13 @@ function checkPaymentStatus() {
                 alert('✅ Ödemeniz onaylandı!');
                 location.reload();
             }
+        } else if (data.status === 'rejected') {
+            // Sadece 1 kere göster, sonra tekrar gösterme
+            localStorage.setItem('ba_rejected', 'true');
+            alert('❌ Ödemeniz reddedildi. Lütfen destek ile iletişime geçin.');
+        }
+    }).catch(function() {});
+}
         } else if (data.status === 'rejected') {
             // ⭐ Oturumu temizle ve çıkış yap
             S.subscribed = false;
