@@ -57,6 +57,7 @@ const TRIAL_MS = 8 * 60 * 60 * 1000;
 const MAX_TRIAL_PER_IP = 1;
 const CAMPAIGN_MAX = 100;
 const CAMPAIGN_TRIAL_MS = 12 * 60 * 60 * 1000;
+const SPECIAL_DURATION = 12 * 60 * 60 * 1000; // ⭐ 12 SAAT SABİT
 
 function getIP(req) {
     const forwarded = req.headers['x-forwarded-for'];
@@ -82,7 +83,6 @@ app.post('/api/admin-login', (req, res) => {
     res.json({ success: true, user: { name: admin.name, email: admin.email, sub: true, subEnd: admin.subEnd } });
 });
 
-// ===== TELEFON KONTROL =====
 app.post('/api/check-phone', (req, res) => {
     const { phone } = req.body;
     if (!phone) return res.json({ available: false, message: 'Telefon numarası gerekli.' });
@@ -90,7 +90,6 @@ app.post('/api/check-phone', (req, res) => {
     res.json({ available: true });
 });
 
-// ===== KAYIT =====
 app.post('/api/register', (req, res) => {
     const { phone, email, name, pass } = req.body;
     const ip = getIP(req);
@@ -108,7 +107,6 @@ app.post('/api/register', (req, res) => {
     res.json({ success: true, trialStart: trials[email].start });
 });
 
-// ===== DENEME KONTROLÜ =====
 app.post('/api/check-trial', (req, res) => {
     const { email } = req.body;
     const ip = getIP(req);
@@ -127,7 +125,6 @@ app.post('/api/check-trial', (req, res) => {
     return res.json({ allowed: true, start: trials[email].start, subscribed: false, isAdmin: false });
 });
 
-// ===== DURUM SORGULAMA =====
 app.get('/api/trial-status', (req, res) => {
     const email = req.query.email || '';
     if (isEmailAdmin(email)) return res.json({ exists: true, expired: false, start: Date.now(), subscribed: true, isAdmin: true, subEnd: Date.now() + (365 * 24 * 60 * 60 * 1000) });
@@ -141,7 +138,6 @@ app.get('/api/trial-status', (req, res) => {
     res.json({ exists: true, expired, start, subscribed, isAdmin: false, subEnd: user ? user.subEnd : null });
 });
 
-// ===== ŞİFRE SIFIRLAMA =====
 app.post('/api/reset-password', (req, res) => {
     const { email, phone, newPass } = req.body;
     if (!email || !phone || !newPass) return res.json({ success: false, message: 'Tüm alanları doldurun.' });
@@ -153,7 +149,6 @@ app.post('/api/reset-password', (req, res) => {
     res.json({ success: true, message: 'Şifreniz başarıyla sıfırlandı!' });
 });
 
-// ===== 99 TL KAMPANYA =====
 app.post('/api/check-special-offer', (req, res) => {
     const { email } = req.body;
     if (!email) return res.json({ eligible: false });
@@ -179,32 +174,26 @@ app.post('/api/request-subscription', (req, res) => {
     if (!user) return res.json({ success: false, message: 'Kullanıcı bulunamadı.' });
     const existing = pendingPayments.find(p => p.email.toLowerCase() === email.toLowerCase() && p.status === 'pending');
     if (existing) return res.json({ success: false, message: 'Zaten bekleyen bir ödeme talebiniz var.' });
-
     const prices = { 0.5: 99, 1: 999, 2: 1799, 3: 2499, 6: 4499 };
     const payment = { id: 'pay_' + Date.now(), email, name: user.name, plan: plan || 'normal', months: months || 1, price: prices[months] || 999, orderNumber: orderNumber || '', status: 'pending', createdAt: Date.now() };
-
-    // ⭐ HEMEN AKTİF ET
     user.sub = true;
     if (plan === 'special') {
-        user.subEnd = Date.now() + (12 * 60 * 60 * 1000);
+        user.subEnd = Date.now() + SPECIAL_DURATION; // ⭐ 12 SAAT SABİT
         campaignCount++;
     } else {
         user.subEnd = Date.now() + ((months || 1) * 30 * 24 * 60 * 60 * 1000);
     }
     user.plan = plan || 'normal';
-
     pendingPayments.push(payment);
     saveData();
     console.log('Ödeme + hesap aktif:', email, 'Sipariş:', orderNumber);
     res.json({ success: true, subEnd: user.subEnd, message: 'Hesabınız aktif edildi!' });
 });
 
-// ===== BEKLEYEN ÖDEMELER (ADMIN) =====
 app.get('/api/pending-payments', (req, res) => {
     res.json({ payments: pendingPayments.filter(p => p.status === 'pending') });
 });
 
-// ===== ÖDEME ONAYLA (ADMIN) =====
 app.post('/api/approve-payment', (req, res) => {
     const { paymentId } = req.body;
     const payment = pendingPayments.find(p => p.id === paymentId);
@@ -216,27 +205,19 @@ app.post('/api/approve-payment', (req, res) => {
     res.json({ success: true });
 });
 
-// ===== ÖDEME REDDET (ADMIN - HESAP KİLİTLE) =====
 app.post('/api/reject-payment', (req, res) => {
     const { paymentId } = req.body;
     const payment = pendingPayments.find(p => p.id === paymentId);
     if (!payment) return res.json({ success: false });
     payment.status = 'rejected';
     payment.rejectedAt = Date.now();
-
-    // ⭐ HESABI KİLİTLE
     const user = users.find(u => u.email.toLowerCase() === payment.email.toLowerCase());
-    if (user) {
-        user.sub = false;
-        user.subEnd = null;
-        user.plan = null;
-    }
+    if (user) { user.sub = false; user.subEnd = null; user.plan = null; }
     saveData();
     console.log('Ödeme reddedildi + hesap kilitlendi:', payment.email);
     res.json({ success: true });
 });
 
-// ===== KULLANICI ÖDEME DURUMU =====
 app.get('/api/my-payment-status', (req, res) => {
     const email = req.query.email || '';
     if (!email) return res.json({ status: 'none' });
@@ -247,18 +228,13 @@ app.get('/api/my-payment-status', (req, res) => {
     return res.json({ status: 'pending', orderNumber: payment.orderNumber });
 });
 
-// ===== ABONELİK (DOĞRUDAN) =====
 app.post('/api/subscribe', (req, res) => {
     const { email, plan, months } = req.body;
     const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
     if (!user) return res.json({ success: false });
     user.sub = true;
-    if (plan === 'special') {
-        user.subEnd = Date.now() + (12 * 60 * 60 * 1000);
-        campaignCount++;
-    } else {
-        user.subEnd = Date.now() + ((months || 1) * 30 * 24 * 60 * 60 * 1000);
-    }
+    if (plan === 'special') { user.subEnd = Date.now() + SPECIAL_DURATION; campaignCount++; }
+    else { user.subEnd = Date.now() + ((months || 1) * 30 * 24 * 60 * 60 * 1000); }
     user.plan = plan || 'normal';
     saveData();
     res.json({ success: true, subEnd: user.subEnd });
@@ -329,6 +305,5 @@ app.post('/webhook', (req, res) => {
 });
 
 app.get('/', (req, res) => { res.sendFile(path.join(__dirname, 'public', 'index.html')); });
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => { console.log('🐋 Balina Alarm: port ' + PORT); });
