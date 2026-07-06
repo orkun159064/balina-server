@@ -53,7 +53,7 @@ if (reviews.length === 0) {
 }
 
 const ADMIN_EMAIL = 'orkun159064@outlook.com';
-const TRIAL_MS = 8 * 60 * 60 * 1000;
+const TRIAL_MS = 2 * 60 * 1000; // 2 dakika (test)
 const MAX_TRIAL_PER_IP = 1;
 const CAMPAIGN_MAX = 100;
 const CAMPAIGN_TRIAL_MS = 12 * 60 * 60 * 1000;
