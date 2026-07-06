@@ -560,11 +560,12 @@ function submitOrderNumber() {
     var orderInput = document.getElementById('orderNumberInput');
     var orderNumber = orderInput ? orderInput.value.trim() : '';
     if (!orderNumber) { alert('Lütfen sipariş numarasını girin!'); return; }
-    if (!S.user || !S.user.email) { alert('Lütfen giriş yapın.'); return; }
+    if (!S.user || !S.user.email) { alert('Oturum bulunamadı. Lütfen tekrar giriş yapın.'); return; }
+
     fetch('/api/request-subscription', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: S.user.email, plan: pendingPlan, months: pendingMonths, orderNumber: orderNumber })
+        body: JSON.stringify({ email: S.user.email, plan: pendingPlan || 'normal', months: pendingMonths || 1, orderNumber: orderNumber })
     })
     .then(function(r) { return r.json(); })
     .then(function(data) {
@@ -583,7 +584,7 @@ function submitOrderNumber() {
             alert(data.message || 'Bir hata oluştu.');
         }
     })
-    .catch(function() { alert('Bağlantı hatası.'); });
+    .catch(function() { alert('Bağlantı hatası. Lütfen tekrar deneyin.'); });
 }
 
 function showPaymentSuccessModal(orderNumber) {
@@ -613,8 +614,8 @@ function closeSuccessAndDash() {
     if (bs) bs.classList.remove('active');
     S.subscribed = true;
     save();
-    goDash();
-    location.reload();
+    updateUserUI();
+    startTimer();
 }
 
 function checkPaymentStatus() {
