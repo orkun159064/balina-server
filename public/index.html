@@ -809,7 +809,18 @@ function connectToServer() {
     };
     evtSource.onerror = function() { evtSource.close(); setTimeout(connectToServer, 5000); };
 }
-
+function generateWeeklyEarnings() {
+    var now = new Date();
+    var weekNum = Math.floor(now.getTime() / (7 * 24 * 60 * 60 * 1000));
+    var seed = weekNum * 12345;
+    var min = 80000;
+    var max = 160000;
+    var range = max - min;
+    var value = min + (((seed * 9301 + 49297) % 233280) / 233280) * range;
+    value = Math.round(value / 1000) * 1000;
+    var el = document.getElementById('weeklyEarnings');
+    if (el) el.textContent = '💰 ' + value.toLocaleString('tr-TR') + ' TL';
+}
 function loadCampaignStatus() { fetch('/api/campaign-status').then(function(r) { return r.json(); }).then(function(data) { var el = document.getElementById('campaignLeft'); if (el) el.textContent = data.left; }).catch(function() {}); }
 
 document.addEventListener('DOMContentLoaded', function() {
