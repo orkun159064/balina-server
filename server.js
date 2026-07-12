@@ -57,13 +57,9 @@ const TRIAL_MS = 8 * 60 * 60 * 1000;
 const MAX_TRIAL_PER_IP = 1;
 const CAMPAIGN_MAX = 100;
 const CAMPAIGN_TRIAL_MS = 12 * 60 * 60 * 1000;
-const SPECIAL_DURATION = 12 * 60 * 60 * 1000; // ⭐ 12 SAAT SABİT
+const SPECIAL_DURATION = 12 * 60 * 60 * 1000;
 
-function getIP(req) {
-    const forwarded = req.headers['x-forwarded-for'];
-    if (forwarded) return forwarded.split(',')[0].trim();
-    return req.ip || req.socket.remoteAddress || 'unknown';
-}
+function getIP(req) { const forwarded = req.headers['x-forwarded-for']; if (forwarded) return forwarded.split(',')[0].trim(); return req.ip || req.socket.remoteAddress || 'unknown'; }
 function isEmailAdmin(email) { return email && email.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase(); }
 function getTrialsByIP(ip) { return Object.values(trials).filter(t => t.ip === ip && !isEmailAdmin(t.email)); }
 function hasActiveTrialOnIP(ip) { return getTrialsByIP(ip).some(t => (Date.now() - t.start) < TRIAL_MS); }
@@ -73,13 +69,8 @@ app.post('/api/admin-login', (req, res) => {
     const { email } = req.body;
     if (!isEmailAdmin(email)) return res.json({ success: false });
     let admin = users.find(u => isEmailAdmin(u.email));
-    if (!admin) {
-        admin = { name: 'Admin', email: ADMIN_EMAIL, phone: '0000000000', ip: 'admin', pass: '', sub: true, subEnd: Date.now() + (365 * 24 * 60 * 60 * 1000), createdAt: Date.now() };
-        users.push(admin);
-    }
-    admin.sub = true;
-    admin.subEnd = Date.now() + (365 * 24 * 60 * 60 * 1000);
-    saveData();
+    if (!admin) { admin = { name: 'Admin', email: ADMIN_EMAIL, phone: '0000000000', ip: 'admin', pass: '', sub: true, subEnd: Date.now() + (365 * 24 * 60 * 60 * 1000), createdAt: Date.now() }; users.push(admin); }
+    admin.sub = true; admin.subEnd = Date.now() + (365 * 24 * 60 * 60 * 1000); saveData();
     res.json({ success: true, user: { name: admin.name, email: admin.email, sub: true, subEnd: admin.subEnd } });
 });
 
@@ -94,12 +85,13 @@ app.post('/api/register', (req, res) => {
     const { phone, email, name, pass } = req.body;
     const ip = getIP(req);
     if (users.find(u => u.email.toLowerCase() === email.toLowerCase())) return res.json({ success: false, message: 'Bu e-posta zaten kayıtlı!' });
-    if (users.find(u => u.phone === phone)) return res.json({ success: false, message: 'Bu telefon numarası zaten kayıtlı!' });
+    if (phone && users.find(u => u.phone === phone)) return res.json({ success: false, message: 'Bu telefon numarası zaten kayıtlı!' });
     if (!isEmailAdmin(email)) {
         if (hasActiveTrialOnIP(ip)) return res.json({ success: false, message: 'Bu cihazdan zaten bir deneme hesabı oluşturulmuş.' });
-        if (getTrialsByIP(ip).length >= MAX_TRIAL_PER_IP) return res.json({ success: false, message: 'Bu cihazdan deneme hakkı daha önce kullanılmış.' });
+        const ipTrials = getTrialsByIP(ip);
+        if (ipTrials.length >= MAX_TRIAL_PER_IP) return res.json({ success: false, message: 'Bu cihazdan deneme hakkı daha önce kullanılmış.' });
     }
-    const user = { name, email, phone, ip, pass: pass || '', sub: isEmailAdmin(email), subEnd: isEmailAdmin(email) ? Date.now() + (365 * 24 * 60 * 60 * 1000) : null, createdAt: Date.now() };
+    const user = { name, email, phone: phone || '', ip, pass: pass || '', sub: isEmailAdmin(email), subEnd: isEmailAdmin(email) ? Date.now() + (365 * 24 * 60 * 60 * 1000) : null, createdAt: Date.now() };
     users.push(user);
     trials[email] = { ip, email, start: Date.now(), createdAt: Date.now() };
     saveData();
@@ -115,10 +107,7 @@ app.post('/api/check-trial', (req, res) => {
     const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
     if (user && user.sub && user.subEnd && user.subEnd > Date.now()) return res.json({ allowed: true, start: trials[email] ? trials[email].start : Date.now(), subscribed: true, isAdmin: false, subEnd: user.subEnd });
     const trial = trials[email];
-    if (trial) {
-        if ((Date.now() - trial.start) >= TRIAL_MS) return res.json({ allowed: false, message: 'Deneme süreniz dolmuştur.' });
-        return res.json({ allowed: true, start: trial.start, subscribed: false, isAdmin: false });
-    }
+    if (trial) { if ((Date.now() - trial.start) >= TRIAL_MS) return res.json({ allowed: false, message: 'Deneme süreniz dolmuştur.' }); return res.json({ allowed: true, start: trial.start, subscribed: false, isAdmin: false }); }
     if (hasActiveTrialOnIP(ip)) return res.json({ allowed: false, message: 'Bu cihazdan zaten deneme kullanılmış.' });
     trials[email] = { ip, email, start: Date.now(), createdAt: Date.now() };
     saveData();
@@ -144,8 +133,7 @@ app.post('/api/reset-password', (req, res) => {
     if (newPass.length < 6) return res.json({ success: false, message: 'Şifre en az 6 karakter olmalı.' });
     const user = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.phone === phone);
     if (!user) return res.json({ success: false, message: 'E-posta veya telefon numarası hatalı!' });
-    user.pass = newPass;
-    saveData();
+    user.pass = newPass; saveData();
     res.json({ success: true, message: 'Şifreniz başarıyla sıfırlandı!' });
 });
 
@@ -159,14 +147,12 @@ app.post('/api/check-special-offer', (req, res) => {
     const now = Date.now();
     if (now >= trialEnd && now < specialEnd) {
         const remaining = specialEnd - now;
-        const h = Math.floor(remaining / 3600000);
-        const m = Math.floor((remaining % 3600000) / 60000);
+        const h = Math.floor(remaining / 3600000); const m = Math.floor((remaining % 3600000) / 60000);
         return res.json({ eligible: true, price: 99, remaining, timeLeft: h + ' saat ' + m + ' dakika', spotsLeft: CAMPAIGN_MAX - campaignCount });
     }
     return res.json({ eligible: false, price: 999 });
 });
 
-// ===== ÖDEME TALEBİ (HEMEN AKTİF) =====
 app.post('/api/request-subscription', (req, res) => {
     const { email, plan, months, orderNumber } = req.body;
     if (!email) return res.json({ success: false, message: 'E-posta gerekli.' });
@@ -177,30 +163,21 @@ app.post('/api/request-subscription', (req, res) => {
     const prices = { 0.5: 99, 1: 999, 2: 1799, 3: 2499, 6: 4499 };
     const payment = { id: 'pay_' + Date.now(), email, name: user.name, plan: plan || 'normal', months: months || 1, price: prices[months] || 999, orderNumber: orderNumber || '', status: 'pending', createdAt: Date.now() };
     user.sub = true;
-    if (plan === 'special') {
-        user.subEnd = Date.now() + SPECIAL_DURATION; // ⭐ 12 SAAT SABİT
-        campaignCount++;
-    } else {
-        user.subEnd = Date.now() + ((months || 1) * 30 * 24 * 60 * 60 * 1000);
-    }
+    if (plan === 'special') { user.subEnd = Date.now() + SPECIAL_DURATION; campaignCount++; }
+    else { user.subEnd = Date.now() + ((months || 1) * 30 * 24 * 60 * 60 * 1000); }
     user.plan = plan || 'normal';
-    pendingPayments.push(payment);
-    saveData();
+    pendingPayments.push(payment); saveData();
     console.log('Ödeme + hesap aktif:', email, 'Sipariş:', orderNumber);
     res.json({ success: true, subEnd: user.subEnd, message: 'Hesabınız aktif edildi!' });
 });
 
-app.get('/api/pending-payments', (req, res) => {
-    res.json({ payments: pendingPayments.filter(p => p.status === 'pending') });
-});
+app.get('/api/pending-payments', (req, res) => { res.json({ payments: pendingPayments.filter(p => p.status === 'pending') }); });
 
 app.post('/api/approve-payment', (req, res) => {
     const { paymentId } = req.body;
     const payment = pendingPayments.find(p => p.id === paymentId);
     if (!payment) return res.json({ success: false });
-    payment.status = 'approved';
-    payment.approvedAt = Date.now();
-    saveData();
+    payment.status = 'approved'; payment.approvedAt = Date.now(); saveData();
     console.log('Ödeme onaylandı:', payment.email);
     res.json({ success: true });
 });
@@ -209,8 +186,7 @@ app.post('/api/reject-payment', (req, res) => {
     const { paymentId } = req.body;
     const payment = pendingPayments.find(p => p.id === paymentId);
     if (!payment) return res.json({ success: false });
-    payment.status = 'rejected';
-    payment.rejectedAt = Date.now();
+    payment.status = 'rejected'; payment.rejectedAt = Date.now();
     const user = users.find(u => u.email.toLowerCase() === payment.email.toLowerCase());
     if (user) { user.sub = false; user.subEnd = null; user.plan = null; }
     saveData();
@@ -235,8 +211,7 @@ app.post('/api/subscribe', (req, res) => {
     user.sub = true;
     if (plan === 'special') { user.subEnd = Date.now() + SPECIAL_DURATION; campaignCount++; }
     else { user.subEnd = Date.now() + ((months || 1) * 30 * 24 * 60 * 60 * 1000); }
-    user.plan = plan || 'normal';
-    saveData();
+    user.plan = plan || 'normal'; saveData();
     res.json({ success: true, subEnd: user.subEnd });
 });
 
