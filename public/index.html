@@ -8,53 +8,35 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐋</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}:root{--bg:#0a0e17;--bg2:#111827;--bg3:#1a2332;--bg4:#243044;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--blue:#3b82f6;--blue-hover:#2563eb;--blue-glow:rgba(59,130,246,.3);--green:#10b981;--green-bg:rgba(16,185,129,.12);--red:#ef4444;--red-bg:rgba(239,68,68,.12);--yellow:#f59e0b;--yellow-bg:rgba(245,158,11,.12);--yellow-bdr:rgba(245,158,11,.3);--orange:#f97316;--orange-bg:rgba(249,115,22,.12);--orange-bdr:rgba(249,115,22,.3);--r:12px;--rs:8px;--rl:16px;--shadow:0 4px 6px -1px rgba(0,0,0,.3);--t:all .3s ease}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
-
-/* ===== PREMIUM ANİMASYONLAR ===== */
+*{margin:0;padding:0;box-sizing:border-box}:root{--bg:#0a0e17;--bg2:#111827;--bg3:#1a2332;--bg4:#243044;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--blue:#3b82f6;--blue-hover:#2563eb;--blue-glow:rgba(59,130,246,.3);--green:#10b981;--green-bg:rgba(16,185,129,.12);--red:#ef4444;--red-bg:rgba(239,68,68,.12);--yellow:#f59e0b;--yellow-bg:rgba(245,158,11,.12);--yellow-bdr:rgba(245,158,11,.3);--orange:#f97316;--orange-bg:rgba(249,115,22,.12);--orange-bdr:rgba(249,115,22,.3);--r:12px;--rs:8px;--rl:16px;--shadow:0 4px 6px -1px rgba(0,0,0,.3);--t:all .3s ease}body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
 @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
 @keyframes swim{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 @keyframes glow{0%,100%{box-shadow:0 0 20px rgba(59,130,246,.3)}50%{box-shadow:0 0 40px rgba(59,130,246,.6)}}
 @keyframes flashNavGreen{0%,100%{background:var(--bg3)}50%{background:#00cc66}}
 @keyframes flashNavRed{0%,100%{background:var(--bg3)}50%{background:#cc0000}}
-.nav.flash-green{animation:flashNavGreen .4s ease 8}
-.nav.flash-red{animation:flashNavRed .4s ease 8}
+.nav.flash-green{animation:flashNavGreen .4s ease 8}.nav.flash-red{animation:flashNavRed .4s ease 8}
 @keyframes borderPulseGreen{0%,100%{box-shadow:inset 0 0 0 0 transparent}50%{box-shadow:inset 0 0 80px rgba(16,185,129,.15)}}
 @keyframes borderPulseRed{0%,100%{box-shadow:inset 0 0 0 0 transparent}50%{box-shadow:inset 0 0 80px rgba(239,68,68,.15)}}
-body.flash-border-green{animation:borderPulseGreen .5s ease 6}
-body.flash-border-red{animation:borderPulseRed .5s ease 6}
+body.flash-border-green{animation:borderPulseGreen .5s ease 6}body.flash-border-red{animation:borderPulseRed .5s ease 6}
 .flash-bar{display:none;position:fixed;top:60px;left:0;right:0;height:6px;z-index:98}
 .flash-bar.al{display:block;background:linear-gradient(90deg,#00ff88,#10b981,#00ff88);animation:pulse .3s ease 10}
 .flash-bar.as{display:block;background:linear-gradient(90deg,#ff4444,#ef4444,#ff4444);animation:pulse .3s ease 10}
-
-/* ⭐ PREMIUM: Hareketli Grid Arka Plan */
 @keyframes gridMove{0%{background-position:0 0}100%{background-position:50px 50px}}
 .premium-bg{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(59,130,246,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,.04) 1px,transparent 1px);background-size:50px 50px;animation:gridMove 8s linear infinite}
-
-/* ⭐ PREMIUM: Akan Çizgiler */
 @keyframes lineFlow{0%{transform:translateX(-100%)}100%{transform:translateX(100vw)}}
 .flow-line{position:fixed;height:1px;background:linear-gradient(90deg,transparent,rgba(59,130,246,.15),transparent);z-index:0;pointer-events:none;animation:lineFlow 12s linear infinite}
 .flow-line:nth-child(1){top:25%;width:60%;animation-duration:10s;animation-delay:0s}
 .flow-line:nth-child(2){top:50%;width:80%;animation-duration:14s;animation-delay:2s}
 .flow-line:nth-child(3){top:75%;width:50%;animation-duration:9s;animation-delay:5s}
-
-/* ⭐ PREMIUM: Mum Grafiği Silüeti */
 @keyframes candlePulse{0%,100%{opacity:.03}50%{opacity:.07}}
 .candle-bg{position:fixed;bottom:0;right:0;width:400px;height:300px;pointer-events:none;z-index:0;opacity:.05;animation:candlePulse 6s ease infinite}
 .candle-bg svg{width:100%;height:100%}
-
-/* ⭐ PREMIUM: Balina Gölgesi */
 @keyframes whaleFloat{0%,100%{transform:translateX(-20%) translateY(0) rotate(-5deg)}50%{transform:translateX(5%) translateY(-20px) rotate(3deg)}}
 .whale-shadow{position:fixed;bottom:10%;left:-5%;font-size:200px;opacity:.03;pointer-events:none;z-index:0;animation:whaleFloat 15s ease-in-out infinite}
-
-/* LANDING */
 .landing{min-height:100vh;background:linear-gradient(135deg,#0a0e17,#0d1b2a,#111827);position:relative;overflow:hidden}
-.landing::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 50% 50%,rgba(59,130,246,.03) 0%,transparent 50%);animation:rotate 30s linear infinite;pointer-events:none}
-@keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 .landing-top{position:sticky;top:0;z-index:100;background:var(--bg3);border-bottom:1px solid var(--bg4);padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
-.landing-top-logo{display:flex;align-items:center;gap:8px;color:#fff;font-weight:700;font-size:16px}
-.landing-top-logo span{font-size:20px}
+.landing-top-logo{display:flex;align-items:center;gap:8px;color:#fff;font-weight:700;font-size:16px}.landing-top-logo span{font-size:20px}
 .landing-online{display:flex;align-items:center;gap:6px;padding:5px 12px;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);border-radius:16px;font-size:11px;font-weight:600;color:var(--green)}
 .landing-online-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s ease infinite}
 .landing-hero{max-width:700px;margin:0 auto;padding:60px 24px 40px;text-align:center;position:relative;z-index:1}
@@ -66,40 +48,29 @@ body.flash-border-red{animation:borderPulseRed .5s ease 6}
 .landing-alert-text{font-size:14px;font-weight:700;color:var(--orange)}
 .landing-features{max-width:700px;margin:0 auto 32px;padding:0 24px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .landing-feature{display:flex;align-items:center;gap:10px;padding:14px;background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--r);transition:var(--t)}
-.landing-feature:hover{border-color:var(--blue);transform:translateX(4px)}
-.landing-feature span{font-size:18px}
-.landing-feature p{font-size:13px;color:var(--text);font-weight:500}
+.landing-feature:hover{border-color:var(--blue);transform:translateX(4px)}.landing-feature span{font-size:18px}.landing-feature p{font-size:13px;color:var(--text);font-weight:500}
 .landing-about{max-width:700px;margin:0 auto 32px;padding:0 24px}
 .landing-about-card{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--rl);padding:28px}
 .landing-about-title{font-size:20px;font-weight:800;color:#fff;margin-bottom:16px;text-align:center}
 .landing-about-text{font-size:13px;color:var(--text2);line-height:1.8;margin-bottom:16px}
 .landing-about-list{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
-.landing-about-list li{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text)}
-.landing-about-list li span{color:var(--green);font-weight:700}
+.landing-about-list li{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text)}.landing-about-list li span{color:var(--green);font-weight:700}
 .landing-about-slogan{text-align:center;margin-top:16px;font-size:16px;font-weight:800;color:var(--blue)}
 .landing-cta{max-width:700px;margin:0 auto;padding:0 24px 60px;text-align:center}
 .landing-free{padding:14px 20px;background:var(--yellow-bg);border:1px solid var(--yellow-bdr);border-radius:var(--r);margin-bottom:20px;display:inline-block;cursor:pointer}
 .landing-free-text{font-size:18px;font-weight:800;color:var(--yellow)}
 .landing-shopier{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:var(--r);margin-bottom:24px;font-size:13px;font-weight:600;color:var(--green);max-width:300px;margin-left:auto;margin-right:auto}
 .landing-shopier span{font-size:18px}
-.landing-btn{display:inline-block;padding:16px 52px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-size:18px;font-weight:800;cursor:pointer;transition:var(--t);font-family:inherit;animation:glow 2s ease infinite;text-decoration:none}
-.landing-btn:hover{background:var(--blue-hover);transform:translateY(-2px)}
-.landing-price{margin-top:20px;font-size:14px;color:var(--text3)}
-.landing-price strong{color:var(--text);font-size:24px;font-weight:900}
-.auth{display:none;min-height:100vh;align-items:center;justify-content:center;background:linear-gradient(135deg,#0a0e17,#111827,#0d1b2a);padding:20px}
-.auth.active{display:flex}
-.auth-box{width:100%;max-width:440px}
-.auth-logo{text-align:center;margin-bottom:32px}
+.auth{display:none;min-height:100vh;align-items:center;justify-content:center;background:linear-gradient(135deg,#0a0e17,#111827,#0d1b2a);padding:20px}.auth.active{display:flex}
+.auth-box{width:100%;max-width:440px}.auth-logo{text-align:center;margin-bottom:32px}
 .auth-logo .whale{font-size:56px;display:block;animation:swim 3s ease infinite}
-.auth-logo h1{color:#fff;font-size:26px;font-weight:800}
-.auth-logo p{color:var(--text3);font-size:13px;margin-top:4px}
+.auth-logo h1{color:#fff;font-size:26px;font-weight:800}.auth-logo p{color:var(--text3);font-size:13px;margin-top:4px}
 .auth-card{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--rl);padding:32px;animation:fadeIn .5s ease}
 .auth-tabs{display:flex;gap:4px;background:var(--bg);border-radius:var(--rs);padding:4px;margin-bottom:24px}
 .auth-tab{flex:1;padding:10px;text-align:center;border:none;background:0 0;color:var(--text3);font-weight:600;font-size:12px;cursor:pointer;border-radius:6px;transition:var(--t);font-family:inherit}
 .auth-tab.active{background:var(--bg3);color:var(--text);box-shadow:var(--shadow)}
 .auth-form{display:none}.auth-form.active{display:block;animation:fadeIn .3s}
-.auth-back{display:block;text-align:center;margin-top:16px;font-size:13px;color:var(--text3);cursor:pointer;text-decoration:none}
-.auth-back:hover{color:var(--blue)}
+.auth-back{display:block;text-align:center;margin-top:16px;font-size:13px;color:var(--text3);cursor:pointer;text-decoration:none}.auth-back:hover{color:var(--blue)}
 .fg{margin-bottom:16px}.fg label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:4px}
 .fg input,.fg textarea{width:100%;padding:11px 14px;border:2px solid var(--bg4);border-radius:var(--rs);font-size:14px;font-family:inherit;transition:var(--t);outline:0;color:var(--text);background:var(--bg)}
 .fg input:focus,.fg textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-glow)}
@@ -108,10 +79,8 @@ body.flash-border-red{animation:borderPulseRed .5s ease 6}
 .btn-primary{background:var(--blue);color:#fff}.btn-primary:hover{background:var(--blue-hover);transform:translateY(-1px)}
 .btn-outline{background:0 0;color:var(--blue);border:2px solid var(--blue)}.btn-outline:hover{background:var(--blue);color:#fff}
 .btn-success{background:var(--green);color:#fff}.btn-success:hover{background:#059669}
-.btn-danger{background:var(--red);color:#fff}.btn-danger:hover{background:#dc2626}
-.btn-sm{padding:7px 14px;font-size:12px}
-.shopier-badge{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:var(--rs);margin-top:12px;font-size:12px;font-weight:600;color:var(--green)}
-.shopier-badge span{font-size:16px}
+.btn-danger{background:var(--red);color:#fff}.btn-danger:hover{background:#dc2626}.btn-sm{padding:7px 14px;font-size:12px}
+.shopier-badge{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:var(--rs);margin-top:12px;font-size:12px;font-weight:600;color:var(--green)}.shopier-badge span{font-size:16px}
 .dash{display:none;min-height:100vh}.dash.active{display:block}
 .nav{background:var(--bg3);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--bg4)}
 .nav-left{display:flex;align-items:center;gap:10px}.nav-left span{font-size:22px}
@@ -119,11 +88,8 @@ body.flash-border-red{animation:borderPulseRed .5s ease 6}
 .nav-right{display:flex;align-items:center;gap:12px}
 .nav-status{display:flex;align-items:center;gap:6px;padding:5px 12px;background:var(--bg4);border-radius:16px;font-size:11px;color:var(--text2)}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s ease infinite}
-.nav-timer{color:var(--text3);font-size:12px;font-weight:500}
-.nav-timer.urgent{color:var(--yellow);animation:pulse 1s ease infinite}
-.nav-timer.expired{color:var(--red)}
-.nav-user{display:flex;align-items:center;gap:8px;padding:5px 12px;background:var(--bg4);border-radius:var(--rs);cursor:pointer;transition:var(--t)}
-.nav-user:hover{background:var(--bg2)}
+.nav-timer{color:var(--text3);font-size:12px;font-weight:500}.nav-timer.urgent{color:var(--yellow);animation:pulse 1s ease infinite}.nav-timer.expired{color:var(--red)}
+.nav-user{display:flex;align-items:center;gap:8px;padding:5px 12px;background:var(--bg4);border-radius:var(--rs);cursor:pointer;transition:var(--t)}.nav-user:hover{background:var(--bg2)}
 .avatar{width:30px;height:30px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px}
 .u-name{color:#fff;font-size:12px;font-weight:600}.u-email{color:var(--text3);font-size:10px}
 .main{padding:24px;max-width:1400px;margin:0 auto;position:relative;z-index:1}
@@ -131,16 +97,6 @@ body.flash-border-red{animation:borderPulseRed .5s ease 6}
 .alert-banner-text{font-size:13px;font-weight:700;color:var(--orange)}
 .audio-hint{text-align:center;margin-bottom:16px;padding:12px;background:var(--yellow-bg);border:1px solid var(--yellow-bdr);border-radius:10px;color:var(--yellow);font-size:13px;cursor:pointer}
 .test-btn{text-align:center;margin-bottom:20px}.test-btn button{padding:14px 30px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;transition:var(--t)}.test-btn button:hover{background:var(--blue-hover)}
-.notif-section{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--r);padding:24px;margin-bottom:24px;animation:fadeIn .4s}
-.notif-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.notif-title-main{font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px;color:#fff}
-.notif-list{max-height:300px;overflow-y:auto}
-.notif-item{display:flex;align-items:flex-start;gap:10px;padding:12px;border-radius:var(--rs);margin-bottom:6px}
-.notif-item.al{background:var(--green-bg);border-left:3px solid var(--green)}.notif-item.as{background:var(--red-bg);border-left:3px solid var(--red)}
-.notif-title{font-size:12px;font-weight:700}.notif-item.al .notif-title{color:var(--green)}.notif-item.as .notif-title{color:var(--red)}
-.notif-time{font-size:10px;color:var(--text3)}
-.no-notif{text-align:center;padding:30px;color:var(--text3);font-size:13px}
-.cb-blue{background:rgba(59,130,246,.15);color:var(--blue);padding:3px 10px;border-radius:16px;font-size:10px;font-weight:600}
 .panels{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
 .panel{background:var(--bg2);border:1px solid var(--bg4);border-radius:var(--rl);overflow:hidden;animation:fadeIn .5s;transition:var(--t)}
 .panel-head{padding:18px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bg4)}
@@ -206,9 +162,6 @@ body.flash-border-red{animation:borderPulseRed .5s ease 6}
 .ap-title{font-size:14px;font-weight:800}.alert-popup.al .ap-title{color:var(--green)}.alert-popup.as .ap-title{color:var(--red)}
 .ap-close{background:0 0;border:none;font-size:16px;cursor:pointer;color:var(--text3);padding:2px}
 .ap-body{font-size:13px;color:var(--text)}.ap-time{font-size:11px;color:var(--text3);margin-top:6px}
-.legal-text{font-size:13px;color:var(--text);line-height:1.8}.legal-text p{margin-bottom:10px}
-.legal-warn{margin-bottom:12px;padding:10px;background:rgba(245,158,11,.15);border:1px solid var(--yellow-bdr);border-radius:8px;font-weight:700;color:var(--yellow);text-align:center}
-.legal-box{padding:10px;background:var(--bg);border-radius:8px;font-size:12px;color:var(--text3);text-align:center}
 .err-msg{background:var(--red-bg);border:1px solid rgba(239,68,68,.3);border-radius:var(--rs);padding:10px 14px;margin-bottom:16px;font-size:13px;color:var(--red);text-align:center;display:none}
 .err-msg.show{display:block;animation:fadeIn .3s}
 .plans-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
@@ -236,8 +189,7 @@ body.flash-border-red{animation:borderPulseRed .5s ease 6}
 .review-delete{background:0 0;border:none;color:var(--red);cursor:pointer;font-size:10px;padding:2px 6px}
 .review-form{margin-top:12px;padding-top:12px;border-top:1px solid var(--bg4)}
 .star-input{display:flex;gap:4px;margin-bottom:8px}
-.star-input span{font-size:20px;cursor:pointer;color:var(--bg4);transition:var(--t)}
-.star-input span.active{color:var(--yellow)}
+.star-input span{font-size:20px;cursor:pointer;color:var(--bg4);transition:var(--t)}.star-input span.active{color:var(--yellow)}
 .show-more-btn{display:block;width:100%;padding:8px;background:var(--bg);border:1px solid var(--bg4);border-radius:var(--rs);color:var(--blue);font-size:12px;font-weight:600;cursor:pointer;transition:var(--t);text-align:center;margin-top:8px}
 .show-more-btn:hover{background:var(--bg3)}
 .chat-toggle{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:var(--blue);color:#fff;border:none;font-size:24px;cursor:pointer;z-index:900;box-shadow:0 4px 12px rgba(59,130,246,.4);transition:var(--t);display:none}
@@ -270,16 +222,15 @@ body.flash-border-red{animation:borderPulseRed .5s ease 6}
 </style>
 </head>
 <body>
-<!-- ⭐ PREMIUM ARKA PLAN ELEMANLARI -->
 <div class="premium-bg"></div>
-<div class="flow-line"></div>
-<div class="flow-line"></div>
-<div class="flow-line"></div>
+<div class="flow-line"></div><div class="flow-line"></div><div class="flow-line"></div>
 <div class="whale-shadow">🐋</div>
 <div class="candle-bg"><svg viewBox="0 0 400 300"><rect x="30" y="120" width="20" height="80" fill="rgba(16,185,129,.6)" rx="2"/><line x1="40" y1="100" x2="40" y2="210" stroke="rgba(16,185,129,.4)" stroke-width="2"/><rect x="70" y="80" width="20" height="60" fill="rgba(16,185,129,.6)" rx="2"/><line x1="80" y1="60" x2="80" y2="150" stroke="rgba(16,185,129,.4)" stroke-width="2"/><rect x="110" y="140" width="20" height="70" fill="rgba(239,68,68,.6)" rx="2"/><line x1="120" y1="120" x2="120" y2="220" stroke="rgba(239,68,68,.4)" stroke-width="2"/><rect x="150" y="100" width="20" height="50" fill="rgba(16,185,129,.6)" rx="2"/><line x1="160" y1="80" x2="160" y2="160" stroke="rgba(16,185,129,.4)" stroke-width="2"/><rect x="190" y="130" width="20" height="60" fill="rgba(239,68,68,.6)" rx="2"/><line x1="200" y1="110" x2="200" y2="200" stroke="rgba(239,68,68,.4)" stroke-width="2"/><rect x="230" y="70" width="20" height="40" fill="rgba(16,185,129,.6)" rx="2"/><line x1="240" y1="50" x2="240" y2="120" stroke="rgba(16,185,129,.4)" stroke-width="2"/><rect x="270" y="150" width="20" height="80" fill="rgba(239,68,68,.6)" rx="2"/><line x1="280" y1="130" x2="280" y2="240" stroke="rgba(239,68,68,.4)" stroke-width="2"/><rect x="310" y="90" width="20" height="50" fill="rgba(16,185,129,.6)" rx="2"/><line x1="320" y1="70" x2="320" y2="150" stroke="rgba(16,185,129,.4)" stroke-width="2"/><rect x="350" y="110" width="20" height="45" fill="rgba(239,68,68,.6)" rx="2"/><line x1="360" y1="90" x2="360" y2="165" stroke="rgba(239,68,68,.4)" stroke-width="2"/></svg></div>
 
 <div class="flash-bar" id="flashBar"></div>
+
 <div id="privacyModal" class="modal-overlay" onclick="closeModal(event,'privacyModal')"><div class="modal" onclick="event.stopPropagation()" style="max-width:650px;"><div class="modal-head"><span class="modal-title">📜 Gizlilik ve Kullanım Şartları</span><button class="modal-close" onclick="closeModal(null,'privacyModal')">X</button></div><div class="privacy-text"><h3>1. KVKK</h3><p>Ad Soyad, E-posta, Telefon ve IP adresi topluyoruz. Üçüncü taraflarla paylaşılmaz.</p><h3>2. Kullanıcı Sözleşmesi</h3><p>Bu platform teyit amaçlı sinyal platformudur. Yatırım tavsiyesi niteliği taşımaz.</p><h3>3. Çerez Politikası</h3><p>Çerezler kullanıcı deneyimini iyileştirmek için kullanılır.</p><h3>4. İade Politikası</h3><p>Dijital hizmet olduğu için iade yapılmamaktadır.</p><h3>5. Kullanıcı Hakları</h3><p>Verilerinizin silinmesini talep edebilirsiniz.</p></div></div></div>
+
 <div id="landingPage" class="landing">
     <div class="landing-top"><div class="landing-top-logo"><span>🐋</span> Balina Alarm</div><div class="landing-online"><span class="landing-online-dot"></span><span id="onlineCount">5.247</span> Aktif Kullanıcı</div></div>
 
@@ -294,23 +245,22 @@ body.flash-border-red{animation:borderPulseRed .5s ease 6}
             </ul>
             <div class="landing-about-slogan">BalinaAlarm – Büyük Hareketleri İlk Sen Fark Et.</div>
             <div style="margin-top:20px;padding:16px;background:var(--bg);border:1px solid var(--bg4);border-radius:var(--rs);">
-    <div style="display:flex;justify-content:space-around;flex-wrap:wrap;gap:12px;">
-        <div style="text-align:center;"><div style="font-size:20px;font-weight:900;color:var(--green);" id="weeklyEarnings">💰 --</div><div style="font-size:10px;color:var(--text3);">Bu hafta toplam kazanç</div></div>
-        <div style="text-align:center;"><div style="font-size:20px;font-weight:900;color:var(--blue);">🔥 847</div><div style="font-size:10px;color:var(--text3);">Aktif kullanıcı</div></div>
-        <div style="text-align:center;"><div style="font-size:20px;font-weight:900;color:var(--yellow);">⭐ 4.9/5</div><div style="font-size:10px;color:var(--text3);">Kullanıcı puanı</div></div>
-    </div>
-</div>
+                <div style="display:flex;justify-content:space-around;flex-wrap:wrap;gap:12px;">
+                    <div style="text-align:center;"><div style="font-size:20px;font-weight:900;color:var(--green);" id="weeklyEarnings">💰 --</div><div style="font-size:10px;color:var(--text3);">Bu hafta toplam kazanç</div></div>
+                    <div style="text-align:center;"><div style="font-size:20px;font-weight:900;color:var(--blue);">🔥 847</div><div style="font-size:10px;color:var(--text3);">Aktif kullanıcı</div></div>
+                    <div style="text-align:center;"><div style="font-size:20px;font-weight:900;color:var(--yellow);">⭐ 4.9/5</div><div style="font-size:10px;color:var(--text3);">Kullanıcı puanı</div></div>
+                </div>
+            </div>
         </div>
     </div>
 
     <div style="max-width:700px;margin:0 auto 32px;padding:0 24px;text-align:center;position:relative;z-index:1;">
-       <div style="margin-bottom:20px;padding:16px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);border-radius:var(--rs);text-align:center;">
-    <div style="font-size:14px;font-weight:800;color:var(--red);margin-bottom:6px;">⚠️ DİKKAT!</div>
-    <div style="font-size:13px;color:var(--text2);line-height:1.6;">Her gün 6-12 arası piyasa güvencesine göre sinyal geliyor.<br><strong style="color:var(--red);">Denemeyen kullanıcılar bu sinyalleri KAÇIRIYOR!</strong></div>
-</div>
-        <button onclick="showAuth()" style="display:inline-block;padding:20px 48px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:var(--r);font-size:22px;font-weight:900;cursor:pointer;animation:glow 2s ease infinite;font-family:inherit;text-decoration:none;letter-spacing:1px;box-shadow:0 4px 20px rgba(16,185,129,.4);">🚀 HEMEN KAYIT OL   ÜCRETSİZ</button>
+        <div style="margin-bottom:20px;padding:16px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);border-radius:var(--rs);text-align:center;">
+            <div style="font-size:14px;font-weight:800;color:var(--red);margin-bottom:6px;">⚠️ DİKKAT!</div>
+            <div style="font-size:13px;color:var(--text2);line-height:1.6;">Her gün 6-12 arası piyasa güvencesine göre sinyal geliyor.<br><strong style="color:var(--red);">Denemeyen kullanıcılar bu sinyalleri KAÇIRIYOR!</strong></div>
+        </div>
+        <button onclick="showAuth()" style="display:inline-block;padding:20px 48px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:var(--r);font-size:22px;font-weight:900;cursor:pointer;animation:glow 2s ease infinite;font-family:inherit;text-decoration:none;letter-spacing:1px;box-shadow:0 4px 20px rgba(16,185,129,.4);">🚀 HEMEN KAYIT OL - ÜCRETSİZ</button>
         <br>
-       
     </div>
 
     <div class="landing-features">
@@ -326,7 +276,9 @@ body.flash-border-red{animation:borderPulseRed .5s ease 6}
         <div style="padding:14px;background:var(--yellow-bg);border:1px solid var(--yellow-bdr);border-radius:var(--r);display:inline-block;cursor:pointer;" onclick="openModal('privacyModal')"><span style="font-size:12px;color:var(--yellow);">📜 Gizlilik ve Kullanım Şartları</span></div>
     </div>
 </div>
-<div id="authScreen" class="auth"><div class="auth-box"><div class="auth-logo"><span class="whale">🐋</span><h1>Balina Alarm</h1><p>Whale Trading Intelligence Platform</p></div><div class="auth-card"><div id="authError" class="err-msg"></div><div class="auth-tabs"><button class="auth-tab active" onclick="switchTab('login')">Giriş Yap</button><button class="auth-tab" onclick="switchTab('register')">Kayıt Ol</button><button class="auth-tab" onclick="switchTab('reset')">Şifremi Unuttum</button></div><form id="loginForm" class="auth-form active" onsubmit="doLogin(event)"><div class="fg"><label>E-posta</label><input type="email" id="lEmail" placeholder="ornek@email.com" required></div><div class="fg"><label>Şifre</label><input type="password" id="lPass" placeholder="********" required></div><button type="submit" class="btn btn-primary" style="height:46px;">Giriş Yap</button></form><form id="registerForm" class="auth-form" onsubmit="doRegister(event)"><div class="fg"><label>Ad Soyad</label><input type="text" id="rName" placeholder="Adınız Soyadınız" required></div><div class="fg"><label>E-posta</label><input type="email" id="rEmail" placeholder="ornek@email.com" required></div><div class="fg"><label>Şifre</label><input type="password" id="rPass" placeholder="En az 6 karakter" required minlength="6"></div><div class="fg"><label>Telefon</label><input type="tel" id="rPhone" placeholder="5XXXXXXXXX" required></div><div style="margin-bottom:16px;"><label style="display:flex;align-items:flex-start;gap:8px;font-size:11px;color:var(--text2);cursor:pointer;"><input type="checkbox" id="kvkkCheck" required style="margin-top:2px;"><span><a href="#" onclick="event.preventDefault();openModal('privacyModal');" style="color:var(--blue);text-decoration:underline;">Gizlilik sözleşmesini</a> okudum, kabul ediyorum.</span></label></div><button type="submit" class="btn btn-primary" style="height:46px;">Kayıt Ol</button></form><form id="resetForm" class="auth-form" onsubmit="doReset(event)"><div class="fg"><label>E-posta</label><input type="email" id="resetEmail" placeholder="ornek@email.com" required></div><div class="fg"><label>Telefon</label><input type="tel" id="resetPhone" placeholder="5XXXXXXXXX" required></div><div class="fg"><label>Yeni Şifre</label><input type="password" id="resetPass" placeholder="En az 6 karakter" required minlength="6"></div><button type="submit" class="btn btn-success" style="height:46px;">🔄 Şifreyi Sıfırla</button></form><span class="auth-back" onclick="showLanding()">← Ana Sayfaya Dön</span></div></div></div>
+
+<div id="authScreen" class="auth"><div class="auth-box"><div class="auth-logo"><span class="whale">🐋</span><h1>Balina Alarm</h1><p>Whale Trading Intelligence Platform</p></div><div class="auth-card"><div id="authError" class="err-msg"></div><div class="auth-tabs"><button class="auth-tab active" onclick="switchTab('login')">Giriş Yap</button><button class="auth-tab" onclick="switchTab('register')">Kayıt Ol</button><button class="auth-tab" onclick="switchTab('reset')">Şifremi Unuttum</button></div><form id="loginForm" class="auth-form active" onsubmit="doLogin(event)"><div class="fg"><label>E-posta</label><input type="email" id="lEmail" placeholder="ornek@email.com" required></div><div class="fg"><label>Şifre</label><input type="password" id="lPass" placeholder="********" required></div><button type="submit" class="btn btn-primary" style="height:46px;">Giriş Yap</button></form><form id="registerForm" class="auth-form" onsubmit="doRegister(event)"><div class="fg"><label>Ad Soyad</label><input type="text" id="rName" placeholder="Adınız Soyadınız" required></div><div class="fg"><label>E-posta</label><input type="email" id="rEmail" placeholder="ornek@email.com" required></div><div class="fg"><label>Şifre</label><input type="password" id="rPass" placeholder="En az 6 karakter" required minlength="6"></div><div class="fg"><label>Telefon (İsteğe Bağlı)</label><input type="tel" id="rPhone" placeholder="5XXXXXXXXX"></div><div style="margin-bottom:12px;"><label style="display:flex;align-items:flex-start;gap:8px;font-size:11px;color:var(--text2);cursor:pointer;"><input type="checkbox" id="kvkkCheck" required style="margin-top:2px;"><span><a href="#" onclick="event.preventDefault();openModal('privacyModal');" style="color:var(--blue);text-decoration:underline;">Gizlilik sözleşmesini</a> okudum, kabul ediyorum.</span></label></div><div style="margin-bottom:16px;padding:14px;background:var(--bg);border:1px solid var(--bg4);border-radius:var(--rs);"><label style="display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--text2);cursor:pointer;"><input type="checkbox" id="legalCheck" required style="margin-top:2px;"><div><div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;">Bu site yatırım tavsiyesi vermez. Okudum, kabul ediyorum.</div><div style="font-size:11px;color:var(--text3);line-height:1.6;">Sinyaller yalnızca eğitim amaçlıdır. Sorumluluğu kullanıcı üstlenir. SPK tarafından denetlenmemiştir. Dijital hizmet olduğu için iade yapılmamaktadır.</div></div></label></div><button type="submit" class="btn btn-primary" style="height:46px;">Kayıt Ol</button></form><form id="resetForm" class="auth-form" onsubmit="doReset(event)"><div class="fg"><label>E-posta</label><input type="email" id="resetEmail" placeholder="ornek@email.com" required></div><div class="fg"><label>Telefon</label><input type="tel" id="resetPhone" placeholder="5XXXXXXXXX" required></div><div class="fg"><label>Yeni Şifre</label><input type="password" id="resetPass" placeholder="En az 6 karakter" required minlength="6"></div><button type="submit" class="btn btn-success" style="height:46px;">🔄 Şifreyi Sıfırla</button></form><span class="auth-back" onclick="showLanding()">← Ana Sayfaya Dön</span></div></div></div>
+
 <div id="dashboard" class="dash">
 <nav class="nav"><div class="nav-left"><span>🐋</span><div><div class="nav-title">Balina Alarm</div><div class="nav-sub">Whale Trading Dashboard</div></div></div><div class="nav-right"><div class="nav-status"><span class="dot"></span><span>Bağlı</span></div><div class="nav-timer" id="navTimer"><span id="timerDisp">08:00:00</span></div><div class="nav-user" onclick="openModal('userModal')"><div class="avatar" id="navAvatar">A</div><div><div class="u-name" id="navName">Kullanıcı</div><div class="u-email" id="navEmail">user@email.com</div></div></div></div></nav>
 <div class="main">
@@ -343,14 +295,16 @@ body.flash-border-red{animation:borderPulseRed .5s ease 6}
 </div>
 </div>
 </div>
-class="plan-duration">12 Saat</div><div class="plan-price" style="color:var(--green);">99 TL</div><div class="plan-save">İlk 100 kişiye özel!</div></div>
-</div><div id="userModal" class="modal-overlay" onclick="closeModal(event,'userModal')"><div class="modal" onclick="event.stopPropagation()"><div class="modal-head"><span class="modal-title">👤 Hesap Bilgileri</span><button class="modal-close" onclick="closeModal(null,'userModal')">X</button></div><div style="text-align:center;margin-bottom:16px;"><div style="width:56px;height:56px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;color:#fff;font-size:20px;font-weight:700;" id="mAvatar">A</div><div style="font-size:16px;font-weight:700;color:#fff;" id="mName">Kullanıcı</div><div style="font-size:13px;color:var(--text3);" id="mEmail">user@email.com</div><div id="mAdminBadge" style="display:none;margin-top:8px;"><span class="admin-badge">🔑 Admin</span></div></div><div style="background:var(--bg);border:1px solid var(--bg4);border-radius:var(--rs);padding:14px;text-align:center;"><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Abonelik Durumu</div><div style="font-size:14px;font-weight:700;color:var(--yellow);" id="mSub">Ücretsiz Deneme</div></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal(null,'userModal')">Kapat</button><button class="btn btn-danger" onclick="doLogout()">🚪 Çıkış</button></div></div></div>
+
+<div id="payModal" class="modal-overlay" onclick="closeModal(event,'payModal')"><div class="modal" onclick="event.stopPropagation()" style="max-width:600px;"><div class="modal-head"><span class="modal-title">💳 Abonelik Satın Al</span><button class="modal-close" onclick="closeModal(null,'payModal')">X</button></div><div class="plans-grid"><div class="plan-card popular" onclick="buySpecial()"><div class="plan-badge popular">🎁 Kampanya</div><div class="plan-duration">12 Saat</div><div class="plan-price" style="color:var(--green);">99 TL</div><div class="plan-monthly">Özel deneme fiyatı</div><div class="plan-save">İlk 100 kişiye özel!</div></div><div class="plan-card" onclick="buyPlan(1,999)"><div class="plan-duration">1 Ay</div><div class="plan-price">999 TL</div><div class="plan-monthly">Aylık 999 TL</div></div><div class="plan-card" onclick="buyPlan(2,1799)"><div class="plan-duration">2 Ay</div><div class="plan-price">1.799 TL</div><div class="plan-monthly">Aylık 900 TL</div><div class="plan-save">%10 Tasarruf</div></div><div class="plan-card popular" onclick="buyPlan(3,2499)"><div class="plan-badge popular">⭐ En Çok Tercih Edilen</div><div class="plan-duration">3 Ay</div><div class="plan-price">2.499 TL</div><div class="plan-monthly">Aylık 833 TL</div><div class="plan-save">%17 Tasarruf</div></div><div class="plan-card best" onclick="buyPlan(6,4499)"><div class="plan-badge best">🏆 En İyi Değer</div><div class="plan-duration">6 Ay</div><div class="plan-price">4.499 TL</div><div class="plan-monthly">Aylık 750 TL</div><div class="plan-save">%25 Tasarruf</div></div></div><a href="https://www.shopier.com/balinaalarm/48434245" target="_blank" style="text-decoration:none;"><div class="shopier-badge" style="font-size:14px;padding:14px;"><span>🛡️</span> Shopier ile Güvenli Ödeme</div></a></div></div>
+
+<div id="userModal" class="modal-overlay" onclick="closeModal(event,'userModal')"><div class="modal" onclick="event.stopPropagation()"><div class="modal-head"><span class="modal-title">👤 Hesap Bilgileri</span><button class="modal-close" onclick="closeModal(null,'userModal')">X</button></div><div style="text-align:center;margin-bottom:16px;"><div style="width:56px;height:56px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;color:#fff;font-size:20px;font-weight:700;" id="mAvatar">A</div><div style="font-size:16px;font-weight:700;color:#fff;" id="mName">Kullanıcı</div><div style="font-size:13px;color:var(--text3);" id="mEmail">user@email.com</div><div id="mAdminBadge" style="display:none;margin-top:8px;"><span class="admin-badge">🔑 Admin</span></div></div><div style="background:var(--bg);border:1px solid var(--bg4);border-radius:var(--rs);padding:14px;text-align:center;"><div style="font-size:11px;color:var(--text3);margin-bottom:3px;">Abonelik Durumu</div><div style="font-size:14px;font-weight:700;color:var(--yellow);" id="mSub">Ücretsiz Deneme</div></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal(null,'userModal')">Kapat</button><button class="btn btn-danger" onclick="doLogout()">🚪 Çıkış</button></div></div></div>
+
 <div id="faqModal" class="modal-overlay" onclick="closeModal(event,'faqModal')"><div class="modal" onclick="event.stopPropagation()" style="max-width:600px;"><div class="modal-head"><span class="modal-title">❓ Sıkça Sorulan Sorular</span><button class="modal-close" onclick="closeModal(null,'faqModal')">X</button></div><div id="faqList"></div></div></div>
-<div class="blocked-text">Ücretsiz deneme süreniz dolmuştur.</div>
-<div style="margin:16px 0;padding:16px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);border-radius:var(--rs);">
-    <div style="font-size:14px;font-weight:800;color:var(--red);margin-bottom:8px;">🔴 Sonraki sinyal gelmek üzere!</div>
-    <div style="font-size:13px;color:var(--text2);line-height:1.6;">Süreniz bittiği için sinyalleri <strong style="color:var(--red);">göremezsiniz!</strong><br>Hemen abone olun, sinyalleri kaçırmayın!</div>
-</div><button class="chat-toggle" id="chatToggle" onclick="toggleChat()">💬</button>
+
+<div id="blockedScreen" class="blocked"><div class="blocked-card"><div class="blocked-icon">🔒</div><div class="blocked-title">Süreniz Doldu</div><div class="blocked-text">Ücretsiz deneme süreniz dolmuştur.</div><div style="margin:16px 0;padding:16px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);border-radius:var(--rs);"><div style="font-size:14px;font-weight:800;color:var(--red);margin-bottom:8px;">🔴 Sonraki sinyal gelmek üzere!</div><div style="font-size:13px;color:var(--text2);line-height:1.6;">Süreniz bittiği için sinyalleri <strong style="color:var(--red);">göremezsiniz!</strong><br>Hemen abone olun, sinyalleri kaçırmayın!</div></div><div id="specialOffer" style="display:none;margin:20px 0;padding:20px;background:rgba(16,185,129,.15);border:2px solid rgba(16,185,129,.4);border-radius:12px;"><div style="font-size:24px;margin-bottom:8px;">🎁</div><div style="font-size:18px;font-weight:800;color:var(--green);margin-bottom:4px;">Özel Teklif!</div><div style="font-size:13px;color:var(--text2);margin-bottom:12px;">İlk 100 kişiye özel 12 saat full erişim</div><div style="font-size:36px;font-weight:900;color:#fff;margin-bottom:4px;">99 TL</div><div style="font-size:12px;color:var(--text3);text-decoration:line-through;">999 TL</div><div id="offerTimer" style="margin:12px 0;padding:8px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);border-radius:8px;font-size:13px;font-weight:700;color:var(--yellow);"></div><div style="font-size:11px;color:var(--text3);margin-bottom:12px;">Kalan kontenjan: <span id="offerSpots" style="color:var(--yellow);font-weight:700;">100</span>/100</div><button class="btn btn-success" onclick="buySpecial()" style="font-size:16px;height:50px;">🛒 99 TL ile Başla</button></div><div id="normalOffer" style="display:none;margin:20px 0;"><div style="font-size:13px;color:var(--text2);margin-bottom:12px;">Abonelik satın alarak devam edin.</div><div class="plans-grid"><div class="plan-card" style="border-color:var(--green);" onclick="buySpecial()"><div class="plan-badge popular">🎁 Kampanya</div><div class="plan-duration">12 Saat</div><div class="plan-price" style="color:var(--green);">99 TL</div><div class="plan-save">İlk 100 kişiye özel!</div></div><div class="plan-card best" onclick="buyPlan(6,4499)"><div class="plan-badge best">🏆</div><div class="plan-duration">6 Ay</div><div class="plan-price">4.499 TL</div></div><div class="plan-card popular" onclick="buyPlan(3,2499)"><div class="plan-badge popular">⭐</div><div class="plan-duration">3 Ay</div><div class="plan-price">2.499 TL</div></div><div class="plan-card" onclick="buyPlan(2,1799)"><div class="plan-duration">2 Ay</div><div class="plan-price">1.799 TL</div></div><div class="plan-card" onclick="buyPlan(1,999)"><div class="plan-duration">1 Ay</div><div class="plan-price">999 TL</div></div></div></div><button class="btn btn-outline" style="margin-top:8px;" onclick="doLogout()">🚪 Çıkış Yap</button></div></div>
+
+<button class="chat-toggle" id="chatToggle" onclick="toggleChat()">💬</button>
 <div class="chat-panel" id="chatPanel"><div class="chat-header"><div class="chat-header-title">💬 Destek</div><button class="chat-header-close" onclick="toggleChat()">✕</button></div><div class="chat-messages" id="chatMessages"><div class="chat-msg admin"><div class="chat-bubble">Merhaba! 👋 Size nasıl yardımcı olabiliriz?</div></div></div><div class="chat-input-area"><input type="text" class="chat-input" id="chatInput" placeholder="Mesajınızı yazın..." onkeypress="if(event.key==='Enter')sendChat()"><button class="chat-send" onclick="sendChat()">Gönder</button></div></div>
 <script>
 var ADMIN_EMAIL = "orkun159064@outlook.com";
@@ -393,10 +347,11 @@ function doRegister(e) {
     e.preventDefault(); hideAuthError();
     var name = document.getElementById('rName').value.trim(); var email = document.getElementById('rEmail').value.trim();
     var pass = document.getElementById('rPass').value; var phone = document.getElementById('rPhone').value.replace(/\s/g, '');
-    if (!name || !email || !pass || !phone) { showAuthError('Tüm alanları doldurun!'); return; }
-    if (phone.length < 10) { showAuthError('Geçerli bir telefon numarası girin!'); return; }
+    if (!name || !email || !pass) { showAuthError('Tüm alanları doldurun!'); return; }
+    if (phone && phone.length < 10) { showAuthError('Geçerli bir telefon numarası girin!'); return; }
     if (pass.length < 6) { showAuthError('Şifre en az 6 karakter olmalı!'); return; }
     var kvkk = document.getElementById('kvkkCheck'); if (kvkk && !kvkk.checked) { showAuthError('Gizlilik sözleşmesini kabul etmelisiniz!'); return; }
+    var legal = document.getElementById('legalCheck'); if (legal && !legal.checked) { showAuthError('Yasal uyarıyı kabul etmelisiniz!'); return; }
     fetch('/api/check-phone', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone: phone }) })
     .then(function(r) { return r.json(); })
     .then(function(data) {
@@ -464,7 +419,6 @@ function goDash() {
     var au = document.getElementById('authScreen'); if (au) au.classList.remove('active');
     var db = document.getElementById('dashboard'); if (db) db.classList.add('active');
     var ct = document.getElementById('chatToggle'); if (ct) ct.style.display = 'flex';
-    if (localStorage.getItem('ba_legal') === 'accepted') { var lm = document.getElementById('legalModal'); if (lm) lm.style.display = 'none'; }
     updateUserUI(); updateWhales(); startTimer(); restorePanels(); loadReviews(); loadChat();
     if (S.isAdmin) { var as = document.getElementById('adminSection'); if (as) as.style.display = 'block'; var bs = document.getElementById('blockedScreen'); if (bs) bs.classList.remove('active'); loadAdminChat(); loadPendingPayments(); }
     else { var as2 = document.getElementById('adminSection'); if (as2) as2.style.display = 'none'; checkBlocked(); checkPaymentStatus(); }
@@ -509,9 +463,16 @@ function startTimer() {
         if (S.subscribed && S.user && S.user.subEnd) {
             var rem = Math.max(0, S.user.subEnd - Date.now());
             if (rem <= 0) { S.subscribed = false; save(); location.reload(); return; }
-            var d = Math.floor(rem / (24*60*60*1000)), h = Math.floor((rem % (24*60*60*1000)) / (60*60*1000));
-            el = document.getElementById('timerDisp'); if (el) el.textContent = d + 'g ' + h + 'sa';
-            el = document.getElementById('subValue'); if (el) el.textContent = d + ' Gün ' + h + ' Saat';
+            if (rem < 24*60*60*1000) {
+                var rh = Math.floor(rem/3600000), rm = Math.floor((rem%3600000)/60000), rs = Math.floor((rem%60000)/1000);
+                var rts = String(rh).padStart(2,'0') + ':' + String(rm).padStart(2,'0') + ':' + String(rs).padStart(2,'0');
+                el = document.getElementById('timerDisp'); if (el) el.textContent = rts;
+                el = document.getElementById('subValue'); if (el) el.textContent = rts;
+            } else {
+                var d = Math.floor(rem / (24*60*60*1000)), h = Math.floor((rem % (24*60*60*1000)) / (60*60*1000));
+                el = document.getElementById('timerDisp'); if (el) el.textContent = d + 'g ' + h + 'sa';
+                el = document.getElementById('subValue'); if (el) el.textContent = d + ' Gün ' + h + ' Saat';
+            }
             el = document.getElementById('subBar'); if (el) el.style.width = (rem / (30*24*60*60*1000)) * 100 + '%';
             el = document.getElementById('navTimer'); if (el) el.className = 'nav-timer';
         } else if (S.subscribed) {
@@ -598,11 +559,9 @@ function submitOrderNumber() {
     var orderInput = document.getElementById('orderNumberInput');
     var orderNumber = orderInput ? orderInput.value.trim() : '';
     if (!orderNumber) { alert('Lütfen sipariş numarasını girin!'); return; }
-    if (!S.user || !S.user.email) { alert('Oturum bulunamadı. Lütfen tekrar giriş yapın.'); return; }
-
+    if (!S.user || !S.user.email) { alert('Oturum bulunamadı.'); return; }
     fetch('/api/request-subscription', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: S.user.email, plan: pendingPlan || 'normal', months: pendingMonths || 1, orderNumber: orderNumber })
     })
     .then(function(r) { return r.json(); })
@@ -610,19 +569,16 @@ function submitOrderNumber() {
         var modal = document.getElementById('orderNumberModal');
         if (modal) modal.remove();
         if (data.success) {
-            S.subscribed = true;
-            S.user.sub = true;
+            S.subscribed = true; S.user.sub = true;
             if (data.subEnd) S.user.subEnd = data.subEnd;
             save();
             var bs = document.getElementById('blockedScreen');
             if (bs) bs.classList.remove('active');
             updateUserUI();
             showPaymentSuccessModal(orderNumber);
-        } else {
-            alert(data.message || 'Bir hata oluştu.');
-        }
+        } else { alert(data.message || 'Bir hata oluştu.'); }
     })
-    .catch(function() { alert('Bağlantı hatası. Lütfen tekrar deneyin.'); });
+    .catch(function() { alert('Bağlantı hatası.'); });
 }
 
 function showPaymentSuccessModal(orderNumber) {
@@ -650,10 +606,8 @@ function closeSuccessAndDash() {
     if (modal) modal.remove();
     var bs = document.getElementById('blockedScreen');
     if (bs) bs.classList.remove('active');
-    S.subscribed = true;
-    save();
-    updateUserUI();
-    startTimer();
+    S.subscribed = true; save();
+    updateUserUI(); startTimer();
 }
 
 function checkPaymentStatus() {
@@ -663,14 +617,7 @@ function checkPaymentStatus() {
     .then(function(r) { return r.json(); })
     .then(function(data) {
         if (data.status === 'approved') {
-            if (!S.subscribed) {
-                S.subscribed = true;
-                if (data.subEnd) S.user.subEnd = data.subEnd;
-                save();
-                updateUserUI();
-                alert('✅ Ödemeniz onaylandı!');
-                location.reload();
-            }
+            if (!S.subscribed) { S.subscribed = true; if (data.subEnd) S.user.subEnd = data.subEnd; save(); updateUserUI(); alert('✅ Ödemeniz onaylandı!'); location.reload(); }
         } else if (data.status === 'rejected') {
             localStorage.setItem('ba_rejected', 'true');
             alert('❌ Ödemeniz reddedildi. Lütfen destek ile iletişime geçin.');
@@ -779,6 +726,20 @@ function rejectPayment(paymentId) {
     .catch(function() { alert('Bağlantı hatası.'); });
 }
 
+function generateWeeklyEarnings() {
+    var now = new Date();
+    var weekNum = Math.floor(now.getTime() / (7 * 24 * 60 * 60 * 1000));
+    var seed = weekNum * 12345;
+    var min = 80000; var max = 160000;
+    var range = max - min;
+    var value = min + (((seed * 9301 + 49297) % 233280) / 233280) * range;
+    value = Math.round(value / 1000) * 1000;
+    var el = document.getElementById('weeklyEarnings');
+    if (el) el.textContent = '💰 ' + value.toLocaleString('tr-TR') + ' TL';
+}
+
+function loadCampaignStatus() { fetch('/api/campaign-status').then(function(r) { return r.json(); }).then(function(data) { var el = document.getElementById('campaignLeft'); if (el) el.textContent = data.left; }).catch(function() {}); }
+
 setInterval(function() { if (S.isAdmin) { loadAdminChat(); loadPendingPayments(); } }, 10000);
 setInterval(function() { if (S && S.user && S.active && !S.isAdmin) { loadChat(); } }, 5000);
 setInterval(function() { ['XAUUSD', 'BTCUSDT'].forEach(function(pair) { try { var saved = JSON.parse(localStorage.getItem('ba_panel_' + pair)); if (saved) { var el = document.getElementById(pair === 'XAUUSD' ? 'timeXAU' : 'timeBTC'); if (el) el.textContent = 'Son güncelleme: ' + timeAgo(saved.time); } } catch (e) {} }); renderLastSignals(); }, 30000);
@@ -804,19 +765,6 @@ function connectToServer() {
     };
     evtSource.onerror = function() { evtSource.close(); setTimeout(connectToServer, 5000); };
 }
-function generateWeeklyEarnings() {
-    var now = new Date();
-    var weekNum = Math.floor(now.getTime() / (7 * 24 * 60 * 60 * 1000));
-    var seed = weekNum * 12345;
-    var min = 80000;
-    var max = 160000;
-    var range = max - min;
-    var value = min + (((seed * 9301 + 49297) % 233280) / 233280) * range;
-    value = Math.round(value / 1000) * 1000;
-    var el = document.getElementById('weeklyEarnings');
-    if (el) el.textContent = '💰 ' + value.toLocaleString('tr-TR') + ' TL';
-}
-function loadCampaignStatus() { fetch('/api/campaign-status').then(function(r) { return r.json(); }).then(function(data) { var el = document.getElementById('campaignLeft'); if (el) el.textContent = data.left; }).catch(function() {}); }
 
 document.addEventListener('DOMContentLoaded', function() {
     var saved = localStorage.getItem('ba_session');
