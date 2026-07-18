@@ -107,8 +107,8 @@ app.post('/api/check-trial', (req, res) => {
     const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
     if (user && user.sub && user.subEnd && user.subEnd > Date.now()) return res.json({ allowed: true, start: trials[email] ? trials[email].start : Date.now(), subscribed: true, isAdmin: false, subEnd: user.subEnd });
     const trial = trials[email];
-    if (trial) { if ((Date.now() - trial.start) >= TRIAL_MS) return res.json({ allowed: false, message: 'Deneme süreniz dolmuştur.' }); return res.json({ allowed: true, start: trial.start, subscribed: false, isAdmin: false }); }
-    if (hasActiveTrialOnIP(ip)) return res.json({ allowed: false, message: 'Bu cihazdan zaten deneme kullanılmış.' });
+if (trial) {
+    if ((Date.now() - trial.start) >= TRIAL_MS) return res.json({ allowed: true, start: trial.start, subscribed: false, isAdmin: false, expired: true });    if (hasActiveTrialOnIP(ip)) return res.json({ allowed: false, message: 'Bu cihazdan zaten deneme kullanılmış.' });
     trials[email] = { ip, email, start: Date.now(), createdAt: Date.now() };
     saveData();
     return res.json({ allowed: true, start: trials[email].start, subscribed: false, isAdmin: false });
