@@ -632,10 +632,9 @@ function showPaymentSuccessModal(orderNumber) {
 function closeSuccessAndDash() {
     var modal = document.getElementById('paymentSuccessModal');
     if (modal) modal.remove();
-    S.subscribed = true;
-    if (!S.user.subEnd) S.user.subEnd = Date.now() + ((pendingMonths || 1) * 30 * 24 * 60 * 60 * 1000);
-    save();
-    location.reload();
+    // location.reload() KALDIRILDI!
+    // Blocked ekranı zaten kaldırıldı
+    // Dashboard zaten açık
 }
 
 function checkPaymentStatus() {
