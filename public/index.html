@@ -330,18 +330,35 @@ function doLogin(e) {
     e.preventDefault(); hideAuthError();
     var email = document.getElementById('lEmail').value.trim(); var pass = document.getElementById('lPass').value;
     if (!email || !pass) { showAuthError('E-posta ve şifre gerekli!'); return; }
+
+    var users = JSON.parse(localStorage.getItem('ba_users') || '[]');
+    var u = users.find(function(x) { return x.email.toLowerCase() === email.toLowerCase() && x.pass === pass; });
+
+    if (!u) {
+        showAuthError('E-posta veya şifre hatalı!');
+        return;
+    }
+
+    S.user = u;
+    S.isAdmin = (email.toLowerCase() === ADMIN_EMAIL.toLowerCase());
+
     fetch('/api/check-trial', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: email }) })
     .then(function(r) { return r.json(); })
     .then(function(data) {
-        var users = JSON.parse(localStorage.getItem('ba_users') || '[]');
-        var u = users.find(function(x) { return x.email.toLowerCase() === email.toLowerCase() && x.pass === pass; });
-        if (!u) { showAuthError('E-posta veya şifre hatalı!'); return; }
-        if (!data.allowed && !data.subscribed) { showAuthError(data.message || 'Deneme süreniz dolmuştur.'); return; }
-        S.user = u; S.subscribed = data.subscribed || false; S.trialStart = data.start; S.isAdmin = (email.toLowerCase() === ADMIN_EMAIL.toLowerCase());
+        S.subscribed = data.subscribed || false;
+        S.trialStart = data.start || u.trialStart || Date.now();
         if (data.subEnd) S.user.subEnd = data.subEnd;
-        save(); goDash();
-    }).catch(function() { showAuthError('Sunucuya bağlanılamıyor.'); });
+        save();
+        goDash();
+    })
+    .catch(function() {
+        S.subscribed = u.sub || false;
+        S.trialStart = u.trialStart || Date.now();
+        save();
+        goDash();
+    });
 }
+
 
 function doRegister(e) {
     e.preventDefault(); hideAuthError();
