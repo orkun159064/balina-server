@@ -588,11 +588,21 @@ function submitOrderNumber() {
         var modal = document.getElementById('orderNumberModal');
         if (modal) modal.remove();
         if (data.success) {
+            // ⭐ HEMEN AKTİF ET
             S.subscribed = true;
             S.user.sub = true;
             S.user.subEnd = data.subEnd || (Date.now() + (pendingMonths || 1) * 30 * 24 * 60 * 60 * 1000);
             save();
+
+            // ⭐ BLOCKED EKRANINI KALDIR
+            var bs = document.getElementById('blockedScreen');
+            if (bs) bs.classList.remove('active');
+
+            // ⭐ UI GÜNCELLE
             updateUserUI();
+            startTimer();
+
+            // ⭐ BAŞARI POPUP GÖSTER
             showPaymentSuccessModal(orderNumber);
         } else {
             alert(data.message || 'Bir hata oluştu.');
@@ -600,7 +610,6 @@ function submitOrderNumber() {
     })
     .catch(function() { alert('Bağlantı hatası. Lütfen tekrar deneyin.'); });
 }
-
 function showPaymentSuccessModal(orderNumber) {
     var existing = document.getElementById('paymentSuccessModal');
     if (existing) existing.remove();
